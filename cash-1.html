@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>محفظة فودافون كاش 1 - الأساسي — سنترال تيك POS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Readex+Pro:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/tailwind-config.js"></script>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="bg-background font-body-md text-on-surface antialiased" data-wallet-id="cash_1">
+  <aside id="app-sidebar"></aside>
+
+  <div class="lg:pr-72">
+    <header id="app-header"></header>
+
+    <main class="w-full pt-16 bg-surface min-h-screen">
+      <div class="flex flex-col w-full px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+        <!-- Header Section -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-5 sm:p-6 rounded-xl shadow-sm border border-slate-200/80">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-primary-fixed flex items-center justify-center text-primary shrink-0">
+              <span class="material-symbols-outlined text-3xl">account_balance_wallet</span>
+            </div>
+            <div>
+              <div class="flex items-center gap-2 flex-wrap">
+                <h1 id="wallet-page-title" class="font-headline-md text-on-surface">محفظة فودافون كاش - خط 1 (الأساسي)</h1>
+                <span id="line-active-badge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-md">
+                  <span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+                  حالة الخط: نشط / متصل
+                </span>
+              </div>
+              <p class="font-body-md text-on-surface-variant mt-0.5">إدارة رصيد الشريحة، عمليات السحب الفوري والإيداع، واحتساب العمولات اللحظية</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <button type="button" onclick="WalletPage.setTxType('withdraw')" class="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary-fixed text-on-primary-fixed hover:bg-primary hover:text-white transition-colors font-label-lg">
+              <span class="material-symbols-outlined text-xl">call_made</span>
+              <span>+ تسجيل عملية سحب</span>
+            </button>
+            <button type="button" onclick="WalletPage.setTxType('deposit')" class="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-container transition-colors font-label-lg shadow-sm">
+              <span class="material-symbols-outlined text-xl">call_received</span>
+              <span>+ تسجيل عملية إيداع</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Wallet Overview Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- SIM Card Number -->
+          <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200/80 flex flex-col justify-between">
+            <div class="flex items-center justify-between">
+              <span class="font-label-md text-on-surface-variant">رقم شريحة المحفظة</span>
+              <button type="button" onclick="WalletPage.openSimModal()" class="p-1.5 rounded-lg hover:bg-surface-container-low text-primary transition-colors" title="تعيين / تعديل رقم الشريحة">
+                <span class="material-symbols-outlined text-lg">edit</span>
+              </button>
+            </div>
+            <div class="mt-3">
+              <span id="wallet-sim-display" class="font-title-md text-outline" dir="ltr">لم يتم تحديد الرقم</span>
+              <div class="flex items-center gap-1 mt-1.5 text-primary font-label-md">
+                <span class="material-symbols-outlined text-sm">sim_card</span>
+                <span id="wallet-sim-status">اضغط أيقونة التعديل لإدخال رقم الشريحة</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Opening Balance -->
+          <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200/80 flex flex-col justify-between">
+            <div class="flex items-center justify-between">
+              <span class="font-label-md text-on-surface-variant">الرصيد الافتتاحي للوردية</span>
+              <button type="button" onclick="WalletPage.openBalanceModal()" class="p-1.5 rounded-lg hover:bg-surface-container-low text-primary transition-colors" title="تعديل الرصيد الافتتاحي">
+                <span class="material-symbols-outlined text-lg">edit</span>
+              </button>
+            </div>
+            <div class="mt-3">
+              <div class="flex items-baseline gap-1.5">
+                <span id="opening-balance-val" class="text-headline-lg font-numeric-table text-on-surface">0.00</span>
+                <span class="font-body-sm text-on-surface-variant">ج.م</span>
+              </div>
+              <span class="font-label-md text-on-surface-variant block mt-1.5">رأس مال الخط عند بداية الشيفت</span>
+            </div>
+          </div>
+
+          <!-- Live Current Balance -->
+          <div class="bg-primary-fixed/40 p-5 rounded-xl shadow-sm border border-primary/20 flex flex-col justify-between">
+            <div class="flex items-center justify-between">
+              <span class="font-label-md text-primary font-bold">الرصيد اللحظي الحالي بالخط</span>
+              <span class="material-symbols-outlined text-primary text-xl">savings</span>
+            </div>
+            <div class="mt-3">
+              <div class="flex items-baseline gap-1.5">
+                <span id="current-balance-val" class="text-display-lg font-numeric-table text-primary font-bold">0.00</span>
+                <span class="font-title-md text-primary">ج.م</span>
+              </div>
+              <div class="flex items-center gap-1 mt-1.5 text-on-surface-variant font-label-md">
+                <span class="material-symbols-outlined text-sm">sync</span>
+                <span>مُحدَّث آنياً مع كل حركة</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Total Daily Commission -->
+          <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200/80 flex flex-col justify-between">
+            <div class="flex items-center justify-between">
+              <span id="wallet-comm-title" class="font-label-md text-tertiary font-bold">عمولات كاش خط 1 المكتسبة اليوم</span>
+              <span class="material-symbols-outlined text-tertiary text-xl">paid</span>
+            </div>
+            <div class="mt-3">
+              <div class="flex items-baseline gap-1.5">
+                <span id="total-commissions-val" class="text-headline-lg font-numeric-table text-tertiary font-bold">0.00</span>
+                <span class="font-body-sm text-tertiary">ج.م</span>
+              </div>
+              <span class="font-label-md text-on-surface-variant block mt-1.5">صافي أرباح العمليات المباشرة</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Transaction Entry Card -->
+        <div class="bg-white p-5 sm:p-6 rounded-xl shadow-sm border border-slate-200/80">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-5">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary">bolt</span>
+              <h2 class="font-title-lg text-on-surface">نموذج الإدخال السريع للمعاملة</h2>
+            </div>
+            <div class="flex items-center gap-1 bg-surface-container-low p-1 rounded-lg border border-slate-200">
+              <button type="button" id="btn-type-withdraw" onclick="WalletPage.setTxType('withdraw')" class="flex items-center gap-1.5 px-4 py-1.5 rounded-lg font-label-lg transition-all bg-white text-primary shadow-sm font-bold">
+                <span class="material-symbols-outlined text-base">call_made</span>
+                <span>سحب كاش (تحويل للعميل)</span>
+              </button>
+              <button type="button" id="btn-type-deposit" onclick="WalletPage.setTxType('deposit')" class="flex items-center gap-1.5 px-4 py-1.5 rounded-lg font-label-lg transition-all text-on-surface-variant hover:text-on-surface">
+                <span class="material-symbols-outlined text-base">call_received</span>
+                <span>إيداع كاش (استلام من العميل)</span>
+              </button>
+            </div>
+          </div>
+
+          <form id="tx-form" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
+            <div class="lg:col-span-3 flex flex-col gap-1">
+              <label for="cust-phone" class="font-label-md text-on-surface-variant">رقم هاتف العميل (11 رقم)</label>
+              <div class="relative flex items-center">
+                <input type="tel" id="cust-phone" maxlength="11" pattern="01[0125][0-9]{8}" placeholder="01xxxxxxxxx" required oninput="WalletPage.validatePhone(this)" class="w-full h-10 px-3 pr-9 bg-surface-container-low border border-slate-200 text-on-surface rounded-lg font-numeric-table text-body-lg focus:bg-white focus:ring-2 focus:ring-primary text-right" dir="ltr" />
+                <span class="material-symbols-outlined absolute right-2.5 text-on-surface-variant text-lg">smartphone</span>
+                <span id="phone-valid-icon" class="material-symbols-outlined absolute left-2.5 text-tertiary text-lg hidden">check_circle</span>
+              </div>
+            </div>
+
+            <div class="lg:col-span-2 flex flex-col gap-1">
+              <label for="tx-amount" class="font-label-md text-on-surface-variant">المبلغ المطلوب (ج.م)</label>
+              <div class="relative flex items-center">
+                <input type="number" id="tx-amount" min="1" step="any" placeholder="0.00" required oninput="WalletPage.autoCalculateCommission(this.value)" class="w-full h-10 px-3 pl-10 bg-surface-container-low border border-slate-200 text-on-surface rounded-lg font-numeric-table text-body-lg focus:bg-white focus:ring-2 focus:ring-primary text-left" dir="ltr" />
+                <span class="absolute left-3 font-label-md text-on-surface-variant pointer-events-none">ج.م</span>
+              </div>
+            </div>
+
+            <div class="lg:col-span-2 flex flex-col gap-1">
+              <div class="flex items-center justify-between gap-1 whitespace-nowrap">
+                <label for="tx-commission" class="font-label-md text-on-surface-variant">العمولة</label>
+                <button type="button" onclick="WalletPage.toggleCustomCommission()" class="text-xs font-label-md text-primary hover:underline">يدوي</button>
+              </div>
+              <div class="relative flex items-center">
+                <input type="number" id="tx-commission" min="0" step="0.5" placeholder="0.00" required class="w-full h-10 px-3 pl-10 bg-surface-container-low border border-slate-200 text-tertiary font-bold rounded-lg font-numeric-table text-body-lg focus:bg-white focus:ring-2 focus:ring-primary text-left" dir="ltr" />
+                <span class="absolute left-3 font-label-md text-on-surface-variant pointer-events-none">ج.م</span>
+              </div>
+            </div>
+
+            <div class="lg:col-span-3 flex flex-col gap-1">
+              <label for="tx-notes" class="font-label-md text-on-surface-variant">اسم العميل / ملاحظات</label>
+              <div class="relative flex items-center">
+                <input type="text" id="tx-notes" placeholder="مثال: اسم العميل أو تفاصيل التحويل" class="w-full h-10 px-3 pr-9 bg-surface-container-low border border-slate-200 text-on-surface rounded-lg font-body-md focus:bg-white focus:ring-2 focus:ring-primary" />
+                <span class="material-symbols-outlined absolute right-2.5 text-on-surface-variant text-lg">edit_note</span>
+              </div>
+            </div>
+
+            <div class="lg:col-span-2 flex flex-col justify-end">
+              <button type="submit" id="btn-submit-tx" class="w-full h-10 rounded-lg bg-primary text-white hover:bg-primary-container transition-colors font-label-lg shadow-sm flex items-center justify-center gap-1.5">
+                <span class="material-symbols-outlined text-lg">check</span>
+                <span>تسجيل سحب كاش</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Transactions Table Section -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden flex flex-col">
+          <div class="p-4 sm:p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-surface-container-low/60 border-b border-slate-200">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-xl">history</span>
+              <h3 id="wallet-table-title" class="font-title-md text-on-surface">سجل حركات كاش خط 1</h3>
+              <span id="tx-count-badge" class="px-2.5 py-0.5 text-xs font-label-md text-on-surface-variant bg-white border border-slate-200 rounded-full font-bold">0 حركات</span>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2">
+              <div class="relative">
+                <input type="text" id="table-search" placeholder="بحث برقم الهاتف أو الاسم..." class="h-9 px-3 pr-8 rounded-lg bg-white border border-slate-200 text-body-sm focus:ring-2 focus:ring-primary w-48 sm:w-56" />
+                <span class="material-symbols-outlined absolute right-2.5 top-2 text-on-surface-variant text-base">search</span>
+              </div>
+              <select id="filter-tx-type" class="h-9 px-2.5 rounded-lg bg-white border border-slate-200 text-body-sm font-semibold">
+                <option value="all">كل الأنواع</option>
+                <option value="withdraw">سحب (تحويل)</option>
+                <option value="deposit">إيداع (استلام)</option>
+              </select>
+              <select id="filter-tx-date" class="h-9 px-2.5 rounded-lg bg-white border border-slate-200 text-body-sm font-semibold">
+                <option value="today">اليوم فقط</option>
+                <option value="all">كل التواريخ</option>
+              </select>
+              <button type="button" onclick="WalletPage.exportTableToCsv()" class="h-9 px-3 rounded-lg bg-navy-dark text-white hover:bg-navy-card font-label-md flex items-center gap-1" title="تصدير CSV">
+                <span class="material-symbols-outlined text-base">download</span>
+                <span class="hidden sm:inline">تصدير</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto w-full">
+            <table class="w-full text-right border-collapse">
+              <thead>
+                <tr class="bg-navy-dark text-white font-label-md">
+                  <th class="py-3 px-4">التاريخ والوقت</th>
+                  <th class="py-3 px-4">نوع الحركة</th>
+                  <th class="py-3 px-4">رقم هاتف العميل</th>
+                  <th class="py-3 px-4">البيان / العميل</th>
+                  <th class="py-3 px-4 text-left">المبلغ</th>
+                  <th class="py-3 px-4 text-left">العمولة</th>
+                  <th class="py-3 px-4 text-left">الرصيد المتبقي</th>
+                  <th class="py-3 px-4 text-center w-28">الإجراءات</th>
+                </tr>
+              </thead>
+              <tbody id="tx-table-body"></tbody>
+            </table>
+          </div>
+
+          <div id="tx-empty-state" class="py-14 px-6 flex flex-col items-center justify-center text-center">
+            <div class="w-16 h-16 rounded-full bg-surface-container-low flex items-center justify-center text-primary mb-3">
+              <span class="material-symbols-outlined text-3xl">receipt_long</span>
+            </div>
+            <h4 id="wallet-empty-title" class="font-title-lg text-on-surface mb-1">لا توجد حركات مسجلة على كاش خط 1 حالياً</h4>
+            <p class="font-body-md text-on-surface-variant max-w-md">استخدم نموذج الإدخال السريع بأعلى الشاشة لتسجيل أول عملية سحب أو إيداع، وسيتم حفظها في Firebase وتحديث رصيد الخط تلقائياً.</p>
+            <button type="button" onclick="document.getElementById('cust-phone').focus()" class="mt-4 flex items-center gap-1.5 px-5 py-2 rounded-lg bg-primary text-white hover:bg-primary-container font-label-lg shadow-sm">
+              <span class="material-symbols-outlined text-lg">add_circle</span>
+              <span>تسجيل أول معاملة الآن</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL: SIM Number Config -->
+  <div id="sim-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-navy-dark/60 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden modal-animate border border-slate-200">
+      <div class="bg-navy-dark text-white px-5 py-4 flex items-center justify-between">
+        <h3 class="font-title-md font-bold">تحديد بيانات شريحة المحفظة</h3>
+        <button type="button" onclick="AppLayout.closeModal('sim-modal')" class="text-slate-300 hover:text-white">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <form id="sim-form" class="p-5 space-y-4">
+        <div>
+          <label for="input-sim-number" class="font-label-md text-on-surface-variant block mb-1">رقم الشريحة (11 رقم)</label>
+          <input type="tel" id="input-sim-number" maxlength="11" placeholder="010xxxxxxxx" class="w-full h-10 px-3 bg-surface-container-low border border-slate-200 rounded-lg font-numeric-table text-title-md focus:bg-white focus:ring-2 focus:ring-primary text-left" dir="ltr" />
+        </div>
+        <label class="flex items-center gap-2 cursor-pointer p-2.5 rounded-lg bg-surface-container-low border border-slate-200">
+          <input type="checkbox" id="input-sim-active" checked class="accent-primary" />
+          <span class="font-body-md font-semibold">الشريحة نشطة ومتاحة للتحويلات</span>
+        </label>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="AppLayout.closeModal('sim-modal')" class="px-4 py-2 rounded-lg bg-surface-container-low text-on-surface font-label-lg">إلغاء</button>
+          <button type="submit" class="px-5 py-2 rounded-lg bg-primary text-white font-label-lg shadow-sm">حفظ الشريحة</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Opening Balance Edit -->
+  <div id="balance-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-navy-dark/60 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden modal-animate border border-slate-200">
+      <div class="bg-navy-dark text-white px-5 py-4 flex items-center justify-between">
+        <h3 class="font-title-md font-bold">تعديل الرصيد الافتتاحي</h3>
+        <button type="button" onclick="AppLayout.closeModal('balance-modal')" class="text-slate-300 hover:text-white">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <form id="balance-form" class="p-5 space-y-4">
+        <div>
+          <label for="input-opening-bal" class="font-label-md text-on-surface-variant block mb-1">الرصيد المالي في بداية الوردية</label>
+          <div class="relative flex items-center">
+            <input type="number" id="input-opening-bal" min="0" step="any" placeholder="0.00" required class="w-full h-10 px-3 pl-12 bg-surface-container-low border border-slate-200 text-on-surface rounded-lg font-numeric-table text-title-md focus:bg-white focus:ring-2 focus:ring-primary text-left" dir="ltr" />
+            <span class="absolute left-3 font-label-md text-on-surface-variant">ج.م</span>
+          </div>
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="AppLayout.closeModal('balance-modal')" class="px-4 py-2 rounded-lg bg-surface-container-low text-on-surface font-label-lg">إلغاء</button>
+          <button type="submit" class="px-5 py-2 rounded-lg bg-primary text-white font-label-lg shadow-sm">حفظ وتعيين</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Edit Transaction -->
+  <div id="edit-tx-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-navy-dark/60 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden modal-animate border border-slate-200">
+      <div class="bg-navy-dark text-white px-5 py-4 flex items-center justify-between">
+        <h3 class="font-title-md font-bold">تعديل بيانات معاملة الكاش</h3>
+        <button type="button" onclick="AppLayout.closeModal('edit-tx-modal')" class="text-slate-300 hover:text-white">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <form id="edit-tx-form" class="p-5 space-y-3">
+        <div>
+          <label class="block font-label-md text-on-surface-variant mb-1">نوع العملية</label>
+          <select id="edit-tx-type" class="w-full h-10 px-3 rounded-lg bg-surface-container-low border border-slate-200 font-body-md">
+            <option value="withdraw">سحب كاش (تحويل للعميل)</option>
+            <option value="deposit">إيداع كاش (استلام من العميل)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-label-md text-on-surface-variant mb-1">رقم هاتف العميل</label>
+          <input type="tel" id="edit-tx-phone" maxlength="11" required class="w-full h-10 px-3 rounded-lg bg-surface-container-low border border-slate-200 font-numeric-table text-left" dir="ltr" />
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-label-md text-on-surface-variant mb-1">المبلغ (ج.م)</label>
+            <input type="number" id="edit-tx-amount" min="1" step="any" required class="w-full h-10 px-3 rounded-lg bg-surface-container-low border border-slate-200 font-numeric-table text-left" dir="ltr" />
+          </div>
+          <div>
+            <label class="block font-label-md text-on-surface-variant mb-1">العمولة (ج.م)</label>
+            <input type="number" id="edit-tx-commission" min="0" step="0.5" required class="w-full h-10 px-3 rounded-lg bg-surface-container-low border border-slate-200 font-numeric-table text-left" dir="ltr" />
+          </div>
+        </div>
+        <div>
+          <label class="block font-label-md text-on-surface-variant mb-1">اسم العميل / ملاحظات</label>
+          <input type="text" id="edit-tx-notes" class="w-full h-10 px-3 rounded-lg bg-surface-container-low border border-slate-200 font-body-md" />
+        </div>
+        <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
+          <button type="button" onclick="AppLayout.closeModal('edit-tx-modal')" class="px-4 py-2 rounded-lg bg-surface-container-low text-on-surface font-label-lg">إلغاء</button>
+          <button type="submit" class="px-5 py-2 rounded-lg bg-primary text-white font-label-lg shadow-sm">حفظ التعديلات</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Delete Confirmation -->
+  <div id="delete-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-navy-dark/60 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 flex flex-col gap-4 modal-animate border border-slate-200">
+      <div class="flex items-center gap-3 text-error">
+        <div class="w-10 h-10 rounded-full bg-error-container flex items-center justify-center">
+          <span class="material-symbols-outlined text-2xl text-error">warning</span>
+        </div>
+        <h3 class="font-title-lg text-on-surface font-bold">هل أنت متأكد من الحذف؟</h3>
+      </div>
+      <p class="font-body-md text-on-surface-variant">سيتم مسح هذه المعاملة من سجل المحفظة وتعديل رصيد الخط والعمولات تلقائياً.</p>
+      <div id="delete-tx-summary" class="p-3 rounded-lg bg-surface-container-low font-numeric-table text-body-sm text-on-surface border border-slate-200"></div>
+      <div class="flex items-center justify-end gap-2 pt-1">
+        <button type="button" onclick="AppLayout.closeModal('delete-modal')" class="px-4 py-2 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container font-label-lg">إلغاء الأمر</button>
+        <button type="button" onclick="WalletPage.confirmDeleteTx()" class="px-5 py-2 rounded-lg bg-error text-white hover:opacity-90 font-label-lg shadow-sm flex items-center gap-1">
+          <span class="material-symbols-outlined text-base">delete</span>
+          <span>تأكيد الحذف وتعديل الرصيد</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase Compat SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics-compat.js"></script>
+  <!-- App Modules -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/wallet.js"></script>
+</body>
+</html>

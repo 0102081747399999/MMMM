@@ -1,0 +1,20 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow read/write access to POS collections for mmmm-cba14
+    // Note: For production multi-user security, configure Firebase Authentication and restrict rules accordingly.
+    match /{collection}/{docId} {
+      allow read, write: if collection in [
+        'settings',
+        'staff',
+        'wallets',
+        'walletTransactions',
+        'inventory',
+        'phones',
+        'sales',
+        'drawerTransactions',
+        'shiftClosings'
+      ];
+    }
+  }
+}

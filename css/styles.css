@@ -1,0 +1,112 @@
+/* Central POS - Shared Stylesheet (RTL Arabic, Navy #0F172A & Sky Blue #38BDF8) */
+@layer base {
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Cairo', 'Readex Pro', system-ui, -apple-system, sans-serif;
+    background-color: #f8fafc;
+    color: #0F172A;
+  }
+
+  body {
+    overscroll-behavior-y: none;
+  }
+}
+
+/* Tabular Figures for Prices, Balances, IMEI & Counts */
+.font-numeric-table {
+  font-family: 'Readex Pro', 'Cairo', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Subtle Custom Scrollbars (usable on Windows desktop & touch) */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.35);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(2, 132, 199, 0.55);
+}
+
+/* Modal Entrance Animation */
+@keyframes modalPop {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.modal-animate {
+  animation: modalPop 0.18s ease-out forwards;
+}
+
+/* Input Focus Enhancement */
+input:focus, select:focus, textarea:focus {
+  outline: none;
+}
+
+/* Hide number input arrows for cleaner cashier numeric fields */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Table row subtle hover */
+.pos-table-row {
+  transition: background-color 0.15s ease;
+}
+
+/* Responsive Mobile Sidebar Drawer */
+@media (max-width: 1023px) {
+  #app-sidebar.sidebar-closed {
+    transform: translateX(100%);
+  }
+  #app-sidebar.sidebar-open {
+    transform: translateX(0);
+  }
+}
+
+/* Print Layout for Shift Reports & Invoices */
+@media print {
+  aside,
+  header,
+  #mobile-sidebar-backdrop,
+  #globalToast,
+  .no-print,
+  button {
+    display: none !important;
+  }
+
+  .lg\:pr-72 {
+    padding-right: 0 !important;
+  }
+
+  main {
+    padding-top: 0 !important;
+    background: #ffffff !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+}

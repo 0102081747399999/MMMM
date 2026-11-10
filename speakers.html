@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>قسم الصبات ومكبرات الصوت — سنترال تيك POS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Readex+Pro:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/tailwind-config.js"></script>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="bg-background font-body-md text-on-surface antialiased" data-section="speakers">
+  <aside id="app-sidebar"></aside>
+
+  <div class="lg:pr-72">
+    <header id="app-header"></header>
+
+    <main class="w-full pt-16 bg-surface min-h-screen">
+      <section class="px-4 sm:px-6 lg:px-8 py-6 flex flex-col gap-5">
+
+        <!-- Header Row -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-5 sm:p-6 rounded-xl shadow-sm border border-slate-200/80">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-primary-fixed flex items-center justify-center text-primary shrink-0">
+              <span class="material-symbols-outlined text-3xl">speaker</span>
+            </div>
+            <div>
+              <div class="flex items-center gap-2 flex-wrap">
+                <h1 class="font-headline-md text-on-surface">قسم الصبات ومكبرات الصوت</h1>
+                <span class="px-2.5 py-0.5 rounded-full bg-surface-container-low text-on-surface-variant font-label-md">جرد الأحجام والموديلات</span>
+              </div>
+              <p class="font-body-md text-on-surface-variant mt-0.5">تصنيف وإدارة الصبات (صب صغير، صب وسط، صب كبير) والأسعار والكميات المتوفرة</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3 flex-wrap">
+            <div class="relative min-w-[240px] flex-1 sm:flex-initial">
+              <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline text-xl">search</span>
+              <input type="text" id="searchInput" placeholder="بحث بالموديل أو الماركة أو المواصفات..." class="w-full bg-surface-container-low border border-slate-200 text-on-surface pl-4 pr-10 py-2.5 rounded-lg font-body-md focus:bg-white focus:ring-2 focus:ring-primary" />
+            </div>
+            <button type="button" onclick="AccessoriesPage.openAddItemModal()" class="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-white hover:bg-primary-container font-label-lg shadow-sm transition-all">
+              <span class="material-symbols-outlined text-xl">add_circle</span>
+              <span>+ إضافة جديد</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Metrics Bar -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200/80 flex items-center justify-between shadow-sm">
+            <div class="flex flex-col">
+              <span class="font-label-md text-on-surface-variant">إجمالي الموديلات المسجلة</span>
+              <span id="metricTotalTypes" class="font-display-lg font-numeric-table text-headline-lg text-on-surface mt-1">0</span>
+            </div>
+            <div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-on-surface-variant">
+              <span class="material-symbols-outlined text-2xl">category</span>
+            </div>
+          </div>
+
+          <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200/80 flex items-center justify-between shadow-sm">
+            <div class="flex flex-col">
+              <span class="font-label-md text-on-surface-variant">إجمالي القطع بالمخزن</span>
+              <span id="metricTotalQty" class="font-display-lg font-numeric-table text-headline-lg text-primary mt-1">0 <span class="font-body-sm text-on-surface-variant">قطعة</span></span>
+            </div>
+            <div class="w-10 h-10 rounded-lg bg-primary-fixed flex items-center justify-center text-primary">
+              <span class="material-symbols-outlined text-2xl">speaker_group</span>
+            </div>
+          </div>
+
+          <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200/80 flex items-center justify-between shadow-sm">
+            <div class="flex flex-col">
+              <span class="font-label-md text-on-surface-variant">قيمة البضاعة (تكلفة)</span>
+              <span id="metricWholesaleTotal" class="font-display-lg font-numeric-table text-headline-lg text-on-surface mt-1">0.00 <span class="font-body-sm text-on-surface-variant">ج.م</span></span>
+            </div>
+            <div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-secondary">
+              <span class="material-symbols-outlined text-2xl">receipt_long</span>
+            </div>
+          </div>
+
+          <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200/80 flex items-center justify-between shadow-sm">
+            <div class="flex flex-col">
+              <span class="font-label-md text-on-surface-variant">الأرباح المتوقعة</span>
+              <span id="metricProfitTotal" class="font-display-lg font-numeric-table text-headline-lg text-tertiary mt-1">0.00 <span class="font-body-sm text-on-surface-variant">ج.م</span></span>
+            </div>
+            <div class="w-10 h-10 rounded-lg bg-tertiary-fixed flex items-center justify-center text-tertiary">
+              <span class="material-symbols-outlined text-2xl">trending_up</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Size Filter Tabs -->
+        <div id="filterTabs" class="flex items-center gap-2 overflow-x-auto pb-1"></div>
+
+        <!-- Inventory Table -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden flex flex-col">
+          <div class="overflow-x-auto w-full">
+            <table class="w-full text-right border-collapse">
+              <thead>
+                <tr class="bg-navy-dark text-white font-label-lg select-none">
+                  <th class="py-3.5 px-4">الكود / الباركود</th>
+                  <th class="py-3.5 px-4">الموديل والمواصفات</th>
+                  <th class="py-3.5 px-4">الشركة / الماركة</th>
+                  <th class="py-3.5 px-4">تصنيف الحجم</th>
+                  <th class="py-3.5 px-4 text-left font-numeric-table">سعر الشراء</th>
+                  <th class="py-3.5 px-4 text-left font-numeric-table">سعر البيع</th>
+                  <th class="py-3.5 px-4 text-left font-numeric-table">هامش الربح</th>
+                  <th class="py-3.5 px-4 text-center">الكمية</th>
+                  <th class="py-3.5 px-4 text-center">حالة المخزون</th>
+                  <th class="py-3.5 px-4 text-left">الإجراءات</th>
+                </tr>
+              </thead>
+              <tbody id="inventoryTableBody"></tbody>
+            </table>
+          </div>
+
+          <div id="emptyState" class="flex flex-col items-center justify-center py-16 px-6 text-center">
+            <div class="w-16 h-16 rounded-full bg-surface-container-low flex items-center justify-center text-primary mb-4">
+              <span class="material-symbols-outlined text-4xl">speaker</span>
+            </div>
+            <h3 id="emptyStateTitle" class="font-headline-md text-on-surface mb-2">لا توجد صبات أو مكبرات صوت مسجلة حالياً</h3>
+            <p id="emptyStateText" class="font-body-md text-on-surface-variant max-w-md mb-6"></p>
+            <button type="button" onclick="AccessoriesPage.openAddItemModal()" class="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-white hover:bg-primary-container font-label-lg shadow-sm">
+              <span class="material-symbols-outlined text-xl">add</span>
+              <span>+ إضافة أول صب / مكبر صوت</span>
+            </button>
+          </div>
+
+          <div class="bg-surface-container-low px-5 py-2.5 flex flex-col sm:flex-row items-center justify-between text-on-surface-variant font-label-md gap-2 border-t border-slate-200">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-base text-tertiary">check_circle</span>
+              <span>المخزن متزامن لحظياً مع Firebase ونقطة البيع (F1)</span>
+            </div>
+            <span id="filteredItemsCount">عرض 0 من إجمالي 0 صنف</span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- MODAL: Add / Edit Item -->
+  <div id="addItemModal" class="fixed inset-0 z-50 hidden bg-navy-dark/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col modal-animate border border-slate-200">
+      <div class="bg-navy-dark text-white px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-sky-accent text-2xl">speaker</span>
+          <div>
+            <h3 id="itemModalTitle" class="font-title-md font-bold">إضافة صب / مكبر صوت جديد</h3>
+            <p class="font-label-md text-slate-300">أدخل الموديل والحجم والأسعار والكمية لحساب الجرد</p>
+          </div>
+        </div>
+        <button type="button" onclick="AppLayout.closeModal('addItemModal')" class="text-slate-300 hover:text-white p-1"><span class="material-symbols-outlined">close</span></button>
+      </div>
+
+      <form id="newItemForm" class="p-6 flex flex-col gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1">
+            <label class="font-label-lg text-on-surface flex items-center justify-between">
+              <span>كود الصنف / الباركود</span>
+              <button type="button" onclick="AccessoriesPage.generateAutoBarcode()" class="text-primary text-xs hover:underline">توليد كود تلقائي</button>
+            </label>
+            <div class="relative">
+              <input type="text" id="itemBarcode" placeholder="اختياري — اتركه فارغاً للتوليد التلقائي" class="w-full bg-surface-container-low border border-slate-200 text-on-surface pr-10 pl-3 py-2 rounded-lg font-numeric-table focus:bg-white focus:ring-2 focus:ring-primary" />
+              <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline text-lg">qr_code_scanner</span>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label for="itemBrand" class="font-label-lg text-on-surface">الشركة / الماركة *</label>
+            <input type="text" id="itemBrand" required placeholder="مثال: JBL, KTS, Sony, Anker" class="w-full bg-surface-container-low border border-slate-200 text-on-surface px-3 py-2 rounded-lg font-body-md focus:bg-white focus:ring-2 focus:ring-primary" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1">
+            <label id="itemNameLabel" for="itemName" class="font-label-lg text-on-surface">اسم الموديل *</label>
+            <input type="text" id="itemName" required class="w-full bg-surface-container-low border border-slate-200 text-on-surface px-3 py-2 rounded-lg font-body-md focus:bg-white focus:ring-2 focus:ring-primary" />
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label for="itemCategory" class="font-label-lg text-on-surface">تصنيف الحجم *</label>
+            <select id="itemCategory" required class="w-full bg-surface-container-low border border-slate-200 text-on-surface px-3 py-2 rounded-lg font-body-md focus:bg-white focus:ring-2 focus:ring-primary"></select>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label id="itemSpecsLabel" for="itemSpecs" class="font-label-lg text-on-surface">المواصفات / القدرة</label>
+          <input type="text" id="itemSpecs" class="w-full bg-surface-container-low border border-slate-200 text-on-surface px-3 py-2 rounded-lg font-body-md focus:bg-white focus:ring-2 focus:ring-primary" />
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="flex flex-col gap-1">
+            <label for="itemCostPrice" class="font-label-lg text-on-surface">سعر الشراء *</label>
+            <div class="relative">
+              <input type="number" id="itemCostPrice" step="0.5" min="0" required oninput="AccessoriesPage.calculateProjectedMargin()" placeholder="0.00" class="w-full bg-surface-container-low border border-slate-200 text-on-surface pr-3 pl-10 py-2 rounded-lg font-numeric-table focus:bg-white focus:ring-2 focus:ring-primary text-left" dir="ltr" />
+              <span class="absolute left-3 top-1/2 -translate-y-1/2 font-label-md text-outline">ج.م</span>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label for="itemSalePrice" class="font-label-lg text-on-surface">سعر البيع *</label>
+            <div class="relative">
+              <input type="number" id="itemSalePrice" step="0.5" min="0" required oninput="AccessoriesPage.calculateProjectedMargin()" placeholder="0.00" class="w-full bg-surface-container-low border border-slate-200 text-on-surface pr-3 pl-10 py-2 rounded-lg font-numeric-table focus:bg-white focus:ring-2 focus:ring-primary text-left" dir="ltr" />
+              <span class="absolute left-3 top-1/2 -translate-y-1/2 font-label-md text-outline">ج.م</span>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label for="itemInitialQty" class="font-label-lg text-on-surface">الكمية *</label>
+            <div class="relative">
+              <input type="number" id="itemInitialQty" min="0" required value="1" class="w-full bg-surface-container-low border border-slate-200 text-on-surface pr-3 pl-12 py-2 rounded-lg font-numeric-table focus:bg-white focus:ring-2 focus:ring-primary text-left" dir="ltr" />
+              <span class="absolute left-3 top-1/2 -translate-y-1/2 font-label-md text-outline">قطعة</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-lg bg-surface-container-low border border-slate-200 flex items-center justify-between text-body-sm">
+          <div class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-base">info</span><span>صافي هامش ربح القطعة:</span></div>
+          <span id="marginPreviewVal" class="font-numeric-table text-tertiary font-bold">0.00 ج.م (+0.0%)</span>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+          <button type="button" onclick="AppLayout.closeModal('addItemModal')" class="px-4 py-2 rounded-lg bg-surface-container-low text-on-surface font-label-lg">إلغاء</button>
+          <button type="submit" class="flex items-center gap-1.5 px-5 py-2 rounded-lg bg-primary text-white hover:bg-primary-container font-label-lg shadow-sm">
+            <span class="material-symbols-outlined text-lg">save</span>
+            <span id="itemModalSubmitText">حفظ الصنف في المخزن</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Quick Sell -->
+  <div id="quickSellModal" class="fixed inset-0 z-50 hidden bg-navy-dark/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden modal-animate border border-slate-200">
+      <div class="bg-navy-dark text-white px-5 py-4 flex items-center justify-between">
+        <h3 class="font-title-md font-bold">إتمام بيع سريع من قسم الصبات</h3>
+        <button type="button" onclick="AppLayout.closeModal('quickSellModal')" class="text-slate-300 hover:text-white"><span class="material-symbols-outlined">close</span></button>
+      </div>
+      <form id="quickSellForm" class="p-5 space-y-4">
+        <div class="p-3 rounded-xl bg-surface-container-low border border-slate-200">
+          <div id="quickSellItemTitle" class="font-title-md text-on-surface font-bold">--</div>
+          <div id="quickSellAvail" class="font-label-md text-tertiary mt-0.5">--</div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-label-md text-on-surface-variant mb-1">الكمية المباعة</label>
+            <input type="number" id="quickSellQty" min="1" value="1" required class="w-full h-10 px-3 rounded-lg bg-surface-container-low border border-slate-200 font-numeric-table text-center font-bold" />
+          </div>
+          <div>
+            <label class="block font-label-md text-on-surface-variant mb-1">سعر بيع القطعة (ج.م)</label>
+            <input type="number" id="quickSellUnitPrice" min="0" step="0.5" required class="w-full h-10 px-3 rounded-lg bg-surface-container-low border border-slate-200 font-numeric-table text-left font-bold" dir="ltr" />
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-2 text-center">
+          <label class="flex items-center justify-center gap-1 p-2 rounded-lg bg-surface-container-low border border-slate-200 cursor-pointer text-body-sm font-semibold"><input type="radio" name="quickSellPay" value="نقدي (كاش)" checked class="accent-primary" /><span>كاش</span></label>
+          <label class="flex items-center justify-center gap-1 p-2 rounded-lg bg-surface-container-low border border-slate-200 cursor-pointer text-body-sm font-semibold"><input type="radio" name="quickSellPay" value="فودافون كاش" class="accent-primary" /><span>فودافون كاش</span></label>
+          <label class="flex items-center justify-center gap-1 p-2 rounded-lg bg-surface-container-low border border-slate-200 cursor-pointer text-body-sm font-semibold"><input type="radio" name="quickSellPay" value="فيزا / شبكة" class="accent-primary" /><span>فيزا</span></label>
+        </div>
+        <div class="flex items-center justify-between bg-navy-dark text-white px-4 py-3 rounded-xl">
+          <span class="font-title-md">إجمالي البيع:</span>
+          <span id="quickSellTotalDisplay" class="font-headline-md font-numeric-table text-sky-accent">0.00 ج.م</span>
+        </div>
+        <div class="flex justify-end gap-2">
+          <button type="button" onclick="AppLayout.closeModal('quickSellModal')" class="px-4 py-2 rounded-lg bg-surface-container-low text-on-surface font-label-lg">إلغاء</button>
+          <button type="submit" class="px-5 py-2 rounded-lg bg-tertiary text-white hover:bg-tertiary-container font-label-lg shadow-sm">تأكيد البيع</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Delete Confirmation -->
+  <div id="deleteModal" class="fixed inset-0 z-50 hidden bg-navy-dark/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col modal-animate border border-slate-200">
+      <div class="p-6 flex flex-col items-center text-center">
+        <div class="w-14 h-14 rounded-full bg-error-container text-error flex items-center justify-center mb-3"><span class="material-symbols-outlined text-3xl">warning</span></div>
+        <h4 class="font-headline-md text-on-surface mb-2">هل أنت متأكد من الحذف؟</h4>
+        <p class="font-body-md text-on-surface-variant mb-2">سيتم حذف هذا الصنف نهائياً من قاعدة البيانات:</p>
+        <div class="p-3 rounded-lg bg-surface-container-low border border-slate-200 w-full my-2">
+          <span id="deleteItemTitle" class="font-title-md text-on-surface block font-bold">--</span>
+          <span id="deleteItemSku" class="font-numeric-table text-outline block mt-0.5">--</span>
+        </div>
+      </div>
+      <div class="bg-surface-container-low px-6 py-4 flex items-center justify-between border-t border-slate-200">
+        <button type="button" onclick="AppLayout.closeModal('deleteModal')" class="px-4 py-2 rounded-lg bg-white border border-slate-200 text-on-surface font-label-lg">تراجع وإلغاء</button>
+        <button type="button" onclick="AccessoriesPage.executeDelete()" class="flex items-center gap-1.5 px-5 py-2 rounded-lg bg-error text-white font-label-lg shadow-sm">
+          <span class="material-symbols-outlined text-base">delete_forever</span>
+          <span>نعم، حذف الصنف</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/accessories.js"></script>
+</body>
+</html>

@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>الإدارة والتقارير العامة — سنترال تيك POS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Readex+Pro:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/tailwind-config.js"></script>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="bg-background font-body-md text-on-surface antialiased">
+  <aside id="app-sidebar"></aside>
+
+  <div class="lg:pr-72">
+    <header id="app-header"></header>
+
+    <main class="w-full pt-16 bg-surface min-h-screen">
+      <div class="flex flex-col w-full px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+        <!-- Top Action & Overview Bar -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-5 sm:p-6 rounded-xl shadow-sm border border-slate-200/80">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-navy-dark flex items-center justify-center text-sky-accent shadow-md shrink-0">
+              <span class="material-symbols-outlined text-2xl">admin_panel_settings</span>
+            </div>
+            <div>
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="font-label-md px-2 py-0.5 rounded bg-primary-fixed text-on-primary-fixed font-bold">نظام الرقابة المركزي</span>
+                <span class="font-label-md text-outline">مزامنة فورية عبر Firebase</span>
+              </div>
+              <h1 class="font-headline-md text-on-surface mt-0.5">لوحة الإدارة والرقابة المالية وجرد الخزينة</h1>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+            <button type="button" id="openManualTxModalBtn" class="flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container font-label-lg transition-all border border-slate-200">
+              <span class="material-symbols-outlined text-lg text-primary">add_circle</span>
+              <span>+ تسجيل حركة خزينة يدوية</span>
+            </button>
+            <button type="button" id="exportShiftReportBtn" class="flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-primary text-white hover:bg-primary-container font-label-lg transition-all shadow-sm">
+              <span class="material-symbols-outlined text-lg">print</span>
+              <span>طباعة التقرير</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Realtime Financial Indicators Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+          <!-- Card 1: Today's Revenue -->
+          <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200/80 flex flex-col justify-between relative overflow-hidden">
+            <div class="flex items-center justify-between mb-3">
+              <span class="font-label-lg text-on-surface-variant">إجمالي إيرادات اليوم</span>
+              <div class="w-9 h-9 rounded-lg bg-primary-fixed text-primary flex items-center justify-center">
+                <span class="material-symbols-outlined text-lg">trending_up</span>
+              </div>
+            </div>
+            <div>
+              <div class="flex items-baseline gap-1.5">
+                <span id="kpiTotalRevenue" class="text-display-lg font-numeric-table text-on-surface tracking-tight">0.00</span>
+                <span class="font-body-sm text-on-surface-variant">ج.م</span>
+              </div>
+              <div class="flex items-center justify-between mt-3 pt-2 border-t border-slate-100 text-on-surface-variant font-label-md">
+                <span class="flex items-center gap-1">
+                  <span class="material-symbols-outlined text-xs">receipt_long</span>
+                  عدد العمليات اليوم:
+                </span>
+                <span id="kpiTotalOps" class="font-numeric-table px-2 py-0.5 rounded bg-surface-container-low text-on-surface font-bold">0 معاملة</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Cash in Drawer -->
+          <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200/80 flex flex-col justify-between relative overflow-hidden">
+            <div class="flex items-center justify-between mb-3">
+              <span class="font-label-lg text-on-surface-variant">رصيد الخزينة الحالي (الدرج)</span>
+              <div class="w-9 h-9 rounded-lg bg-tertiary-fixed text-tertiary flex items-center justify-center">
+                <span class="material-symbols-outlined text-lg">payments</span>
+              </div>
+            </div>
+            <div>
+              <div class="flex items-baseline gap-1.5">
+                <span id="kpiDrawerBalance" class="text-display-lg font-numeric-table text-tertiary tracking-tight">0.00</span>
+                <span class="font-body-sm text-on-surface-variant">ج.م</span>
+              </div>
+              <div class="flex items-center justify-between mt-3 pt-2 border-t border-slate-100 text-on-surface-variant font-label-md">
+                <span class="flex items-center gap-1">
+                  <span class="material-symbols-outlined text-xs">point_of_sale</span>
+                  حالة الدرج:
+                </span>
+                <span id="kpiDrawerStatus" class="px-2 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed-variant font-bold">بانتظار الرصيد الافتتاحي</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Store Retail Sales -->
+          <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200/80 flex flex-col justify-between relative overflow-hidden">
+            <div class="flex items-center justify-between mb-3">
+              <span class="font-label-lg text-on-surface-variant">إجمالي مبيعات البضاعة اليوم</span>
+              <div class="w-9 h-9 rounded-lg bg-surface-container-low text-on-surface flex items-center justify-center">
+                <span class="material-symbols-outlined text-lg">inventory_2</span>
+              </div>
+            </div>
+            <div>
+              <div class="flex items-baseline gap-1.5">
+                <span id="kpiGoodsSales" class="text-display-lg font-numeric-table text-on-surface tracking-tight">0.00</span>
+                <span class="font-body-sm text-on-surface-variant">ج.م</span>
+              </div>
+              <div class="flex items-center justify-between mt-3 pt-2 border-t border-slate-100 text-on-surface-variant font-label-md">
+                <span>هواتف وإكسسوارات</span>
+                <span id="kpiUnitsSold" class="font-numeric-table text-primary font-bold">0 قطعة مُباعة</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4: Wallet Commissions -->
+          <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200/80 flex flex-col justify-between relative overflow-hidden">
+            <div class="flex items-center justify-between mb-3">
+              <span class="font-label-lg text-on-surface-variant">أرباح محافظ الكاش اليوم</span>
+              <div class="w-9 h-9 rounded-lg bg-primary-fixed text-primary flex items-center justify-center">
+                <span class="material-symbols-outlined text-lg">account_balance_wallet</span>
+              </div>
+            </div>
+            <div>
+              <div class="flex items-baseline gap-1.5">
+                <span id="kpiWalletCommissions" class="text-display-lg font-numeric-table text-primary tracking-tight">0.00</span>
+                <span class="font-body-sm text-on-surface-variant">ج.م</span>
+              </div>
+              <div class="flex items-center justify-between mt-3 pt-2 border-t border-slate-100 text-on-surface-variant font-label-md">
+                <span>كاش 1، 2، 3</span>
+                <span id="kpiCommissionSub" class="font-numeric-table text-outline">حصة الموظف: 0.00 ج.م</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Cross-System Overview (Wallets + Inventory Links) -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+          <a href="cash-1.html" class="bg-navy-dark text-white p-3.5 rounded-xl hover:ring-2 hover:ring-sky-accent transition-all flex flex-col justify-between">
+            <div class="flex items-center justify-between text-sky-accent">
+              <span class="font-label-md font-bold">كاش 1 الأساسي</span>
+              <span class="material-symbols-outlined text-base">account_balance_wallet</span>
+            </div>
+            <div id="summaryWalletBal1" class="font-numeric-table text-title-md font-bold mt-2">0.00 ج.م</div>
+            <div id="summaryWalletSim1" class="font-label-md text-slate-400 truncate mt-0.5" dir="ltr">شريحة غير محددة</div>
+          </a>
+
+          <a href="cash-2.html" class="bg-navy-dark text-white p-3.5 rounded-xl hover:ring-2 hover:ring-sky-accent transition-all flex flex-col justify-between">
+            <div class="flex items-center justify-between text-sky-accent">
+              <span class="font-label-md font-bold">كاش 2 الإضافي</span>
+              <span class="material-symbols-outlined text-base">payments</span>
+            </div>
+            <div id="summaryWalletBal2" class="font-numeric-table text-title-md font-bold mt-2">0.00 ج.م</div>
+            <div id="summaryWalletSim2" class="font-label-md text-slate-400 truncate mt-0.5" dir="ltr">شريحة غير محددة</div>
+          </a>
+
+          <a href="cash-3.html" class="bg-navy-dark text-white p-3.5 rounded-xl hover:ring-2 hover:ring-sky-accent transition-all flex flex-col justify-between">
+            <div class="flex items-center justify-between text-sky-accent">
+              <span class="font-label-md font-bold">كاش 3 الاحتياطي</span>
+              <span class="material-symbols-outlined text-base">currency_exchange</span>
+            </div>
+            <div id="summaryWalletBal3" class="font-numeric-table text-title-md font-bold mt-2">0.00 ج.م</div>
+            <div id="summaryWalletSim3" class="font-label-md text-slate-400 truncate mt-0.5" dir="ltr">شريحة غير محددة</div>
+          </a>
+
+          <a href="chargers.html" class="bg-white p-3.5 rounded-xl border border-slate-200 hover:border-primary transition-all flex flex-col justify-between">
+            <div class="flex items-center justify-between text-primary">
+              <span class="font-label-md font-bold">الشواحن والوصلات</span>
+              <span class="material-symbols-outlined text-base">power</span>
+            </div>
+            <div id="summaryStockChargers" class="font-numeric-table text-title-md font-bold text-on-surface mt-2">0 قطعة</div>
+            <span class="font-label-md text-outline">عرض المخزن</span>
+          </a>
+
+          <a href="phones.html" class="bg-white p-3.5 rounded-xl border border-slate-200 hover:border-primary transition-all flex flex-col justify-between">
+            <div class="flex items-center justify-between text-primary">
+              <span class="font-label-md font-bold">التلفونات (IMEI)</span>
+              <span class="material-symbols-outlined text-base">smartphone</span>
+            </div>
+            <div id="summaryStockPhones" class="font-numeric-table text-title-md font-bold text-on-surface mt-2">0 جهاز متاح</div>
+            <span class="font-label-md text-outline">عرض الأجهزة</span>
+          </a>
+
+          <a href="headphones.html" class="bg-white p-3.5 rounded-xl border border-slate-200 hover:border-primary transition-all flex flex-col justify-between">
+            <div class="flex items-center justify-between text-primary">
+              <span class="font-label-md font-bold">قسم السماعات</span>
+              <span class="material-symbols-outlined text-base">headphones</span>
+            </div>
+            <div id="summaryStockHeadphones" class="font-numeric-table text-title-md font-bold text-on-surface mt-2">0 قطعة</div>
+            <span class="font-label-md text-outline">عرض المخزن</span>
+          </a>
+
+          <a href="speakers.html" class="bg-white p-3.5 rounded-xl border border-slate-200 hover:border-primary transition-all flex flex-col justify-between">
+            <div class="flex items-center justify-between text-primary">
+              <span class="font-label-md font-bold">الصبات والمكبرات</span>
+              <span class="material-symbols-outlined text-base">speaker</span>
+            </div>
+            <div id="summaryStockSpeakers" class="font-numeric-table text-title-md font-bold text-on-surface mt-2">0 قطعة</div>
+            <span class="font-label-md text-outline">عرض المخزن</span>
+          </a>
+        </div>
+
+        <!-- Operational Core: Shift Settlement & Reconciliation -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+          <!-- Shift Config & Drawer Opening (5 Cols) -->
+          <div class="lg:col-span-5 bg-white p-6 rounded-xl shadow-sm border border-slate-200/80 flex flex-col justify-between space-y-4">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary text-xl">tune</span>
+                  <h2 class="font-title-lg text-on-surface">إعدادات الوردية الحالية (الشيفت)</h2>
+                </div>
+                <span class="font-label-md px-2.5 py-0.5 rounded-full bg-surface-container-low text-on-surface-variant">تسليم العهدة</span>
+              </div>
+
+              <div class="space-y-4">
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="block font-label-md text-on-surface-variant mb-1">فترة الوردية</label>
+                    <select id="shiftPeriod" class="w-full bg-surface-container-low text-on-surface rounded-lg px-3 py-2 font-body-md border border-slate-200 focus:ring-2 focus:ring-primary">
+                      <option value="morning">الوردية الصباحية</option>
+                      <option value="evening">الوردية المسائية</option>
+                      <option value="night">الوردية الليلية</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block font-label-md text-on-surface-variant mb-1">وقت الفتح</label>
+                    <div class="w-full bg-surface-container-low text-on-surface rounded-lg px-3 py-2 font-numeric-table flex items-center justify-between border border-slate-200">
+                      <span id="shiftOpenedAt">مفتوح الآن</span>
+                      <span class="material-symbols-outlined text-sm text-outline">schedule</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block font-label-md text-on-surface-variant mb-1">الكاشير المسؤول عن العهدة</label>
+                  <div class="flex items-center justify-between bg-surface-container-low p-2.5 rounded-lg border border-slate-200">
+                    <div class="flex items-center gap-2.5">
+                      <div class="w-8 h-8 rounded-full bg-navy-dark text-sky-accent flex items-center justify-center font-bold text-xs">
+                        <span class="material-symbols-outlined text-base">person</span>
+                      </div>
+                      <div class="flex flex-col">
+                        <span id="shiftCashierNameDisplay" class="font-body-md font-bold text-on-surface">أدمن الوردية</span>
+                        <span id="shiftCashierRoleDisplay" class="font-label-md text-outline">إدارة عامة</span>
+                      </div>
+                    </div>
+                    <button type="button" onclick="AppLayout.openDrawerModal()" class="text-xs font-bold text-primary hover:underline">تبديل</button>
+                  </div>
+                </div>
+
+                <div class="p-4 rounded-xl bg-surface-container-low border border-slate-200 space-y-2">
+                  <div class="flex items-center justify-between">
+                    <label for="openingBalanceInput" class="font-label-lg text-on-surface font-bold">الرصيد الافتتاحي للدرج (العهدة)</label>
+                    <span class="text-xs text-primary font-bold">أساس الجرد</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <div class="relative flex-1">
+                      <input type="number" step="0.5" min="0" id="openingBalanceInput" placeholder="0.00" class="w-full text-left font-numeric-table text-title-lg bg-white text-on-surface rounded-lg pl-14 pr-3 py-2 border border-slate-200 focus:ring-2 focus:ring-primary" dir="ltr" />
+                      <span class="absolute left-3 top-1/2 -translate-y-1/2 font-label-md text-outline">ج.م</span>
+                    </div>
+                    <button type="button" id="saveShiftOpeningBtn" class="px-4 py-2.5 rounded-lg bg-primary text-white hover:bg-primary-container font-label-lg shadow-sm shrink-0">
+                      حفظ وفتح
+                    </button>
+                  </div>
+                  <p class="font-body-sm text-on-surface-variant">يُثبت هذا المبلغ كأساس لاحتساب رصيد الدرج والفروقات في نهاية الشيفت.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hand Cash Reconciliation & Variance (7 Cols) -->
+          <div class="lg:col-span-7 bg-white p-6 rounded-xl shadow-sm border border-slate-200/80 flex flex-col justify-between space-y-4">
+            <div>
+              <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-tertiary text-xl">balance</span>
+                  <h2 class="font-title-lg text-on-surface">تسوية العجز أو الزيادة (الجرد الفعلي)</h2>
+                </div>
+                <div class="flex items-center gap-2 px-3 py-1 rounded-lg bg-surface-container-low border border-slate-200">
+                  <span class="font-label-md text-on-surface-variant">الرصيد الدفتري المتوقع:</span>
+                  <strong id="expectedDrawerDisplay" class="font-numeric-table text-primary">0.00 ج.م</strong>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                <div class="space-y-1">
+                  <label for="actualHandCashInput" class="block font-label-lg text-on-surface font-semibold">الكاش الفعلي المحسوب باليد</label>
+                  <div class="relative">
+                    <input type="number" step="0.5" min="0" id="actualHandCashInput" placeholder="0.00" class="w-full text-left font-numeric-table text-title-lg bg-surface-container-low text-on-surface rounded-lg pl-14 pr-3 py-2.5 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-primary" dir="ltr" />
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 font-label-md text-outline">ج.م</span>
+                  </div>
+                  <span class="font-body-sm text-outline">عد النقدية الموجودة بالدرج يدوياً</span>
+                </div>
+
+                <div class="space-y-1">
+                  <label class="block font-label-lg text-on-surface font-semibold">الفرق المحسوب آلياً (عجز / زيادة)</label>
+                  <div class="w-full h-[48px] rounded-lg bg-surface-container-low border border-slate-200 px-3 flex items-center justify-between font-numeric-table text-title-lg">
+                    <span id="varianceValue" dir="ltr">0.00</span>
+                    <span id="varianceStatusBadge" class="font-label-md px-2 py-0.5 rounded bg-surface-container text-on-surface-variant">أدخل الجرد الفعلي</span>
+                  </div>
+                  <span class="font-body-sm text-outline">الفرق = الكاش الفعلي - الرصيد الدفتري</span>
+                </div>
+              </div>
+
+              <div class="space-y-1">
+                <label for="auditNotesInput" class="block font-label-md text-on-surface-variant">ملاحظات التدقيق وأسباب الفروقات إن وجدت</label>
+                <textarea id="auditNotesInput" rows="2" placeholder="اكتب أي ملاحظة تخص مصروفات أو فروقات عند التسليم..." class="w-full bg-surface-container-low text-on-surface rounded-lg px-3 py-2 font-body-md border border-slate-200 focus:bg-white focus:ring-2 focus:ring-primary"></textarea>
+              </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 bg-surface-container-low p-4 rounded-xl border border-slate-200">
+              <div class="flex items-center gap-2 text-on-surface-variant font-label-md">
+                <span class="material-symbols-outlined text-base text-primary">info</span>
+                <span>يتم حفظ تقرير الإغلاق في سجل الورديات بـ Firebase مع طباعة الإيصال.</span>
+              </div>
+              <button type="button" id="commitShiftCloseBtn" class="w-full sm:w-auto flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-lg bg-tertiary text-white hover:bg-tertiary-container font-label-lg shadow-sm transition-all">
+                <span class="material-symbols-outlined text-lg">fact_check</span>
+                <span>اعتماد إغلاق الخزينة وتصدير التقرير</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Security, Permissions, PIN Policy & Staff Management -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200/80 space-y-5">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-xl">shield_lock</span>
+              <h2 class="font-title-lg text-on-surface">إدارة الصلاحيات والأمان والأرقام السرية</h2>
+            </div>
+            <button type="button" onclick="AdminPage.openNewStaffModal()" class="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-container font-label-lg shadow-sm">
+              <span class="material-symbols-outlined text-lg">person_add</span>
+              <span>+ إضافة موظف / صلاحية</span>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Admin PIN -->
+            <div class="p-4 rounded-xl bg-surface-container-low border border-slate-200 flex flex-col justify-between space-y-3">
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <span class="font-label-lg text-on-surface font-bold">رمز الإدارة السري (PIN Code)</span>
+                  <span class="material-symbols-outlined text-primary text-base">key</span>
+                </div>
+                <p class="font-body-sm text-on-surface-variant mb-3">يُستخدم لحماية عمليات الحذف وتعديل السجلات المالية.</p>
+                <div class="relative">
+                  <input type="password" id="adminPinInput" maxlength="6" placeholder="أدخل 4-6 أرقام" class="w-full tracking-widest text-center font-numeric-table text-title-lg bg-white text-on-surface rounded-lg py-2 border border-slate-200 focus:ring-2 focus:ring-primary" />
+                  <button type="button" id="togglePinVisibility" class="absolute left-2.5 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface">
+                    <span class="material-symbols-outlined text-base">visibility</span>
+                  </button>
+                </div>
+              </div>
+              <button type="button" id="savePinBtn" class="w-full py-2 rounded-lg bg-navy-dark text-white hover:bg-navy-card font-label-md transition-colors">
+                حفظ رمز الـ PIN
+              </button>
+            </div>
+
+            <!-- Delete Policy -->
+            <div class="p-4 rounded-xl bg-surface-container-low border border-slate-200 flex flex-col justify-between space-y-3">
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <span class="font-label-lg text-on-surface font-bold">صلاحية حذف السجلات</span>
+                  <span class="material-symbols-outlined text-error text-base">delete_forever</span>
+                </div>
+                <p class="font-body-sm text-on-surface-variant mb-2">التحكم في طلب رمز الـ PIN عند حذف أي صنف أو معاملة:</p>
+                <div class="space-y-2">
+                  <label class="flex items-center gap-2 cursor-pointer p-2 rounded-lg bg-white border border-slate-200">
+                    <input type="radio" name="delete_policy" value="open" checked class="accent-primary" />
+                    <span class="font-body-sm text-on-surface font-semibold">سماح مباشر مع نافذة تأكيد</span>
+                  </label>
+                  <label class="flex items-center gap-2 cursor-pointer p-2 rounded-lg bg-white border border-slate-200">
+                    <input type="radio" name="delete_policy" value="admin_only" class="accent-primary" />
+                    <span class="font-body-sm text-on-surface font-semibold">مقصورة على المدير (طلب PIN)</span>
+                  </label>
+                </div>
+              </div>
+              <div id="securityPolicyStatus" class="font-label-md text-on-surface-variant flex items-center gap-1"></div>
+            </div>
+
+            <!-- Staff Commission Split -->
+            <div class="p-4 rounded-xl bg-surface-container-low border border-slate-200 flex flex-col justify-between space-y-3">
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <span class="font-label-lg text-on-surface font-bold">نسبة عمولة الموظف من الكاش</span>
+                  <span class="material-symbols-outlined text-primary text-base">percent</span>
+                </div>
+                <p class="font-body-sm text-on-surface-variant mb-3">تحديد نسبة ربح الكاشير من صافي عمولات محافظ فودافون كاش.</p>
+                <div class="flex items-center gap-2">
+                  <div class="relative flex-1">
+                    <input type="number" id="commissionPercentInput" min="0" max="100" value="15" class="w-full text-left font-numeric-table text-title-md bg-white text-on-surface rounded-lg pl-8 pr-3 py-2 border border-slate-200 focus:ring-2 focus:ring-primary" dir="ltr" />
+                    <span class="absolute left-2.5 top-1/2 -translate-y-1/2 font-bold text-outline">%</span>
+                  </div>
+                  <span class="font-body-sm text-on-surface-variant">من صافي العمولة</span>
+                </div>
+              </div>
+              <button type="button" id="saveCommissionBtn" class="w-full py-2 rounded-lg bg-primary text-white hover:bg-primary-container font-label-md transition-colors">
+                حفظ نسبة التحفيز
+              </button>
+            </div>
+          </div>
+
+          <!-- Staff & Permissions List -->
+          <div class="border border-slate-200 rounded-xl overflow-hidden">
+            <div class="bg-surface-container-low px-4 py-2.5 flex items-center justify-between border-b border-slate-200">
+              <span class="font-title-md text-on-surface">قائمة الموظفين والصلاحيات المسجلة</span>
+              <span class="font-label-md text-outline">اضغط "تفعيل" لتعيين الكاشير للوردية الحالية</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-right">
+                <thead class="bg-navy-dark text-white font-label-md">
+                  <tr>
+                    <th class="py-2.5 px-4">الاسم</th>
+                    <th class="py-2.5 px-4">الدور الوظيفي</th>
+                    <th class="py-2.5 px-4">الرمز السري</th>
+                    <th class="py-2.5 px-4">الصلاحيات</th>
+                    <th class="py-2.5 px-4 text-center">إجراءات</th>
+                  </tr>
+                </thead>
+                <tbody id="staffTableBody"></tbody>
+              </table>
+            </div>
+            <div id="staffEmptyState" class="py-6 text-center text-on-surface-variant font-body-sm">
+              لا يوجد موظفون مضافون حالياً — اضغط "+ إضافة موظف / صلاحية" لإضافة الكاشير والمديرين.
+            </div>
+          </div>
+        </div>
+
+        <!-- Cash Drawer Movement Log & Shift Closings -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden flex flex-col">
+          <div class="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-xl">receipt_long</span>
+              <div>
+                <h2 class="font-title-lg text-on-surface">سجل حركات الدرج والخزينة اليومية</h2>
+                <span class="font-body-sm text-on-surface-variant">التدفقات النقدية المسجلة يدوياً وتلقائياً من المبيعات</span>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2">
+              <div class="flex items-center gap-1 bg-surface-container-low p-1 rounded-lg">
+                <button type="button" id="tabDrawerLog" onclick="AdminPage.switchLogTab('drawer')" class="px-3 py-1.5 rounded-lg bg-primary text-white font-label-md shadow-sm">حركات الدرج</button>
+                <button type="button" id="tabClosingsLog" onclick="AdminPage.switchLogTab('closings')" class="px-3 py-1.5 rounded-lg bg-surface-container-low text-on-surface-variant hover:bg-surface-container font-label-md">تقارير الإغلاق</button>
+              </div>
+              <select id="drawerLogFilter" class="h-9 px-3 rounded-lg bg-surface-container-low border border-slate-200 text-body-sm font-semibold">
+                <option value="today">اليوم فقط</option>
+                <option value="all">كل السجل</option>
+              </select>
+              <span id="drawerRecordsBadge" class="px-2.5 py-1 rounded-full bg-surface-container-low text-on-surface-variant font-label-md font-bold">0 حركة</span>
+              <button type="button" id="tableAddManualBtn" class="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-white font-label-md hover:bg-primary-container shadow-sm">
+                <span class="material-symbols-outlined text-sm">add</span>
+                <span>إضافة حركة جديدة</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Drawer Table -->
+          <div id="drawerTableWrapper" class="hidden overflow-x-auto">
+            <table class="w-full text-right border-collapse">
+              <thead class="bg-navy-dark text-white font-label-md">
+                <tr>
+                  <th class="py-3 px-4">التاريخ والوقت</th>
+                  <th class="py-3 px-4">النوع</th>
+                  <th class="py-3 px-4">المصدر</th>
+                  <th class="py-3 px-4">البيان / الوصف</th>
+                  <th class="py-3 px-4">المسؤول</th>
+                  <th class="py-3 px-4 text-left">المبلغ (ج.م)</th>
+                  <th class="py-3 px-4 text-center">إجراءات</th>
+                </tr>
+              </thead>
+              <tbody id="drawerTableBody"></tbody>
+            </table>
+          </div>
+
+          <!-- Shift Closings Table -->
+          <div id="closingsTableWrapper" class="hidden overflow-x-auto">
+            <table class="w-full text-right border-collapse">
+              <thead class="bg-navy-dark text-white font-label-md">
+                <tr>
+                  <th class="py-3 px-4">تاريخ الإغلاق</th>
+                  <th class="py-3 px-4">الكاشير</th>
+                  <th class="py-3 px-4 text-left">الافتتاحي</th>
+                  <th class="py-3 px-4 text-left">الدفتري</th>
+                  <th class="py-3 px-4 text-left">الفعلي باليد</th>
+                  <th class="py-3 px-4 text-left">الفارق</th>
+                  <th class="py-3 px-4">ملاحظات</th>
+                </tr>
+              </thead>
+              <tbody id="closingsTableBody"></tbody>
+            </table>
+          </div>
+
+          <!-- Empty State -->
+          <div id="drawerEmptyState" class="p-10 flex flex-col items-center justify-center text-center min-h-[260px]">
+            <div class="w-16 h-16 rounded-full bg-surface-container-low flex items-center justify-center text-primary mb-3">
+              <span class="material-symbols-outlined text-3xl">savings</span>
+            </div>
+            <h3 id="drawerEmptyTitle" class="font-title-lg text-on-surface mb-1">لا توجد حركات مسجلة في درج الخزينة لهذا الشيفت حتى الآن</h3>
+            <p id="drawerEmptySubtitle" class="font-body-md text-on-surface-variant max-w-md mb-5">
+              الدرج في وضع الاستعداد الكامل. بمجرد تسجيل حركة يدوية أو إصدار فاتورة مبيعات كاش ستظهر العمليات هنا لحظياً.
+            </p>
+            <button type="button" id="emptyStateAddBtn" class="flex items-center gap-1.5 px-5 py-2.5 rounded-lg bg-primary text-white hover:bg-primary-container font-label-lg shadow-sm">
+              <span class="material-symbols-outlined text-lg">add_circle</span>
+              <span>+ تسجيل حركة خزينة</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL: Manual Cash Movement -->
+  <div id="manualTxModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-navy-dark/60 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden modal-animate border border-slate-200">
+      <div class="px-6 py-4 flex items-center justify-between bg-navy-dark text-white">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-sky-accent text-xl">account_balance_wallet</span>
+          <h3 id="manualModalTitle" class="font-title-lg font-bold">تسجيل حركة نقدية يدوية بالدرج</h3>
+        </div>
+        <button type="button" onclick="AppLayout.closeModal('manualTxModal')" class="text-slate-300 hover:text-white p-1">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <form id="manualTxForm" class="p-6 space-y-4">
+        <div>
+          <label class="block font-label-md text-on-surface-variant mb-1.5">نوع الحركة</label>
+          <div class="grid grid-cols-2 gap-3">
+            <button type="button" id="typeDepositBtn" onclick="AdminPage.setManualTxType('deposit')" class="py-2.5 rounded-lg border-2 border-tertiary bg-tertiary-fixed text-on-tertiary-fixed font-label-lg flex items-center justify-center gap-1">
+              <span class="material-symbols-outlined text-base">arrow_downward</span>
+              <span>إيداع نقدية في الدرج</span>
+            </button>
+            <button type="button" id="typeWithdrawBtn" onclick="AdminPage.setManualTxType('withdraw')" class="py-2.5 rounded-lg border-2 border-slate-200 bg-surface-container-low text-on-surface font-label-lg flex items-center justify-center gap-1 opacity-75">
+              <span class="material-symbols-outlined text-base">arrow_upward</span>
+              <span>سحب / مصروفات نثرية</span>
+            </button>
+          </div>
+        </div>
+        <div>
+          <label for="modalAmountInput" class="block font-label-md text-on-surface-variant mb-1">المبلغ المطلوب قيده</label>
+          <div class="relative">
+            <input type="number" step="0.5" min="0.5" id="modalAmountInput" placeholder="0.00" required class="w-full text-left font-numeric-table text-title-lg bg-surface-container-low text-on-surface rounded-lg pl-14 pr-3 py-2.5 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-primary" dir="ltr" />
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 font-label-lg text-outline">ج.م</span>
+          </div>
+        </div>
+        <div>
+          <label for="modalReasonInput" class="block font-label-md text-on-surface-variant mb-1">السبب أو البند المالي</label>
+          <input type="text" id="modalReasonInput" placeholder="مثال: توريد سيولة من المالك، مصروفات بوفيه، فواتير..." required class="w-full bg-surface-container-low text-on-surface rounded-lg px-3 py-2.5 font-body-md border border-slate-200 focus:bg-white focus:ring-2 focus:ring-primary" />
+        </div>
+        <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
+          <button type="button" onclick="AppLayout.closeModal('manualTxModal')" class="px-4 py-2 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container font-label-lg">إلغاء</button>
+          <button type="submit" class="px-5 py-2 rounded-lg bg-primary text-white hover:bg-primary-container font-label-lg shadow-sm">حفظ وقيد بالخزينة</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Add / Edit Staff -->
+  <div id="staffModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-navy-dark/60 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl overflow-hidden modal-animate border border-slate-200">
+      <div class="px-6 py-4 flex items-center justify-between bg-navy-dark text-white">
+        <h3 id="staffModalTitle" class="font-title-lg font-bold">إضافة موظف / صلاحية جديدة</h3>
+        <button type="button" onclick="AppLayout.closeModal('staffModal')" class="text-slate-300 hover:text-white p-1">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <form id="staffForm" class="p-6 space-y-4">
+        <div>
+          <label class="block font-label-md text-on-surface-variant mb-1">اسم الموظف *</label>
+          <input type="text" id="staffNameInput" required placeholder="مثال: أحمد محمد" class="w-full h-10 px-3 rounded-lg bg-surface-container-low border border-slate-200 font-body-md focus:bg-white focus:ring-2 focus:ring-primary" />
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-label-md text-on-surface-variant mb-1">الدور الوظيفي</label>
+            <select id="staffRoleInput" class="w-full h-10 px-3 rounded-lg bg-surface-container-low border border-slate-200 font-body-md">
+              <option value="كاشير">كاشير</option>
+              <option value="مدير النظام">مدير النظام</option>
+              <option value="مشرف مبيعات">مشرف مبيعات</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-label-md text-on-surface-variant mb-1">رقم سري خاص (PIN)</label>
+            <input type="text" id="staffPinInput" maxlength="6" placeholder="اختياري (4-6 أرقام)" class="w-full h-10 px-3 rounded-lg bg-surface-container-low border border-slate-200 font-numeric-table text-center" />
+          </div>
+        </div>
+        <div class="space-y-2 bg-surface-container-low p-3 rounded-xl border border-slate-200">
+          <span class="font-label-md text-on-surface-variant block">الصلاحيات الممنوحة:</span>
+          <label class="flex items-center gap-2 text-body-md cursor-pointer">
+            <input type="checkbox" id="staffCanDelete" class="accent-primary" />
+            <span>السماح بحذف المعاملات والأصناف</span>
+          </label>
+          <label class="flex items-center gap-2 text-body-md cursor-pointer">
+            <input type="checkbox" id="staffCanManageDrawer" class="accent-primary" />
+            <span>إدارة فتح وإغلاق الدرج</span>
+          </label>
+          <label class="flex items-center gap-2 text-body-md cursor-pointer">
+            <input type="checkbox" id="staffCanEditPrices" class="accent-primary" />
+            <span>تعديل أسعار الشراء والبيع</span>
+          </label>
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="AppLayout.closeModal('staffModal')" class="px-4 py-2 rounded-lg bg-surface-container-low text-on-surface font-label-lg">إلغاء</button>
+          <button type="submit" class="px-5 py-2 rounded-lg bg-primary text-white hover:bg-primary-container font-label-lg shadow-sm">حفظ الموظف</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Delete Confirmation -->
+  <div id="deleteModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-navy-dark/60 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl overflow-hidden modal-animate border border-slate-200">
+      <div class="p-6 flex items-start gap-4">
+        <div class="w-12 h-12 rounded-full bg-error-container text-error flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-2xl">warning</span>
+        </div>
+        <div class="flex-1">
+          <h3 class="font-title-lg text-on-surface font-bold mb-1">هل أنت متأكد من الحذف؟</h3>
+          <p class="font-body-md text-on-surface-variant">سيتم حذف هذه الحركة المالية نهائياً من قاعدة البيانات وإعادة احتساب رصيد الدرج.</p>
+          <div id="deleteDrawerSummary" class="mt-3 p-2.5 rounded-lg bg-surface-container-low font-body-sm font-semibold text-on-surface"></div>
+        </div>
+      </div>
+      <div class="px-6 py-4 bg-surface-container-low flex items-center justify-end gap-2">
+        <button type="button" onclick="AppLayout.closeModal('deleteModal')" class="px-4 py-2 rounded-lg bg-white border border-slate-200 text-on-surface hover:bg-surface-container font-label-lg">إلغاء الأمر</button>
+        <button type="button" id="confirmDeleteBtn" class="flex items-center gap-1.5 px-5 py-2 rounded-lg bg-error text-white hover:opacity-90 font-label-lg shadow-sm">
+          <span class="material-symbols-outlined text-base">delete_forever</span>
+          <span>نعم، تأكيد الحذف</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase Compat SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics-compat.js"></script>
+  <!-- App Modules -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
