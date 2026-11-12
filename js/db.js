@@ -12,16 +12,18 @@
     state: db ? "connecting" : "error", // 'connecting' | 'connected' | 'local_fallback' | 'error'
     errorCode: db ? null : "sdk-missing",
     errorMessage: db ? "" : "لم يتم تحميل Firebase SDK",
+    rawDetail: "",
     listeners: new Set()
   };
 
   // In-memory listeners for localStorage fallback mode so UI stays reactive across tabs/operations
   const localListeners = new Map();
 
-  function setStatus(state, errorCode = null, errorMessage = "") {
+  function setStatus(state, errorCode = null, errorMessage = "", rawDetail = "") {
     statusState.state = state;
     statusState.errorCode = errorCode;
     statusState.errorMessage = errorMessage;
+    statusState.rawDetail = rawDetail;
     statusState.listeners.forEach((fn) => {
       try {
         fn({ ...statusState });
@@ -37,15 +39,21 @@
     return () => statusState.listeners.delete(fn);
   }
 
-  function mapFirestoreError(err) {
+  function mapFirestoreError(err, rawMsg = "") {
     const code = err && err.code ? err.code : "unknown";
     let msg = "تعذر الاتصال بـ Cloud Firestore";
     if (code === "permission-denied") {
-      msg = "قواعد الأمان (Firestore Rules) تمنع القراءة أو الكتابة حالياً — يتم الحفظ محلياً مؤقتاً";
+      if (rawMsg.includes("API has not been used") || rawMsg.includes("is disabled")) {
+        msg = `خدمة Cloud Firestore API غير مفعلة بعد في مشروع ${config.projectId || ""} — يتم الحفظ محلياً مؤقتاً`;
+      } else {
+        msg = "قواعد الأمان (Firestore Rules) تمنع القراءة أو الكتابة حالياً — يتم الحفظ محلياً مؤقتاً";
+      }
     } else if (code === "not-found" || code === "database-not-found") {
-      msg = "قاعدة بيانات Cloud Firestore غير مُنشأة بعد في مشروع mmmm-cba14 — يتم الحفظ محلياً مؤقتاً";
+      msg = `قاعدة بيانات Cloud Firestore غير مُنشأة بعد في مشروع ${config.projectId || ""} — يتم الحفظ محلياً مؤقتاً`;
     } else if (code === "unavailable") {
-      msg = "لا يوجد اتصال بالإنترنت — يتم الحفظ محلياً مؤقتاً";
+      msg = "تعذر الوصول إلى خادم Firebase (تحقق من الاتصال بالإنترنت) — يتم الحفظ محلياً مؤقتاً";
+    } else if (code === "invalid-config") {
+      msg = "إعدادات مشروع Firebase غير صالحة — يتم الحفظ محلياً مؤقتاً";
     }
     return { code, msg };
   }
@@ -125,7 +133,7 @@
     try {
       const url = `https://firestore.googleapis.com/v1/projects/${encodeURIComponent(config.projectId)}/databases/(default)/documents/settings/store?key=${encodeURIComponent(config.apiKey)}`;
       const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 4500);
+      const timer = setTimeout(() => controller.abort(), 9000);
       const res = await fetch(url, { method: "GET", signal: controller.signal });
       clearTimeout(timer);
 
@@ -150,28 +158,37 @@
       if (res.status === 404 && message.includes("does not exist")) {
         useLocalFallback = true;
         probeCompleted = true;
-        const mapped = mapFirestoreError({ code: "database-not-found" });
-        setStatus("local_fallback", mapped.code, mapped.msg);
+        const mapped = mapFirestoreError({ code: "database-not-found" }, message);
+        setStatus("local_fallback", mapped.code, mapped.msg, message);
         return false;
       }
 
       if (res.status === 403) {
         useLocalFallback = true;
         probeCompleted = true;
-        const mapped = mapFirestoreError({ code: "permission-denied" });
-        setStatus("local_fallback", mapped.code, mapped.msg);
+        const mapped = mapFirestoreError({ code: "permission-denied" }, message);
+        setStatus("local_fallback", mapped.code, mapped.msg, message);
         return false;
       }
 
-      useLocalFallback = false;
+      if (res.status === 400 || res.status === 401) {
+        useLocalFallback = true;
+        probeCompleted = true;
+        const mapped = mapFirestoreError({ code: "invalid-config" }, message);
+        setStatus("local_fallback", mapped.code, mapped.msg, message);
+        return false;
+      }
+
+      useLocalFallback = true;
       probeCompleted = true;
-      setStatus("connected");
-      return true;
+      const mapped = mapFirestoreError({ code: "unavailable" }, message);
+      setStatus("local_fallback", mapped.code, mapped.msg, message || `HTTP ${res.status}`);
+      return false;
     } catch (err) {
       useLocalFallback = true;
       probeCompleted = true;
       const mapped = mapFirestoreError({ code: "unavailable" });
-      setStatus("local_fallback", mapped.code, mapped.msg);
+      setStatus("local_fallback", mapped.code, mapped.msg, err && err.message ? err.message : "");
       return false;
     }
   }
@@ -1016,15 +1033,99 @@
     });
   }
 
+  const LOCAL_LIST_COLLECTIONS = [
+    "staff",
+    "walletTransactions",
+    "inventory",
+    "phones",
+    "sales",
+    "drawerTransactions",
+    "shiftClosings"
+  ];
+  const LOCAL_MAP_COLLECTIONS = ["settings", "wallets"];
+
+  function getLocalDataSummary() {
+    let total = 0;
+    const details = {};
+    LOCAL_MAP_COLLECTIONS.forEach((col) => {
+      const map = readLocalDocMap(col);
+      const count = Object.keys(map || {}).length;
+      if (count > 0) details[col] = count;
+      total += count;
+    });
+    LOCAL_LIST_COLLECTIONS.forEach((col) => {
+      const list = readLocalCollection(col);
+      const count = Array.isArray(list) ? list.length : 0;
+      if (count > 0) details[col] = count;
+      total += count;
+    });
+    return { total, details };
+  }
+
+  async function syncLocalToCloud() {
+    await readyPromise;
+    if (useLocalFallback || !db) {
+      throw new Error("المزامنة السحابية غير متصلة حالياً — فعّل Cloud Firestore أولاً");
+    }
+
+    const ops = [];
+    LOCAL_MAP_COLLECTIONS.forEach((col) => {
+      const map = readLocalDocMap(col);
+      Object.entries(map || {}).forEach(([docId, val]) => {
+        if (!docId || !val || typeof val !== "object") return;
+        const { id: _ignored, ...payload } = val;
+        ops.push({ ref: db.collection(col).doc(docId), data: payload });
+      });
+    });
+
+    LOCAL_LIST_COLLECTIONS.forEach((col) => {
+      const list = readLocalCollection(col);
+      (Array.isArray(list) ? list : []).forEach((item) => {
+        if (!item || typeof item !== "object") return;
+        const { id, ...payload } = item;
+        const ref = id ? db.collection(col).doc(String(id)) : db.collection(col).doc();
+        ops.push({ ref, data: payload });
+      });
+    });
+
+    if (ops.length === 0) return { uploadedCount: 0 };
+
+    const CHUNK_SIZE = 400;
+    for (let i = 0; i < ops.length; i += CHUNK_SIZE) {
+      const batch = db.batch();
+      ops.slice(i, i + CHUNK_SIZE).forEach(({ ref, data }) => {
+        batch.set(ref, data, { merge: true });
+      });
+      await batch.commit();
+    }
+
+    [...LOCAL_MAP_COLLECTIONS, ...LOCAL_LIST_COLLECTIONS].forEach((col) => {
+      try {
+        localStorage.removeItem(STORAGE_PREFIX + col);
+      } catch {}
+    });
+
+    return { uploadedCount: ops.length };
+  }
+
   async function recheckConnection() {
     setStatus("connecting");
     return probeFirestore();
   }
 
+  window.addEventListener("online", () => {
+    if (useLocalFallback && statusState.errorCode === "unavailable") {
+      recheckConnection();
+    }
+  });
+
   window.PosDB = {
     onStatusChange,
     recheckConnection,
     getStatus: () => ({ ...statusState }),
+    isCloudConnected: () => statusState.state === "connected",
+    getLocalDataSummary,
+    syncLocalToCloud,
     todayDateStr,
     formatTimeAr,
     formatMoney,

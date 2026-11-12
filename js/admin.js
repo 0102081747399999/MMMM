@@ -503,7 +503,8 @@
       actualInput.value = "";
       document.getElementById("auditNotesInput").value = "";
       updateVariance();
-      showToast("تم اعتماد إغلاق الخزينة وحفظ تقرير الجرد في Firebase");
+      const synced = DB.isCloudConnected ? DB.isCloudConnected() : false;
+      showToast(synced ? "تم اعتماد إغلاق الخزينة وحفظ تقرير الجرد في Firebase" : "تم حفظ إغلاق الخزينة محلياً فقط (المزامنة غير مفعلة)");
 
       const storeName = state.settings.store?.storeName || "سنترال تيك";
       openPrintWindow(

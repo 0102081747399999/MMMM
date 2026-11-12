@@ -142,9 +142,9 @@
       </div>
 
       <div class="flex items-center gap-2 sm:gap-3 shrink-0">
-        <button type="button" id="firebaseStatusBtn" onclick="AppLayout.showFirebaseInfo()" class="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-low border border-outline-variant/40 text-on-surface-variant font-label-md transition-colors" title="حالة المزامنة مع Firebase">
-          <span id="firebaseStatusDot" class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-          <span id="firebaseStatusText">جاري الربط...</span>
+        <button type="button" id="firebaseStatusBtn" onclick="AppLayout.showFirebaseInfo()" class="inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-full bg-surface-container-low border border-outline-variant/40 text-on-surface-variant text-xs sm:font-label-md transition-colors" title="حالة المزامنة مع Firebase">
+          <span id="firebaseStatusDot" class="w-2 h-2 rounded-full bg-amber-500 animate-pulse shrink-0"></span>
+          <span id="firebaseStatusText" class="truncate max-w-[130px] sm:max-w-none">جاري الربط...</span>
         </button>
 
         <div id="headerDrawerPill" class="hidden xl:flex items-center gap-2 px-3 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant border border-tertiary/20">
@@ -427,7 +427,29 @@
       document.getElementById("globalPinForm").addEventListener("submit", handleVerifyPinSubmit);
     }
 
+    if (!document.getElementById("globalSyncWarningBanner")) {
+      const mainEl = document.querySelector("main");
+      if (mainEl) {
+        const banner = document.createElement("div");
+        banner.id = "globalSyncWarningBanner";
+        banner.className = "hidden mx-4 sm:mx-6 lg:mx-8 mt-4 p-3.5 rounded-xl bg-warning-container border border-warning/40 text-on-warning-container flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm no-print";
+        banner.innerHTML = `
+          <div class="flex items-start sm:items-center gap-2.5">
+            <span class="material-symbols-outlined text-xl shrink-0 mt-0.5 sm:mt-0">cloud_off</span>
+            <div class="text-body-sm sm:text-body-md font-semibold">
+              <span id="globalSyncBannerMsg">المزامنة السحابية غير مفعلة — البيانات تُحفظ على هذا الجهاز فقط ولن تظهر على الهاتف أو الأجهزة الأخرى.</span>
+            </div>
+          </div>
+          <button type="button" onclick="AppLayout.showFirebaseInfo()" class="px-3.5 py-1.5 rounded-lg bg-navy-dark text-white hover:bg-navy-card font-label-md shrink-0 self-end sm:self-auto">
+            تفعيل المزامنة / التشخيص
+          </button>
+        `;
+        mainEl.prepend(banner);
+      }
+    }
+
     if (!document.getElementById("globalFirebaseModal")) {
+      const projectId = (window.FirebaseApp && window.FirebaseApp.config && window.FirebaseApp.config.projectId) || "mmmm-cba14";
       const fbModal = document.createElement("div");
       fbModal.id = "globalFirebaseModal";
       fbModal.className = "fixed inset-0 z-[65] hidden bg-navy-dark/65 backdrop-blur-sm flex items-center justify-center p-4";
@@ -436,21 +458,40 @@
           <div class="bg-navy-dark text-white px-5 py-4 flex items-center justify-between">
             <div class="flex items-center gap-2">
               <span class="material-symbols-outlined text-sky-accent">cloud_sync</span>
-              <h3 class="font-title-md font-bold">حالة الربط مع Firebase (mmmm-cba14)</h3>
+              <h3 class="font-title-md font-bold">حالة الربط والمزامنة مع Firebase (${escapeHtml(projectId)})</h3>
             </div>
             <button type="button" onclick="AppLayout.closeModal('globalFirebaseModal')" class="text-slate-300 hover:text-white">
               <span class="material-symbols-outlined">close</span>
             </button>
           </div>
-          <div class="p-5 space-y-4">
+          <div class="p-5 space-y-4 max-h-[82vh] overflow-y-auto">
             <div id="fbDiagBox" class="p-3.5 rounded-xl bg-surface-container-low border border-slate-200 text-body-md font-semibold"></div>
-            <div id="fbSetupSteps" class="hidden space-y-2 text-body-sm text-on-surface-variant bg-slate-50 p-4 rounded-xl border border-slate-200">
-              <p class="font-bold text-on-surface">لتفعيل المزامنة السحابية على مشروعك:</p>
+            <div id="fbRawDetail" class="hidden p-2.5 rounded-lg bg-slate-900 text-slate-200 font-mono text-xs break-all" dir="ltr"></div>
+            <div id="fbLocalUploadBox" class="hidden p-3.5 rounded-xl bg-primary-fixed/50 border border-primary/30 space-y-2">
+              <div class="flex items-center gap-2 text-on-primary-fixed font-bold text-body-md">
+                <span class="material-symbols-outlined text-lg">cloud_upload</span>
+                <span id="fbLocalUploadText">يوجد بيانات محفوظة محلياً قبل تفعيل المزامنة</span>
+              </div>
+              <p class="text-body-sm text-on-surface-variant">اضغط الزر التالي لرفع البيانات المحفوظة على هذا الجهاز إلى Firebase حتى تظهر على الهاتف وباقي الأجهزة:</p>
+              <button type="button" id="fbUploadLocalBtn" onclick="AppLayout.uploadLocalDataToCloud()" class="px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-container font-label-md flex items-center gap-1.5 shadow-sm">
+                <span class="material-symbols-outlined text-base">upload</span>
+                <span>رفع البيانات المحلية إلى Firebase الآن</span>
+              </button>
+            </div>
+            <div id="fbSetupSteps" class="hidden space-y-2.5 text-body-sm text-on-surface-variant bg-slate-50 p-4 rounded-xl border border-slate-200">
+              <p class="font-bold text-on-surface">لماذا لا تسمع البيانات على الهاتف وكيف تصلحها:</p>
               <ol class="list-decimal list-inside space-y-1.5 leading-relaxed">
-                <li>افتح <a href="https://console.firebase.google.com/project/mmmm-cba14/firestore" target="_blank" rel="noopener noreferrer" class="text-primary underline font-bold">لوحة Cloud Firestore لمشروع mmmm-cba14</a> واضغط <strong>Create database</strong>.</li>
-                <li>اختر <strong>Start in test mode</strong> (أو انسخ القواعد من ملف <code>firestore.rules</code> الموجود بمجلد المشروع).</li>
-                <li>اضغط زر <strong>إعادة فحص الاتصال</strong> بالأسفل وسيتم الربط فوراً.</li>
+                <li>افتح <a href="https://console.firebase.google.com/project/${encodeURIComponent(projectId)}/firestore/rules" target="_blank" rel="noopener noreferrer" class="text-primary underline font-bold">تبويب Rules في Cloud Firestore لمشروع ${escapeHtml(projectId)}</a> (وإذا لم تنشئ قاعدة البيانات بعد اضغط <strong>Create database</strong> أولاً).</li>
+                <li>اضغط زر <strong>نسخ القواعد</strong> بالأسفل، ثم الصقها في محرر القواعد في Firebase واضغط <strong>Publish</strong>.</li>
+                <li>تأكد من فتح نفس النسخة على الهاتف والكمبيوتر (عبر استضافة أو سيرفر محلي وليس عبر <code>content://</code> على الهاتف)، ثم اضغط <strong>إعادة فحص الاتصال</strong>.</li>
               </ol>
+              <div class="flex items-center justify-between gap-2 pt-1">
+                <span class="text-xs text-outline">قواعد الأمان المطلوبة لمجموعات المشروع:</span>
+                <button type="button" onclick="AppLayout.copyFirestoreRules()" class="px-3 py-1.5 rounded-lg bg-navy-dark text-white hover:bg-navy-card font-label-md flex items-center gap-1 shrink-0">
+                  <span class="material-symbols-outlined text-sm">content_copy</span>
+                  <span>نسخ القواعد</span>
+                </button>
+              </div>
             </div>
             <div class="flex items-center justify-end gap-2 pt-2">
               <button type="button" onclick="AppLayout.closeModal('globalFirebaseModal')" class="px-4 py-2 rounded-lg bg-surface-container-low text-on-surface font-label-lg">إغلاق</button>
@@ -872,23 +913,143 @@
     closeModal("globalPinModal");
   }
 
+  function updateSyncBanner(status) {
+    const banner = document.getElementById("globalSyncWarningBanner");
+    const msgEl = document.getElementById("globalSyncBannerMsg");
+    if (!banner || !msgEl || !status) return;
+
+    const btn = banner.querySelector("button");
+    if (status.state === "local_fallback" || status.state === "error") {
+      banner.className = "mx-4 sm:mx-6 lg:mx-8 mt-4 p-3.5 rounded-xl bg-warning-container border border-warning/40 text-on-warning-container flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm no-print";
+      msgEl.textContent = status.errorMessage || "المزامنة السحابية غير مفعلة — البيانات تُحفظ على هذا الجهاز فقط ولن تظهر على الهاتف.";
+      if (btn) {
+        btn.textContent = "تفعيل المزامنة / التشخيص";
+        btn.onclick = () => showFirebaseInfo();
+      }
+      return;
+    }
+
+    if (status.state === "connected" && window.PosDB && window.PosDB.getLocalDataSummary) {
+      const localInfo = window.PosDB.getLocalDataSummary();
+      if (localInfo.total > 0) {
+        banner.className = "mx-4 sm:mx-6 lg:mx-8 mt-4 p-3.5 rounded-xl bg-primary-fixed border border-primary/30 text-on-primary-fixed flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm no-print";
+        msgEl.textContent = `تم الاتصال بـ Firebase! يوجد ${localInfo.total} سجل محفوظ محلياً على هذا الجهاز قبل التفعيل لم يُرفع للهاتف بعد.`;
+        if (btn) {
+          btn.textContent = "رفع البيانات المحلية للسحابة";
+          btn.onclick = () => uploadLocalDataToCloud();
+        }
+        return;
+      }
+    }
+
+    banner.classList.add("hidden");
+  }
+
   function showFirebaseInfo() {
     if (!window.PosDB) return;
     const status = window.PosDB.getStatus ? window.PosDB.getStatus() : lastFirebaseStatus;
+    const projectId = (window.FirebaseApp && window.FirebaseApp.config && window.FirebaseApp.config.projectId) || "mmmm-cba14";
     const box = document.getElementById("fbDiagBox");
+    const rawEl = document.getElementById("fbRawDetail");
+    const localBox = document.getElementById("fbLocalUploadBox");
+    const localTxt = document.getElementById("fbLocalUploadText");
     const steps = document.getElementById("fbSetupSteps");
+
     if (box && steps && status) {
       if (status.state === "connected") {
         box.className = "p-3.5 rounded-xl bg-tertiary-fixed text-on-tertiary-fixed-variant border border-tertiary/20 text-body-md font-bold";
-        box.textContent = "متصل بنجاح بقاعدة بيانات Cloud Firestore (mmmm-cba14) — المزامنة الفورية نشطة.";
+        box.textContent = `متصل بنجاح بقاعدة بيانات Cloud Firestore (${projectId}) — المزامنة الفورية مع الهاتف نشطة.`;
         steps.classList.add("hidden");
+        if (rawEl) rawEl.classList.add("hidden");
       } else {
         box.className = "p-3.5 rounded-xl bg-warning-container text-on-warning-container border border-warning/30 text-body-md font-bold";
         box.textContent = status.errorMessage || "وضع الحفظ المحلي المؤقت نشط الآن — فعّل Cloud Firestore للمزامنة السحابية.";
         steps.classList.remove("hidden");
+        if (rawEl) {
+          if (status.rawDetail) {
+            rawEl.textContent = status.rawDetail;
+            rawEl.classList.remove("hidden");
+          } else {
+            rawEl.classList.add("hidden");
+          }
+        }
       }
     }
+
+    if (localBox && window.PosDB.getLocalDataSummary) {
+      const localInfo = window.PosDB.getLocalDataSummary();
+      if (status && status.state === "connected" && localInfo.total > 0) {
+        localBox.classList.remove("hidden");
+        if (localTxt) {
+          localTxt.textContent = `يوجد ${localInfo.total} سجل محفوظ محلياً على هذا الجهاز`;
+        }
+      } else {
+        localBox.classList.add("hidden");
+      }
+    }
+
     openModal("globalFirebaseModal");
+  }
+
+  async function uploadLocalDataToCloud() {
+    if (!window.PosDB || !window.PosDB.syncLocalToCloud) return;
+    const btn = document.getElementById("fbUploadLocalBtn");
+    if (btn) btn.disabled = true;
+    try {
+      const res = await window.PosDB.syncLocalToCloud();
+      document.getElementById("fbLocalUploadBox")?.classList.add("hidden");
+      updateSyncBanner(window.PosDB.getStatus());
+      showToast("تم رفع البيانات المحلية إلى Firebase بنجاح", `تمت مزامنة ${res.uploadedCount} سجل وستظهر على الهاتف فوراً`);
+    } catch (err) {
+      const msg = err && err.code === "permission-denied"
+        ? "قواعد Firestore تمنع الكتابة — انشر القواعد من ملف firestore.rules أو فعّل Test Mode"
+        : (err && err.message) || "حدث خطأ غير متوقع";
+      showToast("تعذر رفع البيانات إلى Firebase", msg, true);
+      const rawEl = document.getElementById("fbRawDetail");
+      if (rawEl && err && err.message) {
+        rawEl.textContent = err.message;
+        rawEl.classList.remove("hidden");
+      }
+    } finally {
+      if (btn) btn.disabled = false;
+    }
+  }
+
+  const FIRESTORE_RULES_TEMPLATE = `rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{collection}/{docId} {
+      allow read, write: if collection in [
+        'settings',
+        'staff',
+        'wallets',
+        'walletTransactions',
+        'inventory',
+        'phones',
+        'sales',
+        'drawerTransactions',
+        'shiftClosings'
+      ];
+    }
+  }
+}`;
+
+  async function copyFirestoreRules() {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(FIRESTORE_RULES_TEMPLATE);
+      } else {
+        const ta = document.createElement("textarea");
+        ta.value = FIRESTORE_RULES_TEMPLATE;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+      }
+      showToast("تم نسخ قواعد Firestore", "الصقها في تبويب Rules واضغط Publish");
+    } catch (err) {
+      showToast("تعذر النسخ التلقائي — انسخ القواعد من ملف firestore.rules", err.message, true);
+    }
   }
 
   async function retryFirebaseConnection() {
@@ -931,21 +1092,22 @@
         lastFirebaseStatus = status;
         const dot = document.getElementById("firebaseStatusDot");
         const text = document.getElementById("firebaseStatusText");
-        if (!dot || !text) return;
-
-        if (status.state === "connected") {
-          dot.className = "w-2 h-2 rounded-full bg-emerald-500";
-          text.textContent = "متصل بـ Firebase";
-        } else if (status.state === "connecting") {
-          dot.className = "w-2 h-2 rounded-full bg-amber-500 animate-pulse";
-          text.textContent = "جاري المزامنة...";
-        } else if (status.state === "local_fallback") {
-          dot.className = "w-2 h-2 rounded-full bg-amber-500";
-          text.textContent = "حفظ محلي (فعّل Firestore)";
-        } else {
-          dot.className = "w-2 h-2 rounded-full bg-red-500";
-          text.textContent = "تنبيه Firebase";
+        if (dot && text) {
+          if (status.state === "connected") {
+            dot.className = "w-2 h-2 rounded-full bg-emerald-500 shrink-0";
+            text.textContent = "متصل بـ Firebase";
+          } else if (status.state === "connecting") {
+            dot.className = "w-2 h-2 rounded-full bg-amber-500 animate-pulse shrink-0";
+            text.textContent = "جاري المزامنة...";
+          } else if (status.state === "local_fallback") {
+            dot.className = "w-2 h-2 rounded-full bg-amber-500 shrink-0";
+            text.textContent = "محلي فقط (غير متزامن)";
+          } else {
+            dot.className = "w-2 h-2 rounded-full bg-red-500 shrink-0";
+            text.textContent = "تنبيه Firebase";
+          }
         }
+        updateSyncBanner(status);
       });
 
       window.PosDB.subscribeSettings((settings) => {
@@ -990,7 +1152,9 @@
     requirePinIfProtected,
     cancelPinModal,
     showFirebaseInfo,
+    copyFirestoreRules,
     retryFirebaseConnection,
+    uploadLocalDataToCloud,
     openPrintWindow,
     onSettingsUpdate,
     getSettings,

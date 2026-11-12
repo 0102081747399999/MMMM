@@ -10,7 +10,7 @@
     measurementId: "G-7WZ82X3E8V"
   };
 
-  if (typeof firebase === "undefined") {
+  if (typeof firebase === "undefined" || typeof firebase.firestore !== "function") {
     console.error("Firebase SDK failed to load. Check internet connection.");
     window.FirebaseApp = { app: null, db: null, analytics: null, config: firebaseConfig };
     return;

@@ -78,7 +78,10 @@
       }
     }
     if (simBadgeEl) {
-      simBadgeEl.textContent = simNumber ? "شريحة مسجلة ومربوطة بـ Firebase" : "اضغط أيقونة التعديل لإدخال رقم الشريحة";
+      const synced = DB.isCloudConnected ? DB.isCloudConnected() : false;
+      simBadgeEl.textContent = simNumber
+        ? (synced ? "شريحة مسجلة ومربوطة بـ Firebase" : "شريحة مسجلة محلياً (المزامنة غير مفعلة)")
+        : "اضغط أيقونة التعديل لإدخال رقم الشريحة";
     }
 
     const lineBadge = document.getElementById("line-active-badge");
@@ -247,7 +250,11 @@
       document.getElementById("tx-form").reset();
       document.getElementById("phone-valid-icon")?.classList.add("hidden");
       document.getElementById("cust-phone").focus();
-      showToast("تم تسجيل المعاملة في Firebase", `${DB.formatMoney(amount)} ج.م • عمولة ${DB.formatMoney(commission)} ج.م`);
+      const synced = DB.isCloudConnected ? DB.isCloudConnected() : false;
+      showToast(
+        synced ? "تم تسجيل المعاملة ومزامنتها مع Firebase" : "تم حفظ المعاملة محلياً فقط (المزامنة غير مفعلة)",
+        `${DB.formatMoney(amount)} ج.م • عمولة ${DB.formatMoney(commission)} ج.م`
+      );
     } catch (err) {
       showToast("تعذر حفظ المعاملة", err.message, true);
     } finally {
