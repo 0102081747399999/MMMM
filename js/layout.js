@@ -81,12 +81,12 @@
       <div class="flex flex-col h-full">
         <div class="h-16 px-4 flex items-center justify-between bg-navy-dark border-b border-slate-800 shrink-0">
           <div class="flex items-center gap-3 min-w-0">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-primary to-sky-accent flex items-center justify-center text-white shadow-md shrink-0">
-              <span class="material-symbols-outlined text-2xl">point_of_sale</span>
+            <div class="w-10 h-10 rounded-xl overflow-hidden bg-slate-950 border border-red-500/40 shadow-md shrink-0 p-0.5 flex items-center justify-center">
+              <img src="images/logo-icon.svg" alt="ريد ماجيك" class="w-full h-full object-contain" />
             </div>
             <div class="flex flex-col min-w-0">
-              <span id="sidebarStoreName" class="font-title-md text-white leading-tight truncate">${escapeHtml(store.storeName || "سنترال تيك")}</span>
-              <span id="sidebarStoreSubtitle" class="font-label-md text-sky-accent truncate">${escapeHtml(store.storeSubtitle || "للاتصالات والإلكترونيات")}</span>
+              <span id="sidebarStoreName" class="font-title-md text-white leading-tight truncate">${escapeHtml(store.storeName || "ريد ماجيك")}</span>
+              <span id="sidebarStoreSubtitle" class="font-label-md text-rose-400 truncate">${escapeHtml(store.storeSubtitle || "للهواتف والإكسسوارات والمدفوعات")}</span>
             </div>
           </div>
           <button type="button" onclick="AppLayout.toggleMobileSidebar(false)" class="lg:hidden text-slate-400 hover:text-white p-1 rounded-lg">
@@ -108,9 +108,14 @@
               <span id="sidebarCashierRole" class="font-label-md text-tertiary-fixed-dim mt-1 truncate">${escapeHtml(cashierRole)}</span>
             </div>
           </div>
-          <button type="button" onclick="AppLayout.openDrawerModal()" title="تبديل الكاشير / الوردية" class="text-slate-400 hover:text-sky-accent transition-colors p-1.5 rounded-lg hover:bg-navy-card">
-            <span class="material-symbols-outlined text-xl">switch_account</span>
-          </button>
+          <div class="flex items-center gap-1">
+            <button type="button" onclick="AppLayout.openThemeModal()" title="تغيير ثيم وألوان النظام" class="text-slate-400 hover:text-sky-accent transition-colors p-1.5 rounded-lg hover:bg-navy-card">
+              <span class="material-symbols-outlined text-xl">palette</span>
+            </button>
+            <button type="button" onclick="AppLayout.openDrawerModal()" title="تبديل الكاشير / الوردية" class="text-slate-400 hover:text-sky-accent transition-colors p-1.5 rounded-lg hover:bg-navy-card">
+              <span class="material-symbols-outlined text-xl">switch_account</span>
+            </button>
+          </div>
         </div>
       </div>
     `;
@@ -130,8 +135,11 @@
         <button type="button" onclick="AppLayout.toggleMobileSidebar(true)" class="lg:hidden p-2 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container transition-colors" aria-label="فتح القائمة">
           <span class="material-symbols-outlined text-xl">menu</span>
         </button>
+        <div class="w-9 h-9 rounded-lg overflow-hidden bg-slate-950 border border-rose-500/40 shadow-sm shrink-0 p-0.5 hidden sm:flex items-center justify-center">
+          <img src="images/logo-icon.svg" alt="ريد ماجيك" class="w-full h-full object-contain" />
+        </div>
         <div class="flex flex-col min-w-0">
-          <span id="headerStoreName" class="font-title-lg text-title-md lg:text-title-lg text-on-surface font-bold truncate">${escapeHtml(store.storeName || "سنترال تيك - الفرع الرئيسي")}</span>
+          <span id="headerStoreName" class="font-title-lg text-title-md lg:text-title-lg text-on-surface font-bold truncate">${escapeHtml(store.storeName || "ريد ماجيك - الفرع الرئيسي")}</span>
           <div class="flex items-center gap-2 text-on-surface-variant font-label-md text-label-md">
             <span class="material-symbols-outlined text-sm text-primary hidden sm:inline">calendar_today</span>
             <span id="headerLiveDate" class="truncate">--</span>
@@ -152,9 +160,20 @@
           <span id="headerDrawerLabel" class="font-label-lg font-bold">الوردية الصباحية - الدرج مفتوح</span>
         </div>
 
+        <button type="button" onclick="AppLayout.openThemeModal()" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container font-label-lg transition-colors border border-outline-variant/40" title="تغيير ثيم وألوان النظام">
+          <span class="material-symbols-outlined text-base text-primary">palette</span>
+          <span class="hidden md:inline">ألوان النظام</span>
+        </button>
+
         <button type="button" onclick="AppLayout.openDrawerModal()" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container font-label-lg transition-colors border border-outline-variant/40" title="تبديل / إغلاق الدرج">
           <span class="material-symbols-outlined text-base text-primary">lock_reset</span>
           <span class="hidden sm:inline">تبديل / إغلاق الدرج</span>
+        </button>
+
+        <button type="button" onclick="BarcodeService.openModal()" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 font-label-lg shadow-sm transition-colors ring-1 ring-emerald-400/30" title="قارئ الباركود وتوريد البضاعة (F3)">
+          <span class="material-symbols-outlined text-base">barcode_scanner</span>
+          <span class="hidden md:inline">قارئ الباركود (F3)</span>
+          <span class="md:hidden">باركود</span>
         </button>
 
         <button type="button" onclick="AppLayout.openPosModal()" class="flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-lg bg-primary text-on-primary hover:bg-primary-container font-label-lg shadow-sm transition-colors">
@@ -209,9 +228,9 @@
     const sidebarCashierRole = document.getElementById("sidebarCashierRole");
     const sidebarCashierAvatar = document.getElementById("sidebarCashierAvatar");
 
-    if (headerStoreName) headerStoreName.textContent = store.storeName || "سنترال تيك - الفرع الرئيسي";
-    if (sidebarStoreName) sidebarStoreName.textContent = (store.storeName || "سنترال تيك").split("-")[0].trim();
-    if (sidebarStoreSubtitle) sidebarStoreSubtitle.textContent = store.storeSubtitle || "للاتصالات والإلكترونيات";
+    if (headerStoreName) headerStoreName.textContent = store.storeName || "ريد ماجيك - الفرع الرئيسي";
+    if (sidebarStoreName) sidebarStoreName.textContent = (store.storeName || "ريد ماجيك").split("-")[0].trim();
+    if (sidebarStoreSubtitle) sidebarStoreSubtitle.textContent = store.storeSubtitle || "للهواتف والإكسسوارات والمدفوعات";
     if (sidebarCashierName) sidebarCashierName.textContent = shift.cashierName || "أدمن الوردية";
     if (sidebarCashierRole) sidebarCashierRole.textContent = shift.cashierRole || "إدارة عامة";
     if (sidebarCashierAvatar) sidebarCashierAvatar.textContent = getInitials(shift.cashierName || "أدمن");
@@ -307,7 +326,7 @@
               </div>
               <div>
                 <label class="block font-label-md text-on-surface-variant mb-1">اسم المحل / الفرع</label>
-                <input type="text" id="globalStoreNameInput" class="w-full h-10 px-3 rounded-lg bg-surface-container-low border border-outline-variant/40 font-body-md focus:ring-2 focus:ring-primary" placeholder="سنترال تيك - الفرع الرئيسي" />
+                <input type="text" id="globalStoreNameInput" class="w-full h-10 px-3 rounded-lg bg-surface-container-low border border-outline-variant/40 font-body-md focus:ring-2 focus:ring-primary" placeholder="ريد ماجيك - الفرع الرئيسي" />
               </div>
             </div>
             <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
@@ -348,7 +367,10 @@
             <div class="lg:col-span-7 flex flex-col gap-3">
               <div class="relative">
                 <span class="material-symbols-outlined absolute right-3 top-2.5 text-outline text-xl">search</span>
-                <input type="text" id="posSearchInput" oninput="AppLayout.renderPosCatalog()" placeholder="ابحث باسم الصنف، الماركة، الباركود، أو رقم IMEI..." class="w-full h-11 pr-10 pl-4 rounded-xl bg-surface-container-low border border-outline-variant/50 font-body-md focus:bg-white focus:ring-2 focus:ring-primary" />
+                <input type="text" id="posSearchInput" oninput="AppLayout.renderPosCatalog()" placeholder="ابحث باسم الصنف، الماركة، الباركود، أو رقم IMEI..." class="w-full h-11 pr-10 pl-12 rounded-xl bg-surface-container-low border border-outline-variant/50 font-body-md focus:bg-white focus:ring-2 focus:ring-primary" />
+                <button type="button" onclick="BarcodeService.openCameraForInput('posSearchInput')" title="مسح باركود الصنف بالكاميرا لإضافته للفاتورة" class="absolute left-2.5 top-1/2 -translate-y-1/2 p-1 rounded-lg text-slate-500 hover:text-emerald-600 hover:bg-slate-200 transition-colors">
+                  <span class="material-symbols-outlined text-lg">photo_camera</span>
+                </button>
               </div>
               <div id="posCatalogList" class="border border-slate-200 rounded-xl divide-y divide-slate-100 max-h-[340px] overflow-y-auto bg-slate-50/50"></div>
             </div>
@@ -505,6 +527,104 @@
       `;
       document.body.appendChild(fbModal);
     }
+
+    if (!document.getElementById("globalThemeModal")) {
+      const themeModal = document.createElement("div");
+      themeModal.id = "globalThemeModal";
+      themeModal.className = "fixed inset-0 z-[60] hidden bg-navy-dark/70 backdrop-blur-sm flex items-center justify-center p-4";
+      themeModal.innerHTML = `
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden modal-animate border border-slate-200">
+          <div class="bg-navy-dark text-white px-6 py-4 flex items-center justify-between border-b border-slate-800">
+            <div class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-sky-accent text-2xl">palette</span>
+              <div>
+                <h3 class="font-title-lg font-bold">تخصيص ثيم وألوان النظام</h3>
+                <p class="font-label-md text-slate-300">اختر المظهر اللوني المناسب لنظام كاشير ريد ماجيك</p>
+              </div>
+            </div>
+            <button type="button" onclick="AppLayout.closeModal('globalThemeModal')" class="text-slate-300 hover:text-white p-1 rounded-lg">
+              <span class="material-symbols-outlined">close</span>
+            </button>
+          </div>
+          <div class="p-6">
+            <div id="themeOptionsGrid" class="grid grid-cols-1 gap-2.5 max-h-[60vh] overflow-y-auto pr-1">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+          <div class="flex items-center justify-between px-6 py-3.5 bg-surface-container-low border-t border-slate-100 text-xs text-on-surface-variant font-medium">
+            <span>يتم حفظ اختيارك وتطبيقه تلقائياً على كل الشاشات</span>
+            <button type="button" onclick="AppLayout.closeModal('globalThemeModal')" class="px-4 py-1.5 rounded-lg bg-surface-container text-on-surface hover:bg-surface-container-high font-label-md">
+              إغلاق
+            </button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(themeModal);
+    }
+  }
+
+  function openThemeModal() {
+    renderThemeOptions();
+    openModal("globalThemeModal");
+  }
+
+  function renderThemeOptions() {
+    const grid = document.getElementById("themeOptionsGrid");
+    if (!grid) return;
+    const themes = window.POS_THEMES || {};
+    const currentThemeId = (window.getPosTheme && window.getPosTheme()) || "red-magic";
+
+    grid.innerHTML = Object.keys(themes).map((key) => {
+      const t = themes[key];
+      const isCurrent = t.id === currentThemeId;
+      const previewDots = (t.previewHex || ["#0f172a", "#1e293b", "#38bdf8"])
+        .map((hex) => `<span class="w-4 h-4 rounded-full border border-white/20 shadow-sm" style="background-color: ${hex}"></span>`)
+        .join("");
+
+      return `
+        <div onclick="AppLayout.selectTheme('${t.id}')" class="flex items-center justify-between p-3 rounded-xl border-2 cursor-pointer transition-all ${
+          isCurrent
+            ? "border-primary bg-primary-fixed/20 shadow-md ring-1 ring-primary/40"
+            : "border-outline-variant/40 hover:border-primary/60 hover:bg-surface-container-low"
+        }">
+          <div class="flex items-center gap-3.5 min-w-0">
+            <div class="flex items-center -space-x-1 space-x-reverse shrink-0 p-1.5 bg-navy-dark/10 rounded-lg">
+              ${previewDots}
+            </div>
+            <div class="flex flex-col min-w-0">
+              <div class="flex items-center gap-2">
+                <span class="font-title-md font-bold text-on-surface truncate">${escapeHtml(t.name)}</span>
+                ${t.badge ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${isCurrent ? 'bg-primary text-white' : 'bg-surface-container text-on-surface-variant'}">${escapeHtml(t.badge)}</span>` : ""}
+              </div>
+              <p class="font-label-md text-on-surface-variant truncate text-xs mt-0.5">${escapeHtml(t.desc)}</p>
+            </div>
+          </div>
+          <div class="shrink-0 mr-3">
+            <span class="w-6 h-6 rounded-full flex items-center justify-center border ${
+              isCurrent
+                ? "bg-primary text-white border-primary"
+                : "border-slate-300 text-transparent"
+            }">
+              <span class="material-symbols-outlined text-sm font-bold">${isCurrent ? "check" : ""}</span>
+            </span>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function selectTheme(themeId) {
+    if (window.setPosTheme) {
+      window.setPosTheme(themeId);
+    } else {
+      localStorage.setItem("pos_color_theme", themeId);
+      document.documentElement.setAttribute("data-theme", themeId);
+    }
+    renderThemeOptions();
+    showToast("تم تفعيل الثيم بنجاح", "تم تطبيق المظهر وحفظ اختيارك");
+    setTimeout(() => {
+      window.location.reload();
+    }, 400);
   }
 
   let modalDrawerIsOpen = true;
@@ -530,7 +650,7 @@
     setModalDrawerState(shift.isOpen !== false);
     document.getElementById("globalShiftPeriod").value = shift.period || "morning";
     document.getElementById("globalOpeningBalance").value = shift.openingBalance || 0;
-    document.getElementById("globalStoreNameInput").value = store.storeName || "سنترال تيك - الفرع الرئيسي";
+    document.getElementById("globalStoreNameInput").value = store.storeName || "ريد ماجيك - الفرع الرئيسي";
 
     const select = document.getElementById("globalCashierSelect");
     const options = [{ name: "أدمن الوردية", role: "إدارة عامة" }, ...staffList];
@@ -554,7 +674,7 @@
     try {
       const period = document.getElementById("globalShiftPeriod").value;
       const openingBalance = parseFloat(document.getElementById("globalOpeningBalance").value) || 0;
-      const storeName = document.getElementById("globalStoreNameInput").value.trim() || "سنترال تيك - الفرع الرئيسي";
+      const storeName = document.getElementById("globalStoreNameInput").value.trim() || "ريد ماجيك - الفرع الرئيسي";
       const cashierRaw = document.getElementById("globalCashierSelect").value;
       let cashier = { name: "أدمن الوردية", role: "إدارة عامة" };
       try {
@@ -770,7 +890,7 @@
       closeModal("globalPosModal");
       showToast("تم إتمام الفاتورة وتحديث المخزن والخزينة", `الإجمالي: ${window.PosDB.formatMoney(res.grandTotal)} ج.م`);
 
-      const storeName = (currentSettings.store && currentSettings.store.storeName) || "سنترال تيك";
+      const storeName = (currentSettings.store && currentSettings.store.storeName) || "ريد ماجيك";
       const rowsHtml = itemsCopy
         .map(
           (i) => `
@@ -815,9 +935,14 @@
           <title>${escapeHtml(title)}</title>
           <style>
             body { font-family: 'Cairo', Tahoma, Arial, sans-serif; padding: 20px; direction: rtl; color: #0F172A; }
+            .print-logo-box { text-align: center; margin-bottom: 10px; }
+            .print-logo-box img { height: 42px; margin: 0 auto; display: block; }
           </style>
         </head>
         <body>
+          <div class="print-logo-box">
+            <img src="images/logo.svg" alt="ريد ماجيك" onerror="this.style.display='none'" />
+          </div>
           ${bodyHtml}
           <script>window.onload = function(){ window.print(); };<\/script>
         </body>
@@ -1083,6 +1208,9 @@ service cloud.firestore {
         closeModal("globalDrawerModal");
         closeModal("globalPosModal");
         closeModal("globalFirebaseModal");
+        closeModal("globalThemeModal");
+        window.BarcodeService?.closeModal?.();
+        window.BarcodeService?.closeCameraInputModal?.();
         cancelPinModal();
       }
     });
@@ -1158,6 +1286,10 @@ service cloud.firestore {
     openPrintWindow,
     onSettingsUpdate,
     getSettings,
-    getActiveStaffName
+    getActiveStaffName,
+    openThemeModal,
+    selectTheme,
+    renderThemeOptions,
+    openBarcodeStockModal: (code) => window.BarcodeService?.openModal?.(code)
   };
 })();

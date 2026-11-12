@@ -19,6 +19,10 @@
     if (submitTxt) submitTxt.textContent = "حفظ الهاتف وتثبيت السيريال بالمخزن";
     const dateInput = document.getElementById("deviceDate");
     if (dateInput) dateInput.value = DB.todayDateStr();
+    const chk = document.getElementById("phoneDeductFromDrawer");
+    if (chk) chk.checked = false;
+    const prev = document.getElementById("phoneCostPreviewText");
+    if (prev) prev.textContent = "0.00 ج.م";
   }
 
   function scrollToForm() {
@@ -80,7 +84,20 @@
         showToast("تم تحديث بيانات الهاتف بنجاح", `${brand} ${model}`);
       } else {
         await DB.addPhone(payload);
-        showToast("تم تسجيل الهاتف في المخزن برقم IMEI", `${brand} ${model}`);
+        const deductFromDrawer = document.getElementById("phoneDeductFromDrawer")?.checked;
+        if (deductFromDrawer && costPrice > 0) {
+          await DB.addDrawerTx({
+            type: "expense",
+            source: "phones",
+            amount: costPrice,
+            direction: "out",
+            reason: `شراء/توريد هاتف: ${brand} ${model} (${imei1})${supplier ? " من " + supplier : ""}`,
+            staffName: window.AppLayout.getActiveStaffName()
+          });
+          showToast("تم تسجيل الهاتف وقيد تكلفة الشراء بالخزينة", `خصم ${DB.formatMoney(costPrice)} ج.م من الدرج`);
+        } else {
+          showToast("تم تسجيل الهاتف في المخزن برقم IMEI", `${brand} ${model}`);
+        }
       }
       resetForm();
     } catch (err) {
@@ -330,7 +347,7 @@
 
   function printWarrantyInvoice(device) {
     const details = device.saleDetails || {};
-    const storeName = (window.AppLayout.getSettings().store?.storeName) || "سنترال تيك للاتصالات والإلكترونيات";
+    const storeName = (window.AppLayout.getSettings().store?.storeName) || "ريد ماجيك للهواتف والإلكترونيات";
     const bodyHtml = `
       <div style="text-align:center;border-bottom:2px dashed #94a3b8;padding-bottom:10px;margin-bottom:12px;">
         <h2 style="margin:0;font-size:18px;">${escapeHtml(storeName)}</h2>
@@ -372,6 +389,10 @@
     window.AppLayout.init("phones");
     const dateInput = document.getElementById("deviceDate");
     if (dateInput) dateInput.value = DB.todayDateStr();
+    const chk = document.getElementById("phoneDeductFromDrawer");
+    if (chk) chk.checked = false;
+    const prev = document.getElementById("phoneCostPreviewText");
+    if (prev) prev.textContent = "0.00 ج.م";
 
     DB.subscribePhones((list) => {
       state.devices = list;
@@ -382,6 +403,11 @@
     document.getElementById("sellPhoneForm")?.addEventListener("submit", handleSellSubmit);
     document.getElementById("tableSearchInput")?.addEventListener("input", renderDevices);
     document.getElementById("filterStatus")?.addEventListener("change", renderDevices);
+    document.getElementById("deviceCost")?.addEventListener("input", (e) => {
+      const v = parseFloat(e.target.value) || 0;
+      const el = document.getElementById("phoneCostPreviewText");
+      if (el) el.textContent = `${DB.formatMoney(v)} ج.م`;
+    });
   }
 
   window.PhonesPage = {

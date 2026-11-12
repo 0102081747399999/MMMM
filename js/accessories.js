@@ -232,30 +232,81 @@
   }
 
   function calculateProjectedMargin() {
-    const cost = parseFloat(document.getElementById("itemCostPrice").value) || 0;
-    const sale = parseFloat(document.getElementById("itemSalePrice").value) || 0;
+    const cost = parseFloat(document.getElementById("itemCostPrice")?.value) || 0;
+    const sale = parseFloat(document.getElementById("itemSalePrice")?.value) || 0;
+    const qty = parseInt(document.getElementById("itemInitialQty")?.value, 10) || 0;
     const diff = sale - cost;
     const pct = cost > 0 ? ((diff / cost) * 100).toFixed(1) : "0";
     const preview = document.getElementById("marginPreviewVal");
-    if (!preview) return;
-    if (diff >= 0) {
-      preview.textContent = `${DB.formatMoney(diff)} ج.م (+${pct}%)`;
-      preview.className = "font-numeric-table text-tertiary font-bold";
-    } else {
-      preview.textContent = `${DB.formatMoney(diff)} ج.م (${pct}%) خسارة`;
-      preview.className = "font-numeric-table text-error font-bold";
+    if (preview) {
+      if (diff >= 0) {
+        preview.textContent = `${DB.formatMoney(diff)} ج.م (+${pct}%)`;
+        preview.className = "font-numeric-table text-tertiary font-bold";
+      } else {
+        preview.textContent = `${DB.formatMoney(diff)} ج.م (${pct}%) خسارة`;
+        preview.className = "font-numeric-table text-error font-bold";
+      }
+    }
+    const costTotalEl = document.getElementById("stockTotalCostText");
+    if (costTotalEl) {
+      costTotalEl.textContent = `${DB.formatMoney(cost * qty)} ج.م`;
     }
   }
 
-  function openAddItemModal() {
+  function checkBarcodeDuplicate() {
+    const code = document.getElementById("itemBarcode")?.value.trim().toLowerCase();
+    const noticeEl = document.getElementById("itemBarcodeDuplicateNotice");
+    if (!noticeEl) return;
+
+    if (!code) {
+      noticeEl.classList.add("hidden");
+      return;
+    }
+
+    const dup = state.items.find((i) => i.id !== state.editingId && i.barcode && i.barcode.toLowerCase() === code);
+    if (dup) {
+      noticeEl.innerHTML = `
+        <div class="mt-2 p-2.5 rounded-lg bg-amber-50 border border-amber-300 text-amber-900 text-xs flex items-center justify-between">
+          <div class="flex items-center gap-1.5 min-w-0">
+            <span class="material-symbols-outlined text-amber-600 text-base shrink-0">info</span>
+            <span class="truncate">الباركود مسجل مسبقاً للصنف: <strong>${escapeHtml(dup.brand ? dup.brand + " - " : "")}${escapeHtml(dup.name)}</strong> (الرصيد: ${dup.qty})</span>
+          </div>
+          <button type="button" onclick="BarcodeService.openModal('${escapeHtml(code)}')" class="shrink-0 px-2 py-1 rounded bg-amber-600 text-white font-bold hover:bg-amber-700">فتح لتوريد كمية إضافية</button>
+        </div>
+      `;
+      noticeEl.classList.remove("hidden");
+    } else {
+      noticeEl.classList.add("hidden");
+    }
+  }
+
+  function openAddItemModal(initialBarcode = "") {
     state.editingId = null;
     document.getElementById("itemModalTitle").textContent = cfg.addTitle;
     document.getElementById("itemModalSubmitText").textContent = "حفظ الصنف في المخزن";
     document.getElementById("newItemForm").reset();
     document.getElementById("itemInitialQty").value = 1;
+    const chk = document.getElementById("itemDeductFromDrawer");
+    if (chk) chk.checked = false;
+    const optRow = document.getElementById("stockPaymentOptionRow");
+    if (optRow) optRow.classList.remove("hidden");
+    const noticeEl = document.getElementById("itemBarcodeDuplicateNotice");
+    if (noticeEl) noticeEl.classList.add("hidden");
+
+    if (initialBarcode) {
+      document.getElementById("itemBarcode").value = initialBarcode;
+    }
+
     calculateProjectedMargin();
     openModal("addItemModal");
-    setTimeout(() => document.getElementById("itemBrand")?.focus(), 80);
+    setTimeout(() => {
+      const barcodeEl = document.getElementById("itemBarcode");
+      if (initialBarcode || (barcodeEl && barcodeEl.value)) {
+        document.getElementById("itemBrand")?.focus();
+      } else {
+        barcodeEl?.focus();
+      }
+    }, 80);
   }
 
   function openEditItemModal(id) {
@@ -273,6 +324,8 @@
     document.getElementById("itemCostPrice").value = item.costPrice ?? 0;
     document.getElementById("itemSalePrice").value = item.salePrice ?? 0;
     document.getElementById("itemInitialQty").value = item.qty ?? 0;
+    const optRow = document.getElementById("stockPaymentOptionRow");
+    if (optRow) optRow.classList.add("hidden");
     calculateProjectedMargin();
     openModal("addItemModal");
   }
@@ -329,7 +382,21 @@
           salePrice,
           qty
         });
-        showToast("تمت إضافة الصنف لقاعدة البيانات", `${brand ? brand + " - " : ""}${name}`);
+        const deductFromDrawer = document.getElementById("itemDeductFromDrawer")?.checked;
+        const totalCost = costPrice * qty;
+        if (deductFromDrawer && totalCost > 0) {
+          await DB.addDrawerTx({
+            type: "expense",
+            source: sectionKey,
+            amount: totalCost,
+            direction: "out",
+            reason: `شراء/توريد بضاعة: ${brand ? brand + " - " : ""}${name} (${qty} قطعة بسعر جملة ${DB.formatMoney(costPrice)} ج.م)`,
+            staffName: window.AppLayout.getActiveStaffName()
+          });
+          showToast("تمت إضافة الصنف وقيد منصرف البضاعة بالخزينة", `خصم ${DB.formatMoney(totalCost)} ج.م من الدرج`);
+        } else {
+          showToast("تمت إضافة الصنف لقاعدة البيانات", `${brand ? brand + " - " : ""}${name}`);
+        }
       }
       closeModal("addItemModal");
     } catch (err) {
@@ -437,6 +504,11 @@
       state.searchQuery = e.target.value.trim();
       renderTable();
     });
+    document.getElementById("itemBarcode")?.addEventListener("input", checkBarcodeDuplicate);
+    document.getElementById("itemBarcode")?.addEventListener("change", checkBarcodeDuplicate);
+    document.getElementById("itemInitialQty")?.addEventListener("input", calculateProjectedMargin);
+    document.getElementById("itemCostPrice")?.addEventListener("input", calculateProjectedMargin);
+    document.getElementById("itemSalePrice")?.addEventListener("input", calculateProjectedMargin);
     document.getElementById("newItemForm")?.addEventListener("submit", handleSaveItem);
     document.getElementById("quickSellForm")?.addEventListener("submit", handleQuickSellSubmit);
     document.getElementById("quickSellQty")?.addEventListener("input", updateQuickSellTotal);

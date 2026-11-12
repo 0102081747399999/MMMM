@@ -1,0 +1,240 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 360" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#07090e"/>
+      <stop offset="35%" stop-color="#0d111b"/>
+      <stop offset="70%" stop-color="#180c14"/>
+      <stop offset="100%" stop-color="#08080c"/>
+    </linearGradient>
+
+    <!-- Neon Red Gradient -->
+    <linearGradient id="redGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ff1e42"/>
+      <stop offset="50%" stop-color="#e11d48"/>
+      <stop offset="100%" stop-color="#be123c"/>
+    </linearGradient>
+
+    <!-- Chrome Silver Gradient -->
+    <linearGradient id="silverGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="40%" stop-color="#f1f5f9"/>
+      <stop offset="70%" stop-color="#cbd5e1"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </linearGradient>
+
+    <!-- Crimson Dark Gradient -->
+    <linearGradient id="darkRedGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4c0519"/>
+      <stop offset="100%" stop-color="#1e040b"/>
+    </linearGradient>
+
+    <!-- Radial Glows -->
+    <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff1e42" stop-opacity="0.32"/>
+      <stop offset="60%" stop-color="#e11d48" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+
+    <radialGradient id="cornerGlow" cx="90%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#ff1e42" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Drop Shadow / Glow Filters -->
+    <filter id="redNeon" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000000" flood-opacity="0.7"/>
+    </filter>
+
+    <!-- Cyber Grid Pattern -->
+    <pattern id="cyberGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ff1e42" stroke-width="0.75" stroke-opacity="0.07"/>
+      <circle cx="0" cy="0" r="1.5" fill="#ff1e42" fill-opacity="0.15"/>
+    </pattern>
+
+    <!-- Dots Pattern -->
+    <pattern id="dotPattern" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#38bdf8" fill-opacity="0.12"/>
+    </pattern>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="1600" height="360" fill="url(#bgGrad)"/>
+  
+  <!-- Subtle Grid & Dots Overlay -->
+  <rect width="1600" height="360" fill="url(#cyberGrid)"/>
+  <rect x="0" y="0" width="450" height="360" fill="url(#dotPattern)"/>
+  
+  <!-- Radial Glow Behind Logo & Text -->
+  <ellipse cx="800" cy="180" rx="500" ry="180" fill="url(#centerGlow)"/>
+  <ellipse cx="1400" cy="100" rx="350" ry="200" fill="url(#cornerGlow)"/>
+
+  <!-- Top and Bottom Cyber Accents / Borders -->
+  <rect x="0" y="0" width="1600" height="4" fill="url(#redGrad)"/>
+  <rect x="0" y="356" width="1600" height="4" fill="url(#redGrad)"/>
+  
+  <!-- Angled Cyber Speed Slashes (Right Side & Left Side) -->
+  <g opacity="0.45">
+    <polygon points="1520,0 1560,0 1480,360 1440,360" fill="url(#redGrad)"/>
+    <polygon points="1565,0 1585,0 1505,360 1485,360" fill="#ff1e42" opacity="0.6"/>
+    <polygon points="1430,0 1445,0 1365,360 1350,360" fill="#e11d48" opacity="0.3"/>
+
+    <polygon points="160,0 120,0 40,360 80,360" fill="url(#redGrad)" opacity="0.2"/>
+    <polygon points="110,0 95,0 15,360 30,360" fill="#38bdf8" opacity="0.15"/>
+  </g>
+
+  <!-- Subtle Circuit Traces -->
+  <g stroke="#ff1e42" stroke-width="1.5" stroke-opacity="0.25" fill="none">
+    <path d="M 250,50 L 320,50 L 360,90 L 500,90"/>
+    <circle cx="500" cy="90" r="4" fill="#ff1e42" fill-opacity="0.5"/>
+    <circle cx="250" cy="50" r="3" fill="#ff1e42" fill-opacity="0.5"/>
+
+    <path d="M 1350,310 L 1280,310 L 1240,270 L 1120,270"/>
+    <circle cx="1120" cy="270" r="4" fill="#ff1e42" fill-opacity="0.5"/>
+    <circle cx="1350" cy="310" r="3" fill="#ff1e42" fill-opacity="0.5"/>
+  </g>
+
+  <!-- MAIN BRANDING CONTENT -->
+  <g id="brandGroup" filter="url(#softShadow)">
+    
+    <!-- Red Magic Stylized Cyber Shield / Emblem (Center-Right) -->
+    <g transform="translate(1030, 70)">
+      <!-- Outer Hex Shield -->
+      <polygon points="110,10 200,60 200,160 110,210 20,160 20,60" 
+               fill="url(#darkRedGrad)" stroke="url(#redGrad)" stroke-width="3" filter="url(#redNeon)"/>
+      
+      <!-- Inner Sharp Red Polygonal Core -->
+      <polygon points="110,28 182,68 182,152 110,192 38,152 38,68" 
+               fill="#090d16" stroke="#ff1e42" stroke-width="1.5" stroke-opacity="0.6"/>
+
+      <!-- Red Magic Iconic Angular Geometric "RM" Monogram -->
+      <!-- Left Wing / R Blade -->
+      <path d="M 65,70 L 95,70 L 105,100 L 80,100 L 98,150 L 72,150 L 60,115 L 60,150 L 45,150 Z" 
+            fill="url(#silverGrad)"/>
+      <path d="M 65,82 L 85,82 L 80,95 L 65,95 Z" fill="#090d16"/>
+      
+      <!-- Right Wing / M Blade -->
+      <path d="M 115,70 L 132,70 L 145,115 L 158,70 L 175,70 L 175,150 L 158,150 L 158,102 L 148,135 L 142,135 L 132,102 L 132,150 L 115,150 Z" 
+            fill="url(#redGrad)"/>
+
+      <!-- Glowing Center Energy Crystal -->
+      <polygon points="110,95 117,110 110,125 103,110" fill="#ffffff" filter="url(#redNeon)"/>
+      
+      <!-- Corner Tech Accents -->
+      <circle cx="110" cy="10" r="3" fill="#ff1e42"/>
+      <circle cx="200" cy="60" r="3" fill="#ff1e42"/>
+      <circle cx="200" cy="160" r="3" fill="#ff1e42"/>
+      <circle cx="110" cy="210" r="3" fill="#ff1e42"/>
+      <circle cx="20" cy="160" r="3" fill="#ff1e42"/>
+      <circle cx="20" cy="60" r="3" fill="#ff1e42"/>
+    </g>
+
+    <!-- Main Arabic & English Typography -->
+    <g transform="translate(980, 0)">
+      
+      <!-- Top Cyber Tag -->
+      <g transform="translate(0, 82)">
+        <rect x="-420" y="0" width="420" height="28" rx="6" fill="#1e1322" stroke="#ff1e42" stroke-width="1" stroke-opacity="0.4"/>
+        <!-- Pulsing Red Dot -->
+        <circle cx="-15" cy="14" r="5" fill="#ff1e42" filter="url(#redNeon)"/>
+        <text x="-32" y="19" text-anchor="end" 
+              fill="#fda4af" font-family="system-ui, -apple-system, 'Cairo', 'Readex Pro', 'Segoe UI', Tahoma, sans-serif" 
+              font-size="13" font-weight="700" letter-spacing="1">
+          المتجر المعتمد • هواتف ذكية • إكسسوارات • خدمات كاش
+        </text>
+      </g>
+
+      <!-- Main Arabic Store Name: ريد ماجيك -->
+      <text x="0" y="180" text-anchor="end" 
+            fill="url(#silverGrad)" 
+            stroke="#ff1e42" stroke-width="2" stroke-opacity="0.35"
+            font-family="system-ui, -apple-system, 'Cairo', 'Readex Pro', 'Segoe UI', Tahoma, sans-serif" 
+            font-size="82" font-weight="900" letter-spacing="0">
+        ريد ماجيك
+      </text>
+
+      <!-- English Sub-Brand: RED MAGIC -->
+      <g transform="translate(0, 222)">
+        <text x="0" y="0" text-anchor="end" 
+              fill="url(#redGrad)" 
+              font-family="'Readex Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" 
+              font-size="28" font-weight="800" letter-spacing="9">
+          RED MAGIC
+        </text>
+        <text x="-320" y="-2" text-anchor="end" 
+              fill="#64748b" 
+              font-family="system-ui, -apple-system, sans-serif" 
+              font-size="14" font-weight="700" letter-spacing="3">
+          MOBILE &amp; GAMING STORE
+        </text>
+      </g>
+
+      <!-- Bottom Tagline / Categories -->
+      <g transform="translate(0, 268)">
+        <text x="0" y="0" text-anchor="end" 
+              fill="#cbd5e1" 
+              font-family="system-ui, -apple-system, 'Cairo', 'Readex Pro', 'Segoe UI', Tahoma, sans-serif" 
+              font-size="16" font-weight="600">
+          بيع وصيانة الهواتف الذكية • شواحن ووصلات أصلية • صبات وسماعات • تحويل وسحب فودافون كاش
+        </text>
+      </g>
+    </g>
+
+    <!-- Left Badges & Feature Cards (Responsive Details) -->
+    <g transform="translate(120, 95)">
+      <!-- System Admin Badge Card -->
+      <rect x="0" y="0" width="340" height="170" rx="14" 
+            fill="#0b101b" fill-opacity="0.85" 
+            stroke="#1e293b" stroke-width="1.5"/>
+      <rect x="0" y="0" width="340" height="170" rx="14" 
+            fill="none" stroke="#ff1e42" stroke-width="1.5" stroke-opacity="0.25"/>
+
+      <!-- Inner Badge Header -->
+      <rect x="15" y="15" width="310" height="34" rx="8" fill="#171e2e"/>
+      <circle cx="35" cy="32" r="5" fill="#10b981"/>
+      <text x="50" y="37" fill="#f8fafc" font-family="system-ui, 'Cairo', sans-serif" font-size="13" font-weight="700">
+        نظام الإدارة والرقابة المركزية
+      </text>
+      <text x="310" y="37" text-anchor="end" fill="#38bdf8" font-family="monospace" font-size="11" font-weight="700">
+        POS v2.5
+      </text>
+
+      <!-- Feature Pill 1: Phones & Inventory -->
+      <g transform="translate(20, 64)">
+        <rect x="0" y="0" width="142" height="40" rx="8" fill="#131b2e" stroke="#1e293b" stroke-width="1"/>
+        <text x="16" y="25" fill="#ff1e42" font-size="16">📱</text>
+        <text x="40" y="25" fill="#e2e8f0" font-family="system-ui, 'Cairo', sans-serif" font-size="12" font-weight="600">هواتف ومخازن</text>
+      </g>
+
+      <!-- Feature Pill 2: Fast Charging & Audio -->
+      <g transform="translate(178, 64)">
+        <rect x="0" y="0" width="142" height="40" rx="8" fill="#131b2e" stroke="#1e293b" stroke-width="1"/>
+        <text x="16" y="25" fill="#ff1e42" font-size="16">⚡</text>
+        <text x="40" y="25" fill="#e2e8f0" font-family="system-ui, 'Cairo', sans-serif" font-size="12" font-weight="600">شواحن وصبات</text>
+      </g>
+
+      <!-- Feature Pill 3: Wallets & Cash -->
+      <g transform="translate(20, 114)">
+        <rect x="0" y="0" width="142" height="40" rx="8" fill="#131b2e" stroke="#1e293b" stroke-width="1"/>
+        <text x="16" y="25" fill="#ff1e42" font-size="16">💳</text>
+        <text x="40" y="25" fill="#e2e8f0" font-family="system-ui, 'Cairo', sans-serif" font-size="12" font-weight="600">محافظ الكاش</text>
+      </g>
+
+      <!-- Feature Pill 4: Cloud Sync -->
+      <g transform="translate(178, 114)">
+        <rect x="0" y="0" width="142" height="40" rx="8" fill="#131b2e" stroke="#1e293b" stroke-width="1"/>
+        <text x="16" y="25" fill="#38bdf8" font-size="16">☁️</text>
+        <text x="40" y="25" fill="#38bdf8" font-family="system-ui, 'Cairo', sans-serif" font-size="12" font-weight="600">مزامنة سحابية</text>
+      </g>
+    </g>
+
+  </g>
+</svg>

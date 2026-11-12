@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>مخزن ومبيعات التلفونات — سنترال تيك POS</title>
+  <title>مخزن ومبيعات التلفونات — ريد ماجيك POS</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Readex+Pro:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -109,10 +109,16 @@
                 <span class="font-label-md text-slate-300">تسجيل بيانات الجهاز وأرقام السيريال IMEI 1 &amp; IMEI 2 لتوثيق الضمان</span>
               </div>
             </div>
-            <button type="button" onclick="PhonesPage.resetForm()" class="flex items-center gap-1 font-label-md text-slate-300 hover:text-white transition-colors">
-              <span class="material-symbols-outlined text-base">restart_alt</span>
-              <span>تفريغ الحقول</span>
-            </button>
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="BarcodeService.openModal()" class="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-label-md text-xs sm:text-sm transition-colors shadow-sm">
+                <span class="material-symbols-outlined text-base">barcode_scanner</span>
+                <span>قارئ الباركود (F3)</span>
+              </button>
+              <button type="button" onclick="PhonesPage.resetForm()" class="flex items-center gap-1 font-label-md text-slate-300 hover:text-white transition-colors">
+                <span class="material-symbols-outlined text-base">restart_alt</span>
+                <span>تفريغ الحقول</span>
+              </button>
+            </div>
           </div>
 
           <form id="newPhoneForm" class="p-6 space-y-5">
@@ -176,7 +182,12 @@
                   <span>سيريال أساسي (IMEI 1) *</span>
                   <button type="button" onclick="PhonesPage.generateTempImei('deviceImei1')" class="text-xs text-primary hover:underline">توليد سيريال مؤقت</button>
                 </label>
-                <input type="text" id="deviceImei1" maxlength="15" required placeholder="15 رقماً..." class="w-full h-11 px-3 bg-surface-container-low border border-slate-200 rounded-lg font-numeric-table text-title-md text-on-surface tracking-widest focus:bg-white focus:ring-2 focus:ring-primary text-left" dir="ltr" />
+                <div class="relative flex items-center">
+                  <input type="text" id="deviceImei1" data-barcode-input="true" maxlength="15" required placeholder="15 رقماً..." class="w-full h-11 px-3 pl-10 bg-surface-container-low border border-slate-200 rounded-lg font-numeric-table text-title-md text-on-surface tracking-widest focus:bg-white focus:ring-2 focus:ring-primary text-left" dir="ltr" />
+                  <button type="button" onclick="BarcodeService.openCameraForInput('deviceImei1')" title="مسح باركود السيريال بالكاميرا" class="absolute left-2 top-1/2 -translate-y-1/2 p-1 rounded hover:bg-slate-200 text-emerald-600 transition-colors">
+                    <span class="material-symbols-outlined text-base">photo_camera</span>
+                  </button>
+                </div>
               </div>
 
               <div class="flex flex-col gap-1">
@@ -184,7 +195,12 @@
                   <span>سيريال شريحة ثانية (IMEI 2)</span>
                   <span class="font-label-md text-outline">اختياري</span>
                 </label>
-                <input type="text" id="deviceImei2" maxlength="15" placeholder="15 رقماً (للشريحة 2)..." class="w-full h-11 px-3 bg-surface-container-low border border-slate-200 rounded-lg font-numeric-table text-title-md text-on-surface tracking-widest focus:bg-white focus:ring-2 focus:ring-primary text-left" dir="ltr" />
+                <div class="relative flex items-center">
+                  <input type="text" id="deviceImei2" data-barcode-input="true" maxlength="15" placeholder="15 رقماً (للشريحة 2)..." class="w-full h-11 px-3 pl-10 bg-surface-container-low border border-slate-200 rounded-lg font-numeric-table text-title-md text-on-surface tracking-widest focus:bg-white focus:ring-2 focus:ring-primary text-left" dir="ltr" />
+                  <button type="button" onclick="BarcodeService.openCameraForInput('deviceImei2')" title="مسح باركود السيريال 2 بالكاميرا" class="absolute left-2 top-1/2 -translate-y-1/2 p-1 rounded hover:bg-slate-200 text-emerald-600 transition-colors">
+                    <span class="material-symbols-outlined text-base">photo_camera</span>
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -213,6 +229,18 @@
               <div class="flex flex-col gap-1">
                 <label class="font-label-lg text-on-surface">تاريخ الاستلام</label>
                 <input type="date" id="deviceDate" class="w-full h-11 px-3 bg-surface-container-low border border-slate-200 rounded-lg font-numeric-table text-body-md text-on-surface focus:bg-white focus:ring-2 focus:ring-primary" />
+              </div>
+            </div>
+
+            <!-- Stock Purchase / Drawer Deduction Option for Phones -->
+            <div id="phonePaymentOptionRow" class="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-on-surface flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <label class="flex items-center gap-2 cursor-pointer font-label-lg font-bold text-amber-950">
+                <input type="checkbox" id="phoneDeductFromDrawer" class="w-4 h-4 rounded text-primary accent-primary" />
+                <span>تسجيل شراء الهاتف وخصم سعر الشراء من الخزينة / الدرج الآن</span>
+              </label>
+              <div class="text-xs text-amber-900 font-semibold flex items-center gap-1.5 shrink-0">
+                <span>المبلغ المخصوم من الخزينة:</span>
+                <strong id="phoneCostPreviewText" class="font-numeric-table font-bold text-amber-950 text-sm">0.00 ج.م</strong>
               </div>
             </div>
 
@@ -411,6 +439,8 @@
   <script src="https://www.gstatic.com/firebasejs/13.3.0/firebase-analytics-compat.js"></script>
   <script src="js/firebase-config.js"></script>
   <script src="js/db.js"></script>
+  <script src="js/html5-qrcode.min.js"></script>
+  <script src="js/barcode-service.js"></script>
   <script src="js/layout.js"></script>
   <script src="js/phones.js"></script>
 </body>

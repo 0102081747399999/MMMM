@@ -227,8 +227,8 @@
 
   const DEFAULT_SETTINGS = {
     store: {
-      storeName: "سنترال تيك - الفرع الرئيسي",
-      storeSubtitle: "للاتصالات والإلكترونيات"
+      storeName: "ريد ماجيك - الفرع الرئيسي",
+      storeSubtitle: "للهواتف والإكسسوارات والمدفوعات"
     },
     shift: {
       isOpen: true,

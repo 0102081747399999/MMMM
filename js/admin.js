@@ -506,7 +506,7 @@
       const synced = DB.isCloudConnected ? DB.isCloudConnected() : false;
       showToast(synced ? "تم اعتماد إغلاق الخزينة وحفظ تقرير الجرد في Firebase" : "تم حفظ إغلاق الخزينة محلياً فقط (المزامنة غير مفعلة)");
 
-      const storeName = state.settings.store?.storeName || "سنترال تيك";
+      const storeName = state.settings.store?.storeName || "ريد ماجيك";
       openPrintWindow(
         "تقرير إغلاق وردية وجرد خزينة",
         `
@@ -529,6 +529,297 @@
     } catch (err) {
       showToast("تعذر حفظ تقرير الإغلاق", err.message, true);
     }
+  }
+
+  // Monthly Sales & Profit Tracking
+  function getSectionBadge(sec) {
+    switch (sec) {
+      case "phones":
+        return `<span class="px-2 py-0.5 rounded text-xs font-bold bg-primary-fixed text-on-primary-fixed">هواتف</span>`;
+      case "chargers":
+        return `<span class="px-2 py-0.5 rounded text-xs font-bold bg-secondary-fixed text-on-secondary-fixed">شواحن</span>`;
+      case "headphones":
+        return `<span class="px-2 py-0.5 rounded text-xs font-bold bg-tertiary-fixed text-on-tertiary-fixed-variant">سماعات</span>`;
+      case "speakers":
+        return `<span class="px-2 py-0.5 rounded text-xs font-bold bg-warning-container text-on-warning-container">صبات</span>`;
+      default:
+        return `<span class="px-2 py-0.5 rounded text-xs font-semibold bg-surface-container-low text-on-surface-variant">${escapeHtml(sec || "بضاعة")}</span>`;
+    }
+  }
+
+  function filterItemsByPeriod(list, period) {
+    const now = new Date();
+    const curYear = now.getFullYear();
+    const curMonth = String(now.getMonth() + 1).padStart(2, "0");
+    const thisMonthPrefix = `${curYear}-${curMonth}`;
+
+    const prevMonthDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const prevYear = prevMonthDate.getFullYear();
+    const prevMonth = String(prevMonthDate.getMonth() + 1).padStart(2, "0");
+    const lastMonthPrefix = `${prevYear}-${prevMonth}`;
+
+    const todayStr = DB.todayDateStr();
+    const thirtyDaysAgoMs = Date.now() - 30 * 24 * 60 * 60 * 1000;
+
+    return list.filter((item) => {
+      const d = item.dateStr || "";
+      const t = item.createdAtMs || 0;
+      switch (period) {
+        case "this_month":
+          return d.startsWith(thisMonthPrefix);
+        case "last_month":
+          return d.startsWith(lastMonthPrefix);
+        case "last_30_days":
+          return t >= thirtyDaysAgoMs;
+        case "today":
+          return d === todayStr;
+        case "all_time":
+        default:
+          return true;
+      }
+    });
+  }
+
+  function getPeriodLabel(period) {
+    const now = new Date();
+    const monthNames = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+    const curMonthName = monthNames[now.getMonth()];
+    const prevMonthDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const prevMonthName = monthNames[prevMonthDate.getMonth()];
+
+    switch (period) {
+      case "this_month":
+        return `شهر ${curMonthName} ${now.getFullYear()}`;
+      case "last_month":
+        return `شهر ${prevMonthName} ${prevMonthDate.getFullYear()}`;
+      case "last_30_days":
+        return "آخر 30 يوماً";
+      case "today":
+        return `اليوم (${DB.todayDateStr()})`;
+      case "all_time":
+      default:
+        return "كامل سجل المتجر";
+    }
+  }
+
+  function renderMonthlySalesReport() {
+    const periodSelect = document.getElementById("monthlyReportPeriodSelect");
+    const sectionSelect = document.getElementById("monthlyReportSectionSelect");
+    const searchInput = document.getElementById("monthlySalesSearchInput");
+    const tbody = document.getElementById("monthlySalesTableBody");
+    const emptyState = document.getElementById("monthlySalesEmptyState");
+
+    if (!tbody) return;
+
+    const period = periodSelect ? periodSelect.value : (state.monthlyPeriod || "this_month");
+    const section = sectionSelect ? sectionSelect.value : "ALL";
+    const search = searchInput ? searchInput.value.toLowerCase().trim() : "";
+
+    // Filter sales
+    let filteredSales = filterItemsByPeriod(state.sales, period);
+    if (section !== "ALL") {
+      filteredSales = filteredSales.filter((s) => s.section === section);
+    }
+    if (search) {
+      filteredSales = filteredSales.filter(
+        (s) =>
+          (s.itemName || "").toLowerCase().includes(search) ||
+          (s.customerName || "").toLowerCase().includes(search) ||
+          (s.staffName || "").toLowerCase().includes(search)
+      );
+    }
+
+    // Filter wallet txs for commissions
+    const filteredWalletTxs = filterItemsByPeriod(state.walletTxs, period);
+    const walletCommissions = filteredWalletTxs.reduce((sum, t) => sum + (Number(t.commission) || 0), 0);
+
+    // Compute sales totals
+    const totalGoodsSales = filteredSales.reduce((sum, s) => sum + (Number(s.totalAmount) || 0), 0);
+    const totalGoodsCost = filteredSales.reduce((sum, s) => {
+      const unitCost = Number(s.unitCost) || 0;
+      const qty = Number(s.qty) || 1;
+      return sum + unitCost * qty;
+    }, 0);
+    const netGoodsProfit = filteredSales.reduce((sum, s) => sum + (Number(s.profit) || 0), 0);
+    const unitsSold = filteredSales.reduce((sum, s) => sum + (Number(s.qty) || 1), 0);
+    const totalStoreProfit = netGoodsProfit + walletCommissions;
+
+    const marginPct = totalGoodsCost > 0 ? ((netGoodsProfit / totalGoodsCost) * 100).toFixed(1) : "0";
+
+    // Update KPI card DOM
+    const elGoodsSales = document.getElementById("monthlyTotalGoodsSales");
+    const elGoodsCost = document.getElementById("monthlyTotalGoodsCost");
+    const elNetProfit = document.getElementById("monthlyNetGoodsProfit");
+    const elMarginBadge = document.getElementById("monthlyProfitMarginBadge");
+    const elUnitsBadge = document.getElementById("monthlyUnitsSoldBadge");
+    const elWalletComms = document.getElementById("monthlyWalletCommissions");
+    const elWalletOps = document.getElementById("monthlyWalletOpsBadge");
+    const elTotalStoreProfit = document.getElementById("monthlyTotalStoreProfit");
+    const elCountLabel = document.getElementById("monthlySalesCountLabel");
+
+    if (elGoodsSales) elGoodsSales.textContent = DB.formatMoney(totalGoodsSales);
+    if (elGoodsCost) elGoodsCost.textContent = DB.formatMoney(totalGoodsCost);
+    if (elNetProfit) elNetProfit.textContent = (netGoodsProfit >= 0 ? "+" : "") + DB.formatMoney(netGoodsProfit);
+    if (elMarginBadge) elMarginBadge.textContent = `هامش الربح: ${marginPct >= 0 ? "+" : ""}${marginPct}%`;
+    if (elUnitsBadge) elUnitsBadge.textContent = `${unitsSold} قطعة وجهاز (${filteredSales.length} عملية بيع)`;
+    if (elWalletComms) elWalletComms.textContent = DB.formatMoney(walletCommissions);
+    if (elWalletOps) elWalletOps.textContent = `${filteredWalletTxs.length} عملية تحويل وسحب`;
+    if (elTotalStoreProfit) elTotalStoreProfit.textContent = (totalStoreProfit >= 0 ? "+" : "") + DB.formatMoney(totalStoreProfit);
+    if (elCountLabel) elCountLabel.textContent = `عرض ${filteredSales.length} حركة بيع • ${getPeriodLabel(period)}`;
+
+    if (filteredSales.length === 0) {
+      tbody.innerHTML = "";
+      if (emptyState) emptyState.classList.remove("hidden");
+      return;
+    }
+
+    if (emptyState) emptyState.classList.add("hidden");
+
+    tbody.innerHTML = filteredSales
+      .map((s, idx) => {
+        const qty = Number(s.qty) || 1;
+        const unitPrice = Number(s.unitPrice) || 0;
+        const unitCost = Number(s.unitCost) || 0;
+        const totalAmount = Number(s.totalAmount) || (unitPrice * qty);
+        const profit = Number(s.profit) !== undefined ? Number(s.profit) : (totalAmount - (unitCost * qty));
+        const rowMarginPct = (unitCost * qty) > 0 ? ((profit / (unitCost * qty)) * 100).toFixed(0) : "0";
+        const rowBg = idx % 2 === 0 ? "bg-white" : "bg-slate-50/70";
+
+        return `
+          <tr class="${rowBg} hover:bg-emerald-50/40 transition-colors border-b border-slate-100 text-xs sm:text-sm">
+            <td class="py-3 px-3.5 whitespace-nowrap">
+              <span class="font-numeric-table font-bold text-on-surface block">${escapeHtml(s.dateStr || "-")}</span>
+              <span class="font-numeric-table text-outline text-xs">${escapeHtml(s.timeStr || "")}</span>
+            </td>
+            <td class="py-3 px-3.5 font-bold text-on-surface max-w-xs">
+              <span class="block truncate" title="${escapeHtml(s.itemName || "-")}">${escapeHtml(s.itemName || "-")}</span>
+              ${s.customerName ? `<span class="text-xs font-normal text-on-surface-variant block">العميل: ${escapeHtml(s.customerName)}</span>` : ""}
+            </td>
+            <td class="py-3 px-3.5 whitespace-nowrap">
+              ${getSectionBadge(s.section)}
+            </td>
+            <td class="py-3 px-3.5 text-center font-numeric-table font-bold text-on-surface">
+              ${qty}
+            </td>
+            <td class="py-3 px-3.5 text-left font-numeric-table text-on-surface">
+              ${DB.formatMoney(unitPrice)} <span class="text-[10px] text-outline">ج.م</span>
+            </td>
+            <td class="py-3 px-3.5 text-left font-numeric-table text-on-surface-variant">
+              ${DB.formatMoney(unitCost)} <span class="text-[10px] text-outline">ج.م</span>
+            </td>
+            <td class="py-3 px-3.5 text-left font-numeric-table font-bold text-on-surface">
+              ${DB.formatMoney(totalAmount)} <span class="text-[10px] text-outline">ج.م</span>
+            </td>
+            <td class="py-3 px-3.5 text-left font-numeric-table font-black ${profit >= 0 ? "text-tertiary" : "text-error"} bg-emerald-50/80">
+              ${profit >= 0 ? "+" : ""}${DB.formatMoney(profit)} <span class="text-[10px]">ج.م</span>
+              <span class="block text-[10px] font-semibold opacity-80">${profit >= 0 ? "+" : ""}${rowMarginPct}%</span>
+            </td>
+            <td class="py-3 px-3.5 text-center whitespace-nowrap">
+              <span class="px-2 py-0.5 rounded text-xs font-semibold bg-surface-container-low text-on-surface-variant">${escapeHtml(s.paymentMethod || "نقدي")}</span>
+            </td>
+            <td class="py-3 px-3.5 text-on-surface-variant text-xs whitespace-nowrap">
+              ${escapeHtml(s.staffName || "الكاشير")}
+            </td>
+          </tr>
+        `;
+      })
+      .join("");
+  }
+
+  function changeMonthlyReportPeriod() {
+    const select = document.getElementById("monthlyReportPeriodSelect");
+    if (select) state.monthlyPeriod = select.value;
+    renderMonthlySalesReport();
+  }
+
+  function printMonthlySalesReport() {
+    const periodSelect = document.getElementById("monthlyReportPeriodSelect");
+    const period = periodSelect ? periodSelect.value : (state.monthlyPeriod || "this_month");
+    const periodLabel = getPeriodLabel(period);
+
+    const filteredSales = filterItemsByPeriod(state.sales, period);
+    const filteredWalletTxs = filterItemsByPeriod(state.walletTxs, period);
+    const walletCommissions = filteredWalletTxs.reduce((sum, t) => sum + (Number(t.commission) || 0), 0);
+
+    const totalGoodsSales = filteredSales.reduce((sum, s) => sum + (Number(s.totalAmount) || 0), 0);
+    const totalGoodsCost = filteredSales.reduce((sum, s) => sum + ((Number(s.unitCost) || 0) * (Number(s.qty) || 1)), 0);
+    const netGoodsProfit = filteredSales.reduce((sum, s) => sum + (Number(s.profit) || 0), 0);
+    const unitsSold = filteredSales.reduce((sum, s) => sum + (Number(s.qty) || 1), 0);
+    const totalStoreProfit = netGoodsProfit + walletCommissions;
+
+    const rowsHtml = filteredSales.map((s, idx) => {
+      const qty = Number(s.qty) || 1;
+      const unitPrice = Number(s.unitPrice) || 0;
+      const unitCost = Number(s.unitCost) || 0;
+      const totalAmount = Number(s.totalAmount) || (unitPrice * qty);
+      const profit = Number(s.profit) !== undefined ? Number(s.profit) : (totalAmount - (unitCost * qty));
+      return `
+        <tr style="border-bottom:1px solid #ddd;font-size:12px;">
+          <td style="padding:6px;">${idx + 1}</td>
+          <td style="padding:6px;">${escapeHtml(s.dateStr || "")}</td>
+          <td style="padding:6px;font-weight:bold;">${escapeHtml(s.itemName || "-")}</td>
+          <td style="padding:6px;text-align:center;">${qty}</td>
+          <td style="padding:6px;text-align:left;">${DB.formatMoney(unitPrice)}</td>
+          <td style="padding:6px;text-align:left;">${DB.formatMoney(unitCost)}</td>
+          <td style="padding:6px;text-align:left;font-weight:bold;">${DB.formatMoney(totalAmount)}</td>
+          <td style="padding:6px;text-align:left;font-weight:bold;color:${profit >= 0 ? "#059669" : "#dc2626"};">
+            ${profit >= 0 ? "+" : ""}${DB.formatMoney(profit)} ج.م
+          </td>
+        </tr>
+      `;
+    }).join("");
+
+    const storeName = state.settings.store?.storeName || "ريد ماجيك";
+    openPrintWindow(
+      `تقرير مبيعات وأرباح المتجر — ${periodLabel}`,
+      `
+      <div style="text-align:center;border-bottom:2px solid #0F172A;padding-bottom:10px;margin-bottom:12px;">
+        <h2 style="margin:0;font-size:20px;">${escapeHtml(storeName)}</h2>
+        <h3 style="margin:4px 0;font-size:15px;color:#0284C7;">تقرير المبيعات وحساب صافي الأرباح (${escapeHtml(periodLabel)})</h3>
+        <p style="margin:2px 0;font-size:11px;color:#64748b;">تاريخ التصدير: ${DB.todayDateStr()}</p>
+      </div>
+
+      <table style="width:100%;margin-bottom:16px;border-collapse:collapse;font-size:13px;background:#f8fafc;">
+        <tr>
+          <td style="padding:8px;border:1px solid #cbd5e1;">إجمالي مبيعات البضاعة:</td>
+          <td style="padding:8px;border:1px solid #cbd5e1;font-weight:bold;text-align:left;">${DB.formatMoney(totalGoodsSales)} ج.م</td>
+          <td style="padding:8px;border:1px solid #cbd5e1;">عدد الأصناف المباعة:</td>
+          <td style="padding:8px;border:1px solid #cbd5e1;font-weight:bold;text-align:left;">${unitsSold} قطعة</td>
+        </tr>
+        <tr>
+          <td style="padding:8px;border:1px solid #cbd5e1;">إجمالي تكلفة الشراء:</td>
+          <td style="padding:8px;border:1px solid #cbd5e1;font-weight:bold;text-align:left;">${DB.formatMoney(totalGoodsCost)} ج.م</td>
+          <td style="padding:8px;border:1px solid #cbd5e1;">صافي أرباح البضاعة:</td>
+          <td style="padding:8px;border:1px solid #cbd5e1;font-weight:bold;color:#059669;text-align:left;">+${DB.formatMoney(netGoodsProfit)} ج.م</td>
+        </tr>
+        <tr style="background:#e0f2fe;">
+          <td style="padding:8px;border:1px solid #cbd5e1;">أرباح عمولات محافظ الكاش:</td>
+          <td style="padding:8px;border:1px solid #cbd5e1;font-weight:bold;text-align:left;">+${DB.formatMoney(walletCommissions)} ج.م</td>
+          <td style="padding:8px;border:1px solid #cbd5e1;font-weight:bold;font-size:14px;">إجمالي صافي مكسب المتجر:</td>
+          <td style="padding:8px;border:1px solid #cbd5e1;font-weight:900;font-size:15px;color:#0F172A;text-align:left;">+${DB.formatMoney(totalStoreProfit)} ج.م</td>
+        </tr>
+      </table>
+
+      <h4 style="margin:12px 0 6px 0;font-size:14px;">جدول الأصناف المباعة بالتفصيل وتحديد الربح:</h4>
+      <table style="width:100%;border-collapse:collapse;text-align:right;">
+        <thead style="background:#0F172A;color:#fff;font-size:12px;">
+          <tr>
+            <th style="padding:6px;">#</th>
+            <th style="padding:6px;">التاريخ</th>
+            <th style="padding:6px;">اسم الصنف</th>
+            <th style="padding:6px;text-align:center;">الكمية</th>
+            <th style="padding:6px;text-align:left;">سعر البيع</th>
+            <th style="padding:6px;text-align:left;">سعر التكلفة</th>
+            <th style="padding:6px;text-align:left;">الإجمالي</th>
+            <th style="padding:6px;text-align:left;">المكسب</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rowsHtml || '<tr><td colspan="8" style="padding:15px;text-align:center;">لا توجد مبيعات في هذه الفترة</td></tr>'}
+        </tbody>
+      </table>
+      `
+    );
   }
 
   // Staff CRUD
@@ -641,11 +932,13 @@
     DB.subscribeAllWalletTransactions((list) => {
       state.walletTxs = list;
       renderKPIs();
+      renderMonthlySalesReport();
     });
 
     DB.subscribeSales((list) => {
       state.sales = list;
       renderKPIs();
+      renderMonthlySalesReport();
     });
 
     DB.subscribeDrawerTransactions((list) => {
@@ -734,7 +1027,10 @@
     openEditStaffModal,
     setActiveCashier,
     triggerDeleteStaff,
-    switchLogTab
+    switchLogTab,
+    renderMonthlySalesReport,
+    changeMonthlyReportPeriod,
+    printMonthlySalesReport
   };
 
   document.addEventListener("DOMContentLoaded", init);
