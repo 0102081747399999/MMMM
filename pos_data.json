@@ -1,0 +1,128 @@
+{
+  "products": [],
+  "salesInvoices": [],
+  "drawer": {
+    "shiftId": "#402",
+    "history": [
+      {
+        "type": "out",
+        "amount": 1800,
+        "reason": "إلغاء وحذف نهائي لفاتورة بيع INV-1014",
+        "timestamp": "2026-11-18T18:12:45.701Z",
+        "balanceAfter": 0
+      },
+      {
+        "balanceAfter": 1800,
+        "amount": 1800,
+        "reason": "فاتورة بيع INV-1014",
+        "timestamp": "2026-11-18T18:12:14.472Z",
+        "type": "in"
+      },
+      {
+        "reason": "تحديد رصيد افتتاح الدرج",
+        "type": "set_opening",
+        "amount": 0,
+        "balanceAfter": 0,
+        "timestamp": "2026-11-18T17:38:31.773Z"
+      },
+      {
+        "amount": 1500,
+        "balanceAfter": -1500,
+        "type": "out",
+        "reason": "إلغاء وحذف نهائي لفاتورة بيع INV-1013",
+        "timestamp": "2026-11-18T17:38:21.691Z"
+      },
+      {
+        "timestamp": "2026-11-18T17:38:04.244Z",
+        "balanceAfter": 0,
+        "type": "set_opening",
+        "amount": 0,
+        "reason": "تحديد رصيد افتتاح الدرج"
+      },
+      {
+        "balanceAfter": 1250,
+        "timestamp": "2026-11-18T17:14:06.872Z",
+        "type": "set_opening",
+        "reason": "تحديد رصيد افتتاح الدرج",
+        "amount": 1250
+      },
+      {
+        "type": "in",
+        "balanceAfter": 1250,
+        "amount": 1500,
+        "timestamp": "2026-11-18T16:15:43.176Z",
+        "reason": "فاتورة بيع INV-1013 - بيع مباشر بالكود (555) - شاحن"
+      },
+      {
+        "type": "out",
+        "reason": "إلغاء وحذف نهائي لفاتورة بيع INV-1010",
+        "amount": 70,
+        "timestamp": "2026-11-18T16:12:39.483Z",
+        "balanceAfter": -250
+      },
+      {
+        "reason": "إلغاء وحذف نهائي لفاتورة بيع INV-1011",
+        "timestamp": "2026-11-18T16:12:32.623Z",
+        "type": "out",
+        "amount": 180,
+        "balanceAfter": -180
+      },
+      {
+        "type": "set_opening",
+        "amount": 0,
+        "balanceAfter": 0,
+        "reason": "تحديد رصيد افتتاح الدرج",
+        "timestamp": "2026-11-18T16:12:23.623Z"
+      },
+      {
+        "timestamp": "2026-11-18T14:33:58.516Z",
+        "amount": 0,
+        "reason": "فاتورة بيع INV-1012",
+        "balanceAfter": 0,
+        "type": "in"
+      }
+    ],
+    "currentCash": 0,
+    "openingCash": 0
+  },
+  "vodafoneLines": [
+    {
+      "id": "line_1",
+      "isActive": true,
+      "lineNum": 1,
+      "phone": "",
+      "totalTransferredMonth": 0,
+      "monthlyLimit": 100000,
+      "balance": 0,
+      "deviceStatus": "connected",
+      "updatedAt": "2026-11-18T12:21:28.688Z",
+      "deviceName": "هاتف محمول خط 1"
+    },
+    {
+      "id": "line_2",
+      "deviceStatus": "connected",
+      "isActive": true,
+      "monthlyLimit": 100000,
+      "balance": 0,
+      "deviceName": "هاتف محمول خط 2",
+      "lineNum": 2,
+      "totalTransferredMonth": 0,
+      "phone": "",
+      "updatedAt": "2026-11-18T12:21:28.688Z"
+    },
+    {
+      "id": "line_3",
+      "monthlyLimit": 100000,
+      "updatedAt": "2026-11-18T12:21:28.688Z",
+      "deviceName": "هاتف محمول خط 3",
+      "totalTransferredMonth": 0,
+      "deviceStatus": "connected",
+      "lineNum": 3,
+      "isActive": true,
+      "phone": "",
+      "balance": 0
+    }
+  ],
+  "vodafoneTransactions": [],
+  "lastUpdated": "2026-11-19T13:40:45.752Z"
+}
