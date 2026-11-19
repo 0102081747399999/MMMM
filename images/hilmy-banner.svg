@@ -1,0 +1,291 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 400" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient: Deep Onyx, Cyber Navy & Royal Crimson -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#05070d"/>
+      <stop offset="25%" stop-color="#0b101c"/>
+      <stop offset="55%" stop-color="#190a16"/>
+      <stop offset="85%" stop-color="#120610"/>
+      <stop offset="100%" stop-color="#06080e"/>
+    </linearGradient>
+
+    <!-- Neon Crimson Gradient -->
+    <linearGradient id="crimsonGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ff2a55"/>
+      <stop offset="50%" stop-color="#e11d48"/>
+      <stop offset="100%" stop-color="#9f1239"/>
+    </linearGradient>
+
+    <!-- Royal Gold & Bronze Gradient -->
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="35%" stop-color="#facc15"/>
+      <stop offset="70%" stop-color="#ca8a04"/>
+      <stop offset="100%" stop-color="#854d0e"/>
+    </linearGradient>
+
+    <!-- Platinum Chrome Silver Gradient -->
+    <linearGradient id="silverGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="35%" stop-color="#f1f5f9"/>
+      <stop offset="70%" stop-color="#cbd5e1"/>
+      <stop offset="100%" stop-color="#64748b"/>
+    </linearGradient>
+
+    <!-- Dark Shield & Glass Gradients -->
+    <linearGradient id="glassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.02"/>
+    </linearGradient>
+
+    <linearGradient id="pedestalGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#090d16"/>
+    </linearGradient>
+
+    <!-- Radial Glows -->
+    <radialGradient id="centerGlowCrimson" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#e11d48" stop-opacity="0.45"/>
+      <stop offset="50%" stop-color="#be123c" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+
+    <radialGradient id="goldAmbientGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#facc15" stop-opacity="0.35"/>
+      <stop offset="60%" stop-color="#ca8a04" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+
+    <radialGradient id="blueTechGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.30"/>
+      <stop offset="70%" stop-color="#0284c7" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Glow & Shadow Filters -->
+    <filter id="neonBlur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="shadow3D" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.8"/>
+    </filter>
+
+    <!-- Cyber Grid Pattern -->
+    <pattern id="cyberGrid" width="50" height="50" patternUnits="userSpaceOnUse">
+      <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#e11d48" stroke-width="0.75" stroke-opacity="0.08"/>
+      <circle cx="0" cy="0" r="1.5" fill="#f43f5e" fill-opacity="0.2"/>
+    </pattern>
+
+    <!-- Tech Dots Pattern -->
+    <pattern id="dotPattern" width="25" height="25" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="3" r="1.2" fill="#38bdf8" fill-opacity="0.15"/>
+    </pattern>
+  </defs>
+
+  <!-- ==========================================
+       1. BACKGROUND & SHOWROOM ENVIRONMENT
+       ========================================== -->
+  <rect width="1600" height="400" fill="url(#bgGrad)"/>
+  <rect width="1600" height="400" fill="url(#cyberGrid)"/>
+  <rect x="0" y="0" width="1600" height="400" fill="url(#dotPattern)" opacity="0.6"/>
+
+  <!-- Radial Light Halos -->
+  <ellipse cx="800" cy="200" rx="550" ry="190" fill="url(#centerGlowCrimson)"/>
+  <ellipse cx="800" cy="180" rx="280" ry="140" fill="url(#goldAmbientGlow)"/>
+  <ellipse cx="250" cy="220" rx="220" ry="150" fill="url(#blueTechGlow)"/>
+  <ellipse cx="1350" cy="220" rx="220" ry="150" fill="url(#blueTechGlow)"/>
+
+  <!-- Top and Bottom Cyber Laser Strips -->
+  <rect x="0" y="0" width="1600" height="4" fill="url(#crimsonGrad)"/>
+  <rect x="0" y="396" width="1600" height="4" fill="url(#crimsonGrad)"/>
+  <line x1="200" y1="4" x2="1400" y2="4" stroke="url(#goldGrad)" stroke-width="2" filter="url(#softGlow)"/>
+  <line x1="200" y1="396" x2="1400" y2="396" stroke="url(#goldGrad)" stroke-width="2" filter="url(#softGlow)"/>
+
+  <!-- Showroom Reflective Perspective Floor -->
+  <polygon points="0,400 1600,400 1450,280 150,280" fill="#080c16" fill-opacity="0.8"/>
+  <line x1="150" y1="280" x2="1450" y2="280" stroke="#e11d48" stroke-width="1.5" stroke-opacity="0.4"/>
+  <line x1="280" y1="280" x2="160" y2="400" stroke="#e11d48" stroke-width="1" stroke-opacity="0.25"/>
+  <line x1="500" y1="280" x2="420" y2="400" stroke="#e11d48" stroke-width="1" stroke-opacity="0.25"/>
+  <line x1="700" y1="280" x2="680" y2="400" stroke="#e11d48" stroke-width="1" stroke-opacity="0.25"/>
+  <line x1="900" y1="280" x2="920" y2="400" stroke="#e11d48" stroke-width="1" stroke-opacity="0.25"/>
+  <line x1="1100" y1="280" x2="1180" y2="400" stroke="#e11d48" stroke-width="1" stroke-opacity="0.25"/>
+  <line x1="1320" y1="280" x2="1440" y2="400" stroke="#e11d48" stroke-width="1" stroke-opacity="0.25"/>
+
+  <!-- Cyber Architectural Slashes (Left & Right Flanks) -->
+  <g opacity="0.35">
+    <polygon points="1520,0 1560,0 1460,400 1420,400" fill="url(#crimsonGrad)"/>
+    <polygon points="1565,0 1585,0 1485,400 1465,400" fill="#facc15"/>
+    <polygon points="1440,0 1455,0 1355,400 1340,400" fill="#e11d48"/>
+
+    <polygon points="160,0 120,0 20,400 60,400" fill="url(#crimsonGrad)"/>
+    <polygon points="115,0 95,0 -5,400 15,400" fill="#38bdf8"/>
+    <polygon points="240,0 225,0 125,400 140,400" fill="#e11d48"/>
+  </g>
+
+  <!-- Glowing Digital Circuit Paths -->
+  <g stroke="#e11d48" stroke-width="1.5" stroke-opacity="0.3" fill="none">
+    <path d="M 180,70 L 260,70 L 310,120 L 460,120"/>
+    <circle cx="460" cy="120" r="4" fill="#e11d48" fill-opacity="0.7"/>
+    <circle cx="180" cy="70" r="3" fill="#e11d48" fill-opacity="0.7"/>
+
+    <path d="M 1420,70 L 1340,70 L 1290,120 L 1140,120"/>
+    <circle cx="1140" cy="120" r="4" fill="#facc15" fill-opacity="0.8"/>
+    <circle cx="1420" cy="70" r="3" fill="#e11d48" fill-opacity="0.7"/>
+
+    <path d="M 350,330 L 420,330 L 460,290 L 580,290"/>
+    <circle cx="580" cy="290" r="4" fill="#38bdf8" fill-opacity="0.7"/>
+
+    <path d="M 1250,330 L 1180,330 L 1140,290 L 1020,290"/>
+    <circle cx="1020" cy="290" r="4" fill="#facc15" fill-opacity="0.7"/>
+  </g>
+
+  <!-- ==========================================
+       2. CENTERPIECE: HOLOGRAPHIC TELECOM ORB
+       ========================================== -->
+  <g transform="translate(800, 185)" filter="url(#shadow3D)">
+    <!-- Ambient Halo Behind Center -->
+    <circle cx="0" cy="0" r="110" fill="#0c101d" stroke="url(#goldGrad)" stroke-width="2" stroke-opacity="0.6"/>
+    <circle cx="0" cy="0" r="95" fill="none" stroke="url(#crimsonGrad)" stroke-width="1.5" stroke-dasharray="6,4" stroke-opacity="0.7"/>
+    
+    <!-- Outer Orbital Ring 1 (Tilted 35deg) -->
+    <ellipse cx="0" cy="0" rx="145" ry="46" transform="rotate(-28)" fill="none" stroke="url(#goldGrad)" stroke-width="2.5" filter="url(#softGlow)"/>
+    <circle cx="120" cy="-64" r="5" fill="#facc15" filter="url(#neonBlur)"/>
+    
+    <!-- Outer Orbital Ring 2 (Tilted -35deg) -->
+    <ellipse cx="0" cy="0" rx="145" ry="46" transform="rotate(28)" fill="none" stroke="url(#crimsonGrad)" stroke-width="2" filter="url(#softGlow)"/>
+    <circle cx="-120" cy="-64" r="5" fill="#ff2a55" filter="url(#neonBlur)"/>
+
+    <!-- Central Floating Core Shield -->
+    <polygon points="0,-65 55,-35 55,35 0,65 -55,35 -55,-35" 
+             fill="#0b0f1a" stroke="url(#goldGrad)" stroke-width="2.5" filter="url(#softGlow)"/>
+    
+    <polygon points="0,-48 40,-26 40,26 0,48 -40,26 -40,-26" 
+             fill="#140813" stroke="url(#crimsonGrad)" stroke-width="1.8"/>
+
+    <!-- Core Energy Crystal / Monogram Emblem -->
+    <!-- Stylized Telecom Tower / Diamond Core -->
+    <path d="M 0,-34 L 16,-8 L 0,18 L -16,-8 Z" fill="url(#goldGrad)" filter="url(#softGlow)"/>
+    <circle cx="0" cy="-8" r="4" fill="#ffffff"/>
+    
+    <!-- Radiating Network Waves (Antenna Arcs) -->
+    <path d="M -26,-22 A 32 32 0 0 1 26,-22" fill="none" stroke="url(#goldGrad)" stroke-width="2" stroke-linecap="round"/>
+    <path d="M -34,-30 A 42 42 0 0 1 34,-30" fill="none" stroke="url(#crimsonGrad)" stroke-width="2" stroke-linecap="round"/>
+    <path d="M -42,-38 A 52 52 0 0 1 42,-38" fill="none" stroke="#facc15" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.8"/>
+
+    <!-- Core Base Glow -->
+    <ellipse cx="0" cy="95" rx="70" ry="14" fill="#e11d48" fill-opacity="0.4" filter="url(#neonBlur)"/>
+  </g>
+
+  <!-- ==========================================
+       3. RIGHT SHOWCASE: LUXURY FLAGSHIP SMARTPHONES
+       ========================================== -->
+  <g transform="translate(1080, 80)" filter="url(#shadow3D)">
+    <!-- Glass Pedestal Platform -->
+    <polygon points="30,220 270,220 300,245 0,245" fill="url(#pedestalGrad)" stroke="#334155" stroke-width="1.5"/>
+    <line x1="0" y1="245" x2="300" y2="245" stroke="url(#crimsonGrad)" stroke-width="2" filter="url(#softGlow)"/>
+    <ellipse cx="150" cy="235" rx="110" ry="10" fill="#e11d48" fill-opacity="0.35" filter="url(#neonBlur)"/>
+
+    <!-- Phone 1 (Foreground Flagship - Angled) -->
+    <g transform="translate(110, 20) rotate(8)">
+      <!-- Phone Body / Titanium Frame -->
+      <rect x="0" y="0" width="85" height="175" rx="14" fill="#090d16" stroke="url(#silverGrad)" stroke-width="2.5"/>
+      <!-- Inner Screen Bezel Glow -->
+      <rect x="3" y="3" width="79" height="169" rx="11" fill="#060910" stroke="url(#crimsonGrad)" stroke-width="1" stroke-opacity="0.7"/>
+      <!-- Screen Wallpaper Glow -->
+      <rect x="5" y="5" width="75" height="165" rx="9" fill="url(#bgGrad)"/>
+      <ellipse cx="42" cy="70" rx="32" ry="45" fill="url(#centerGlowCrimson)"/>
+      <!-- Camera Punch Hole -->
+      <circle cx="42" cy="14" r="3" fill="#1e293b" stroke="#334155" stroke-width="0.75"/>
+      <!-- Bottom Home Indicator -->
+      <line x1="28" y1="162" x2="56" y2="162" stroke="#64748b" stroke-width="2" stroke-linecap="round"/>
+      <!-- Edge Reflection Glass Slash -->
+      <polygon points="5,5 45,5 15,170 5,170" fill="url(#glassGrad)"/>
+    </g>
+
+    <!-- Phone 2 (Background Flagship - Tilted Left) -->
+    <g transform="translate(25, 45) rotate(-10)">
+      <rect x="0" y="0" width="80" height="165" rx="13" fill="#05080f" stroke="#475569" stroke-width="2"/>
+      <rect x="3" y="3" width="74" height="159" rx="10" fill="#070a12"/>
+      <rect x="5" y="5" width="70" height="155" rx="8" fill="url(#bgGrad)"/>
+      <ellipse cx="40" cy="65" rx="28" ry="40" fill="url(#goldAmbientGlow)"/>
+      <!-- Camera Island on Back Edge -->
+      <rect x="10" y="10" width="22" height="48" rx="7" fill="#0f172a" stroke="url(#goldGrad)" stroke-width="1"/>
+      <circle cx="21" cy="22" r="6" fill="#020617" stroke="#ca8a04" stroke-width="1"/>
+      <circle cx="21" cy="44" r="6" fill="#020617" stroke="#ca8a04" stroke-width="1"/>
+      <polygon points="5,5 35,5 10,160 5,160" fill="url(#glassGrad)"/>
+    </g>
+
+    <!-- Phone 3 (Mini Fold / Compact) -->
+    <g transform="translate(185, 95) rotate(16)">
+      <rect x="0" y="0" width="60" height="105" rx="10" fill="#0b0f19" stroke="url(#crimsonGrad)" stroke-width="1.8"/>
+      <rect x="3" y="3" width="54" height="99" rx="8" fill="#090d16"/>
+      <ellipse cx="30" cy="50" rx="20" ry="30" fill="url(#blueTechGlow)"/>
+    </g>
+  </g>
+
+  <!-- ==========================================
+       4. LEFT SHOWCASE: SMART AUDIO, CHARGERS & ACCESSORIES
+       ========================================== -->
+  <g transform="translate(200, 80)" filter="url(#shadow3D)">
+    <!-- Glass Pedestal Platform -->
+    <polygon points="30,220 270,220 300,245 0,245" fill="url(#pedestalGrad)" stroke="#334155" stroke-width="1.5"/>
+    <line x1="0" y1="245" x2="300" y2="245" stroke="url(#goldGrad)" stroke-width="2" filter="url(#softGlow)"/>
+    <ellipse cx="150" cy="235" rx="110" ry="10" fill="#facc15" fill-opacity="0.3" filter="url(#neonBlur)"/>
+
+    <!-- Over-Ear Studio Headphone Silhouette -->
+    <g transform="translate(60, 25)">
+      <!-- Headband Arc -->
+      <path d="M 15,100 A 70 70 0 0 1 145,100" fill="none" stroke="url(#silverGrad)" stroke-width="8" stroke-linecap="round"/>
+      <path d="M 25,95 A 60 60 0 0 1 135,95" fill="none" stroke="#e11d48" stroke-width="2" stroke-opacity="0.7"/>
+
+      <!-- Left Ear Cup -->
+      <rect x="2" y="85" width="26" height="58" rx="12" fill="#090d16" stroke="url(#crimsonGrad)" stroke-width="2.5" filter="url(#softGlow)"/>
+      <ellipse cx="15" cy="114" rx="7" ry="18" fill="url(#goldGrad)" opacity="0.8"/>
+
+      <!-- Right Ear Cup -->
+      <rect x="132" y="85" width="26" height="58" rx="12" fill="#090d16" stroke="url(#crimsonGrad)" stroke-width="2.5" filter="url(#softGlow)"/>
+      <ellipse cx="145" cy="114" rx="7" ry="18" fill="url(#goldGrad)" opacity="0.8"/>
+    </g>
+
+    <!-- Wireless Earbuds Charging Pod Case -->
+    <g transform="translate(170, 130)">
+      <rect x="0" y="0" width="55" height="42" rx="14" fill="#0b0f19" stroke="url(#goldGrad)" stroke-width="2" filter="url(#softGlow)"/>
+      <line x1="0" y1="16" x2="55" y2="16" stroke="#ca8a04" stroke-width="1"/>
+      <circle cx="28" cy="28" r="3" fill="#10b981" filter="url(#neonBlur)"/>
+    </g>
+
+    <!-- Fast GaN Charger & Cable Silhouette -->
+    <g transform="translate(25, 145)">
+      <!-- Charger Block -->
+      <polygon points="0,15 28,0 48,12 20,28" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+      <polygon points="0,15 20,28 20,60 0,46" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5"/>
+      <polygon points="20,28 48,12 48,44 20,60" fill="#090d16" stroke="#38bdf8" stroke-width="1.5"/>
+      <!-- Glowing Ports -->
+      <line x1="6" y1="28" x2="14" y2="34" stroke="#ff2a55" stroke-width="2"/>
+      <line x1="6" y1="38" x2="14" y2="44" stroke="#facc15" stroke-width="2"/>
+    </g>
+  </g>
+
+  <!-- Ambient Floating Tech Sparkles -->
+  <circle cx="540" cy="130" r="2.5" fill="#facc15" filter="url(#softGlow)"/>
+  <circle cx="680" cy="90" r="2" fill="#ff2a55" filter="url(#softGlow)"/>
+  <circle cx="920" cy="90" r="2.5" fill="#38bdf8" filter="url(#softGlow)"/>
+  <circle cx="1040" cy="120" r="2" fill="#facc15" filter="url(#softGlow)"/>
+  <circle cx="420" cy="210" r="1.5" fill="#ffffff"/>
+  <circle cx="1190" cy="210" r="1.5" fill="#ffffff"/>
+
+</svg>

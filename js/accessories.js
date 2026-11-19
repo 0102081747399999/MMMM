@@ -62,6 +62,7 @@
     items: [],
     currentFilter: "ALL",
     searchQuery: "",
+    highlightCode: null,
     editingId: null,
     pendingDeleteId: null,
     sellingItem: null
@@ -174,9 +175,15 @@
           stockChip = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-bold bg-tertiary-fixed text-on-tertiary-fixed-variant"><span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>متوفر (${qty})</span>`;
         }
 
-        const rowBg = idx % 2 === 0 ? "bg-white" : "bg-slate-50/70";
+        const isHighlighted = state.highlightCode && (
+          (item.barcode && item.barcode.toLowerCase() === state.highlightCode) ||
+          (item.name && item.name.toLowerCase().includes(state.highlightCode))
+        );
+        const rowBg = isHighlighted
+          ? "ring-4 ring-emerald-500 bg-emerald-50/90 shadow-lg scale-[1.01] transition-all font-semibold"
+          : (idx % 2 === 0 ? "bg-white" : "bg-slate-50/70");
         return `
-          <tr class="${rowBg} hover:bg-primary-fixed/20 transition-colors border-b border-slate-100">
+          <tr id="${isHighlighted ? 'highlighted-accessory-row' : ''}" class="${rowBg} hover:bg-primary-fixed/20 transition-colors border-b border-slate-100">
             <td class="py-3 px-4 font-numeric-table text-body-sm font-bold text-on-surface">
               <div class="flex items-center gap-1.5">
                 <span class="material-symbols-outlined text-outline text-base">barcode</span>
@@ -202,6 +209,9 @@
             <td class="py-3 px-4 text-center">${stockChip}</td>
             <td class="py-3 px-4 text-left">
               <div class="flex items-center justify-end gap-1">
+                <button type="button" onclick="BarcodeService.openLabelStudio({ name: '${escapeHtml(item.brand ? item.brand + ' - ' : '')}${escapeHtml(item.name)}', price: '${item.salePrice || 0}', code: '${escapeHtml(item.barcode || '')}' })" title="طباعة ملصق استيكر باركود" class="p-1.5 rounded-lg bg-amber-50 text-amber-700 hover:bg-amber-500 hover:text-white transition-colors">
+                  <span class="material-symbols-outlined text-lg">label</span>
+                </button>
                 <button type="button" onclick="AccessoriesPage.openSellModal('${item.id}')" title="بيع سريع" class="p-1.5 rounded-lg bg-tertiary-fixed text-on-tertiary-fixed-variant hover:bg-tertiary hover:text-white transition-colors">
                   <span class="material-symbols-outlined text-lg">point_of_sale</span>
                 </button>
@@ -217,6 +227,12 @@
         `;
       })
       .join("");
+
+    if (state.highlightCode) {
+      setTimeout(() => {
+        document.getElementById("highlighted-accessory-row")?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 150);
+    }
   }
 
   function setFilter(cat) {
@@ -287,7 +303,7 @@
     document.getElementById("newItemForm").reset();
     document.getElementById("itemInitialQty").value = 1;
     const chk = document.getElementById("itemDeductFromDrawer");
-    if (chk) chk.checked = false;
+    if (chk) chk.checked = true;
     const optRow = document.getElementById("stockPaymentOptionRow");
     if (optRow) optRow.classList.remove("hidden");
     const noticeEl = document.getElementById("itemBarcodeDuplicateNotice");
@@ -334,7 +350,9 @@
     e.preventDefault();
     let barcode = document.getElementById("itemBarcode").value.trim();
     if (!barcode) {
-      barcode = cfg.barcodePrefix + Math.floor(100000 + Math.random() * 900000);
+      showToast("ممنوع إضافة أي بضاعة بدون باركود!", "امسح بالمسدس أو اضغط زر «توليد وطباعة ملصق» لإنشاء باركود واستيكر أولاً", true);
+      document.getElementById("itemBarcode")?.focus();
+      return;
     }
     const brand = document.getElementById("itemBrand").value.trim();
     const name = document.getElementById("itemName").value.trim();
@@ -492,6 +510,16 @@
     if (nameInp) nameInp.placeholder = cfg.namePlaceholder;
     if (specsInp) specsInp.placeholder = cfg.specsPlaceholder;
 
+    // Check URL parameters for smart auto-navigation / highlight
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchParam = urlParams.get("search") || urlParams.get("highlight") || urlParams.get("barcode");
+    if (searchParam) {
+      state.searchQuery = searchParam.trim();
+      state.highlightCode = (urlParams.get("highlight") || searchParam).trim().toLowerCase();
+      const searchInp = document.getElementById("searchInput");
+      if (searchInp) searchInp.value = state.searchQuery;
+    }
+
     renderCategoryTabsAndSelect();
 
     DB.subscribeInventory(sectionKey, (items) => {
@@ -500,10 +528,26 @@
       renderTable();
     });
 
-    document.getElementById("searchInput")?.addEventListener("input", (e) => {
-      state.searchQuery = e.target.value.trim();
-      renderTable();
-    });
+    const searchInp = document.getElementById("searchInput");
+    if (searchInp) {
+      searchInp.addEventListener("input", (e) => {
+        state.searchQuery = e.target.value.trim();
+        renderTable();
+      });
+      searchInp.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          const val = searchInp.value.trim();
+          if (!val) return;
+          if (window.BarcodeService && typeof window.BarcodeService.detectProductSection === "function") {
+            const detectedSec = window.BarcodeService.detectProductSection(val);
+            if (detectedSec && detectedSec !== sectionKey) {
+              e.preventDefault();
+              window.BarcodeService.navigateToProductPage(val);
+            }
+          }
+        }
+      });
+    }
     document.getElementById("itemBarcode")?.addEventListener("input", checkBarcodeDuplicate);
     document.getElementById("itemBarcode")?.addEventListener("change", checkBarcodeDuplicate);
     document.getElementById("itemInitialQty")?.addEventListener("input", calculateProjectedMargin);

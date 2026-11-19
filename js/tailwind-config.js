@@ -429,19 +429,25 @@
     }
   };
 
-  // Determine active theme (Default: 'red-magic' - مطابق لهوية المحل)
+  // Determine active theme (Default: 'dark-onyx' - تصميم التيتانيوم الداكن الفخم)
   const savedThemeId = (function () {
     try {
+      const migrated = localStorage.getItem("pos_theme_migrated_v2");
+      if (!migrated) {
+        localStorage.setItem("pos_color_theme", "dark-onyx");
+        localStorage.setItem("pos_theme_migrated_v2", "true");
+        return "dark-onyx";
+      }
       const stored = localStorage.getItem("pos_color_theme");
-      if (stored && stored !== "dark-onyx" && THEMES[stored]) return stored;
+      if (stored && THEMES[stored]) return stored;
     } catch (e) {}
     try {
-      localStorage.setItem("pos_color_theme", "red-magic");
+      localStorage.setItem("pos_color_theme", "dark-onyx");
     } catch (e) {}
-    return "red-magic";
+    return "dark-onyx";
   })();
 
-  const activeTheme = THEMES[savedThemeId] || THEMES["red-magic"];
+  const activeTheme = THEMES[savedThemeId] || THEMES["dark-onyx"];
 
   // Synchronously set data-theme attribute on <html> to prevent layout flash
   try {
@@ -453,7 +459,7 @@
   // Expose global helper APIs
   window.POS_THEMES = THEMES;
   window.getPosTheme = function () {
-    return localStorage.getItem("pos_color_theme") || "red-magic";
+    return localStorage.getItem("pos_color_theme") || "dark-onyx";
   };
   window.setPosTheme = function (themeId) {
     if (!THEMES[themeId]) return false;
@@ -482,15 +488,15 @@
           full: "9999px"
         },
         spacing: {
-          "margin-mobile": "1rem",
-          "space-lg": "1.25rem",
-          "margin": "1.5rem",
-          "space-xs": "0.25rem",
-          "space-md": "0.75rem",
-          "gutter": "1rem",
-          "space-sm": "0.5rem",
-          "space-xl": "2rem",
-          "gutter-mobile": "0.75rem"
+          "margin-mobile": "0.75rem",
+          "space-lg": "1rem",
+          "margin": "1.25rem",
+          "space-xs": "0.2rem",
+          "space-md": "0.6rem",
+          "gutter": "0.85rem",
+          "space-sm": "0.4rem",
+          "space-xl": "1.5rem",
+          "gutter-mobile": "0.6rem"
         },
         fontFamily: {
           sans: ["Cairo", "Readex Pro", "sans-serif"],
@@ -507,17 +513,17 @@
           "numeric-table": ["Readex Pro", "Cairo", "monospace"]
         },
         fontSize: {
-          "display-lg": ["30px", { lineHeight: "38px", fontWeight: "700" }],
-          "headline-lg": ["24px", { lineHeight: "32px", fontWeight: "700" }],
-          "headline-md": ["20px", { lineHeight: "28px", fontWeight: "700" }],
-          "title-lg": ["18px", { lineHeight: "26px", fontWeight: "700" }],
-          "title-md": ["15px", { lineHeight: "22px", fontWeight: "600" }],
-          "body-lg": ["15px", { lineHeight: "22px", fontWeight: "400" }],
-          "body-md": ["13px", { lineHeight: "20px", fontWeight: "400" }],
-          "body-sm": ["12px", { lineHeight: "18px", fontWeight: "400" }],
-          "label-lg": ["13px", { lineHeight: "18px", fontWeight: "600" }],
-          "label-md": ["11px", { lineHeight: "16px", fontWeight: "500" }],
-          "numeric-table": ["13px", { lineHeight: "18px", fontWeight: "600" }]
+          "display-lg": ["22px", { lineHeight: "28px", fontWeight: "700" }],
+          "headline-lg": ["18px", { lineHeight: "24px", fontWeight: "700" }],
+          "headline-md": ["15px", { lineHeight: "22px", fontWeight: "700" }],
+          "title-lg": ["14px", { lineHeight: "20px", fontWeight: "700" }],
+          "title-md": ["13px", { lineHeight: "18px", fontWeight: "600" }],
+          "body-lg": ["13px", { lineHeight: "18px", fontWeight: "400" }],
+          "body-md": ["12px", { lineHeight: "16px", fontWeight: "400" }],
+          "body-sm": ["11px", { lineHeight: "15px", fontWeight: "400" }],
+          "label-lg": ["11px", { lineHeight: "15px", fontWeight: "600" }],
+          "label-md": ["10px", { lineHeight: "14px", fontWeight: "500" }],
+          "numeric-table": ["12px", { lineHeight: "16px", fontWeight: "600" }]
         }
       }
     }

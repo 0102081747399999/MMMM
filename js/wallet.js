@@ -228,11 +228,9 @@
 
     if (state.currentType === "withdraw" && amount > state.currentBalance) {
       showToast(
-        "تنبيه: رصيد المحفظة غير كافٍ",
-        `الرصيد الحالي (${DB.formatMoney(state.currentBalance)} ج.م) أقل من المطلوب — اضغط تعديل الرصيد الافتتاحي أولاً`,
-        true
+        "تسجيل سحب يدوي",
+        `تم قيد العملية بنجاح. الرصيد بعد الحركة: ${DB.formatMoney(state.currentBalance - amount)} ج.م`
       );
-      return;
     }
 
     const submitBtn = document.getElementById("btn-submit-tx");
@@ -359,6 +357,19 @@
     }
   }
 
+  async function resetWalletToZero() {
+    if (!confirm("هل تريد تصفير جميع أرقام هذه المحفظة ومسح المعاملات السابقة لبدء الإدخال اليدوي بأصفار؟")) return;
+    try {
+      await DB.saveWallet(walletId, { openingBalance: 0 });
+      for (const tx of state.rawTransactions) {
+        if (tx.id) await DB.deleteWalletTx(tx.id);
+      }
+      showToast("تم تصفير المحفظة بنجاح", "جميع الأرقام أصبحت 0.00 وجاهزة للإدخال اليدوي");
+    } catch (err) {
+      showToast("تعذر التصفير", err.message, true);
+    }
+  }
+
   function exportTableToCsv() {
     const list = getFilteredTransactions();
     if (list.length === 0) {
@@ -444,6 +455,7 @@
     openEditTxModal,
     openDeleteModal,
     confirmDeleteTx,
+    resetWalletToZero,
     exportTableToCsv
   };
 

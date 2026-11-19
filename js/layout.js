@@ -6,11 +6,17 @@
     { id: "cash_1", href: "cash-1.html", icon: "account_balance_wallet", label: "محفظة كاش 1 - الأساسي" },
     { id: "cash_2", href: "cash-2.html", icon: "payments", label: "محفظة كاش 2 - الإضافي" },
     { id: "cash_3", href: "cash-3.html", icon: "currency_exchange", label: "محفظة كاش 3 - الاحتياطي" },
-    { group: "المخازن والمبيعات" },
+    { group: "المخازن والمبيعات (تحكم باركود)" },
     { id: "chargers", href: "chargers.html", icon: "power", label: "مخزن الشواحن والوصلات" },
     { id: "phones", href: "phones.html", icon: "smartphone", label: "مخزن ومبيعات التلفونات" },
     { id: "headphones", href: "headphones.html", icon: "headphones", label: "قسم السماعات" },
-    { id: "speakers", href: "speakers.html", icon: "speaker", label: "قسم الصبات والمكبرات" }
+    { id: "speakers", href: "speakers.html", icon: "speaker", label: "قسم الصبات والمكبرات" },
+    { group: "الباركود والتحكم المستقل (2 QR)" },
+    { id: "qr_intake", action: "openIntakeScanner", icon: "add_shopping_cart", label: "📥 كود QR دخول بضاعة (F6)" },
+    { id: "qr_sale", action: "openSaleScanner", icon: "shopping_cart_checkout", label: "📤 كود QR خروج بضاعة (F7)" },
+    { id: "qr_cards", action: "openControlCards", icon: "qr_code_2", label: "🖨️ بطاقتي 2 QR المستقلة" },
+    { id: "optical_camera", action: "toggleOpticalCamera", icon: "photo_camera", label: "📷 المسح الضوئي (كاميرا + مسدس)" },
+    { id: "barcode_hub", action: "openBarcodeHub", icon: "barcode_scanner", label: "⚡ لوحة تحكم القارئ الشاملة (F3)" }
   ];
 
   const PERIOD_LABELS = {
@@ -60,6 +66,36 @@
       if (item.group) {
         return `<div class="pt-3 first:pt-1 px-3 py-1 font-label-md text-label-md text-slate-400 uppercase tracking-wider">${escapeHtml(item.group)}</div>`;
       }
+      if (item.action) {
+        let fn = "BarcodeService.openModal()";
+        let colorCls = "text-amber-300 hover:text-amber-200";
+        let iconCls = "text-amber-400";
+        if (item.action === "openIntakeScanner") {
+          fn = "BarcodeService.openDedicatedScanner('intake')";
+          colorCls = "text-emerald-300 hover:text-emerald-200 font-bold";
+          iconCls = "text-emerald-400";
+        } else if (item.action === "openSaleScanner") {
+          fn = "BarcodeService.openDedicatedScanner('sale')";
+          colorCls = "text-rose-300 hover:text-rose-200 font-bold";
+          iconCls = "text-rose-400";
+        } else if (item.action === "openControlCards") {
+          fn = "BarcodeService.openControlCardsModal()";
+          colorCls = "text-sky-300 hover:text-sky-200 font-bold";
+          iconCls = "text-sky-400";
+        } else if (item.action === "toggleOpticalCamera") {
+          fn = "BarcodeService.toggleOpticalCamera()";
+          colorCls = "text-sky-300 hover:text-sky-200 font-bold";
+          iconCls = "text-sky-400";
+        } else if (item.action === "openLabelStudio") {
+          fn = "BarcodeService.openLabelStudio()";
+        }
+        return `
+          <button type="button" onclick="${fn}; AppLayout.toggleMobileSidebar(false);" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg ${colorCls} hover:bg-navy-card transition-colors">
+            <span class="material-symbols-outlined text-xl ${iconCls}">${item.icon}</span>
+            <span class="font-body-md text-body-md">${escapeHtml(item.label)}</span>
+          </button>
+        `;
+      }
       const isActive = item.id === pageId;
       const cls = isActive
         ? "flex items-center gap-3 px-4 py-2.5 rounded-lg bg-primary text-on-primary font-title-md shadow-md ring-1 ring-sky-accent/40"
@@ -94,7 +130,17 @@
           </button>
         </div>
 
-        <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-1">
+        <div class="px-3 pt-3 pb-1">
+          <button type="button" onclick="AppLayout.openPosModal(); AppLayout.toggleMobileSidebar(false);" class="w-full py-2.5 px-3.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-600 hover:from-blue-500 hover:to-sky-500 text-white font-black text-sm flex items-center justify-between shadow-lg shadow-blue-950/50 ring-2 ring-sky-400/40 transition-all hover:scale-[1.02] active:scale-[0.98]">
+            <div class="flex items-center gap-2.5">
+              <span class="material-symbols-outlined text-2xl text-sky-200">receipt_long</span>
+              <span class="font-black text-base tracking-wide">فاتورة جديدة</span>
+            </div>
+            <span class="px-2 py-0.5 rounded-md bg-white/20 text-white font-mono text-xs font-black shadow-inner">F1</span>
+          </button>
+        </div>
+
+        <nav class="flex-1 overflow-y-auto px-3 py-3 space-y-1">
           ${navHtml}
         </nav>
 
@@ -126,7 +172,7 @@
     if (!header) return;
 
     header.className =
-      "fixed top-0 right-0 lg:right-72 left-0 h-16 bg-surface-container-lowest/95 backdrop-blur-xl border-b border-surface-container shadow-[0_1px_8px_rgba(15,23,42,0.04)] z-40 flex items-center justify-between px-4 lg:px-8 gap-3";
+      "fixed top-0 right-0 lg:right-72 left-0 h-14 bg-surface-container-lowest/95 backdrop-blur-xl border-b border-surface-container shadow-[0_1px_8px_rgba(15,23,42,0.04)] z-40 flex items-center justify-between px-3 sm:px-4 lg:px-6 gap-2.5";
 
     const store = currentSettings.store || {};
 
@@ -170,16 +216,72 @@
           <span class="hidden sm:inline">تبديل / إغلاق الدرج</span>
         </button>
 
-        <button type="button" onclick="BarcodeService.openModal()" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 font-label-lg shadow-sm transition-colors ring-1 ring-emerald-400/30" title="قارئ الباركود وتوريد البضاعة (F3)">
-          <span class="material-symbols-outlined text-base">barcode_scanner</span>
-          <span class="hidden md:inline">قارئ الباركود (F3)</span>
-          <span class="md:hidden">باركود</span>
+        <!-- Dedicated 2 QR Barcode System: Separate Independent Intake & Sale Buttons -->
+        <div class="flex items-center gap-1.5 p-1 bg-surface-container-low border border-slate-300/80 rounded-2xl shadow-sm">
+          <!-- 1. Dedicated INTAKE QR Button -->
+          <button 
+            type="button" 
+            onclick="BarcodeService.openDedicatedScanner('intake')" 
+            id="headerQrIntakeBtn" 
+            class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-black text-xs sm:text-sm shadow-md shadow-emerald-700/20 ring-1 ring-emerald-400/40 transition-all hover:scale-[1.02] active:scale-[0.98] shrink-0" 
+            title="كود QR مستقل لدخول وتوريد البضاعة (اختصار F6)">
+            <span class="material-symbols-outlined text-lg">add_shopping_cart</span>
+            <span class="font-black">📥 دخول بضاعة</span>
+            <span class="hidden 2xl:inline px-1 py-0.2 rounded bg-black/20 text-[10px] font-mono">F6</span>
+          </button>
+
+          <!-- 2. Dedicated SALE QR Button -->
+          <button 
+            type="button" 
+            onclick="BarcodeService.openDedicatedScanner('sale')" 
+            id="headerQrSaleBtn" 
+            class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-rose-600 to-red-700 hover:from-rose-500 hover:to-red-600 text-white font-black text-xs sm:text-sm shadow-md shadow-rose-700/20 ring-1 ring-rose-400/40 transition-all hover:scale-[1.02] active:scale-[0.98] shrink-0" 
+            title="كود QR مستقل لخروج ومبيعات البضاعة (اختصار F7)">
+            <span class="material-symbols-outlined text-lg">shopping_cart_checkout</span>
+            <span class="font-black">📤 خروج بضاعة</span>
+            <span class="hidden 2xl:inline px-1 py-0.2 rounded bg-black/20 text-[10px] font-mono">F7</span>
+          </button>
+
+          <!-- 3. Printable 2 QR Cards Button -->
+          <button 
+            type="button" 
+            onclick="BarcodeService.openControlCardsModal()" 
+            class="p-1.5 rounded-xl text-slate-600 hover:text-sky-600 hover:bg-white transition-colors" 
+            title="عرض وطباعة بطاقتي 2 QR المستقلة للتحكم في مسدس الباركود (CMD:INTAKE و CMD:SALE)">
+            <span class="material-symbols-outlined text-xl">qr_code_2</span>
+          </button>
+
+          <!-- 4. Barcode Hub Settings (F3) -->
+          <button 
+            type="button" 
+            onclick="BarcodeService.openModal()" 
+            class="p-1.5 rounded-xl text-slate-500 hover:text-primary hover:bg-white transition-colors border-r border-slate-300/60 pr-1.5" 
+            title="إعدادات ونافذة الباركود الشاملة (F3)">
+            <span class="material-symbols-outlined text-lg">tune</span>
+          </button>
+        </div>
+
+        <!-- Optical Scanner Camera Quick Toggle Button (مسح ضوئي مع مسدس الباركود) -->
+        <button 
+          type="button" 
+          onclick="BarcodeService.toggleOpticalCamera()" 
+          id="headerOpticalCameraBtn"
+          class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-300 hover:text-white font-label-md font-bold border border-slate-700 transition-all shrink-0" 
+          title="تشغيل المسح الضوئي بالكاميرا مع مسدس الباركود">
+          <span class="material-symbols-outlined text-lg">photo_camera</span>
+          <span class="hidden md:inline">المسح الضوئي (كاميرا)</span>
         </button>
 
-        <button type="button" onclick="AppLayout.openPosModal()" class="flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-lg bg-primary text-on-primary hover:bg-primary-container font-label-lg shadow-sm transition-colors">
-          <span class="material-symbols-outlined text-base">point_of_sale</span>
-          <span class="hidden sm:inline">فاتورة جديدة (F1)</span>
-          <span class="sm:hidden">فاتورة</span>
+        <!-- Super Prominent "فاتورة جديدة" POS Button -->
+        <button 
+          type="button" 
+          onclick="AppLayout.openPosModal()" 
+          id="headerMainInvoiceBtn"
+          class="flex items-center gap-2 px-3.5 sm:px-5 py-2 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-600 hover:from-blue-500 hover:to-sky-500 text-white font-black text-sm sm:text-base shadow-lg shadow-blue-500/30 ring-2 ring-sky-300/60 transition-all hover:scale-[1.03] active:scale-[0.98] shrink-0" 
+          title="كاشير الفاتورة السريعة (اختصار لوحة المفاتيح: F1)">
+          <span class="material-symbols-outlined text-xl sm:text-2xl text-sky-200">receipt_long</span>
+          <span class="font-black text-base sm:text-lg tracking-wide drop-shadow">فاتورة جديدة</span>
+          <span class="px-2 py-0.5 rounded-md bg-white/25 text-white font-mono text-xs font-black shadow-inner">F1</span>
         </button>
       </div>
     `;
@@ -351,9 +453,12 @@
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden modal-animate border border-slate-200">
           <div class="bg-navy-dark text-white px-6 py-4 flex items-center justify-between shrink-0">
             <div class="flex items-center gap-3">
-              <span class="material-symbols-outlined text-sky-accent text-2xl">point_of_sale</span>
+              <span class="material-symbols-outlined text-sky-accent text-3xl">receipt_long</span>
               <div>
-                <h3 class="font-title-lg font-bold">كاشير الفاتورة السريعة (F1)</h3>
+                <h3 class="font-title-lg font-black text-xl text-white flex items-center gap-2">
+                  <span>كاشير الفاتورة السريعة</span>
+                  <span class="px-2 py-0.5 rounded-md bg-sky-500/30 border border-sky-400 text-sky-200 text-xs font-black font-mono">F1</span>
+                </h3>
                 <p class="font-label-md text-slate-300">بيع فوري من جميع المخازن والهواتف المتاحة وخصم تلقائي</p>
               </div>
             </div>
@@ -367,7 +472,7 @@
             <div class="lg:col-span-7 flex flex-col gap-3">
               <div class="relative">
                 <span class="material-symbols-outlined absolute right-3 top-2.5 text-outline text-xl">search</span>
-                <input type="text" id="posSearchInput" oninput="AppLayout.renderPosCatalog()" placeholder="ابحث باسم الصنف، الماركة، الباركود، أو رقم IMEI..." class="w-full h-11 pr-10 pl-12 rounded-xl bg-surface-container-low border border-outline-variant/50 font-body-md focus:bg-white focus:ring-2 focus:ring-primary" />
+                <input type="text" id="posSearchInput" oninput="AppLayout.renderPosCatalog()" onkeydown="if(event.key==='Enter'){event.preventDefault();AppLayout.handlePosBarcodeEnter();}" placeholder="ابحث باسم الصنف، الماركة، الباركود، أو رقم IMEI..." class="w-full h-11 pr-10 pl-12 rounded-xl bg-surface-container-low border border-outline-variant/50 font-body-md focus:bg-white focus:ring-2 focus:ring-primary" />
                 <button type="button" onclick="BarcodeService.openCameraForInput('posSearchInput')" title="مسح باركود الصنف بالكاميرا لإضافته للفاتورة" class="absolute left-2.5 top-1/2 -translate-y-1/2 p-1 rounded-lg text-slate-500 hover:text-emerald-600 hover:bg-slate-200 transition-colors">
                   <span class="material-symbols-outlined text-lg">photo_camera</span>
                 </button>
@@ -379,8 +484,11 @@
             <div class="lg:col-span-5 flex flex-col justify-between bg-surface-container-low rounded-xl p-4 border border-slate-200 gap-4">
               <div class="flex flex-col gap-3">
                 <div class="flex items-center justify-between border-b border-slate-200 pb-2">
-                  <span class="font-title-md font-bold text-on-surface">سلة الفاتورة</span>
-                  <span id="posCartCount" class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-md font-bold">0 أصناف</span>
+                  <span class="font-title-lg font-black text-slate-900 flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-primary text-xl">receipt</span>
+                    <span>سلة الفاتورة الحالية</span>
+                  </span>
+                  <span id="posCartCount" class="px-2.5 py-1 rounded-full bg-primary text-white font-label-md font-black">0 أصناف</span>
                 </div>
                 <div id="posCartItems" class="space-y-2 max-h-[190px] overflow-y-auto"></div>
               </div>
@@ -408,9 +516,9 @@
                   <span class="font-title-md">الإجمالي المطلوب</span>
                   <span id="posCartTotal" class="font-display-lg text-headline-md text-sky-accent font-numeric-table">0.00 ج.م</span>
                 </div>
-                <button type="button" id="posCheckoutBtn" onclick="AppLayout.submitPosCheckout()" class="w-full py-2.5 rounded-xl bg-primary hover:bg-primary-container text-white font-label-lg shadow-md flex items-center justify-center gap-2 transition-colors">
-                  <span class="material-symbols-outlined text-xl">receipt_long</span>
-                  <span>إتمام البيع وطباعة الفاتورة</span>
+                <button type="button" id="posCheckoutBtn" onclick="AppLayout.submitPosCheckout()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-base shadow-lg shadow-emerald-950/25 ring-2 ring-emerald-400/40 flex items-center justify-center gap-2.5 transition-all hover:scale-[1.01] active:scale-[0.99]">
+                  <span class="material-symbols-outlined text-2xl">receipt_long</span>
+                  <span class="text-base font-black tracking-wide">إتمام البيع وطباعة الفاتورة</span>
                 </button>
               </div>
             </div>
@@ -821,6 +929,51 @@
     renderPosCart();
   }
 
+  function handlePosBarcodeEnter() {
+    const input = document.getElementById("posSearchInput");
+    if (!input) return;
+    const q = input.value.trim().toLowerCase();
+    if (!q) return;
+
+    // 1. Exact barcode match in inventory
+    const inv = allInventoryCache.find(
+      (i) => i.barcode && i.barcode.trim().toLowerCase() === q && (Number(i.qty) || 0) > 0
+    );
+    if (inv) {
+      addToPosCart("inventory", inv.id);
+      input.value = "";
+      renderPosCatalog();
+      window.BarcodeService?.playBeep?.();
+      return;
+    }
+
+    // 2. Exact IMEI/barcode match in phones
+    const phone = allPhonesCache.find(
+      (p) =>
+        !p.isSold &&
+        ((p.imei1 && p.imei1.trim().toLowerCase() === q) ||
+          (p.imei2 && p.imei2.trim().toLowerCase() === q) ||
+          (p.barcode && p.barcode.trim().toLowerCase() === q))
+    );
+    if (phone) {
+      addToPosCart("phone", phone.id);
+      input.value = "";
+      renderPosCatalog();
+      window.BarcodeService?.playBeep?.();
+      return;
+    }
+
+    // 3. Fallback: If filtered list in catalog has 1 match, auto-add it
+    const container = document.getElementById("posCatalogList");
+    const firstAddBtn = container?.querySelector("button");
+    if (firstAddBtn) {
+      firstAddBtn.click();
+      input.value = "";
+      renderPosCatalog();
+      window.BarcodeService?.playBeep?.();
+    }
+  }
+
   function updatePosCartQty(index, delta) {
     const line = posCart[index];
     if (!line) return;
@@ -926,7 +1079,7 @@
   }
 
   function openPrintWindow(title, bodyHtml) {
-    const win = window.open("", "_blank", "width=460,height=640");
+    const win = window.open("", "_blank", "width=480,height=660");
     if (!win) return;
     win.document.write(`
       <html dir="rtl" lang="ar">
@@ -937,14 +1090,23 @@
             body { font-family: 'Cairo', Tahoma, Arial, sans-serif; padding: 20px; direction: rtl; color: #0F172A; }
             .print-logo-box { text-align: center; margin-bottom: 10px; }
             .print-logo-box img { height: 42px; margin: 0 auto; display: block; }
+            .print-toolbar { text-align: center; margin-bottom: 16px; background: #f1f5f9; padding: 10px; border-radius: 10px; }
+            .print-btn { background: #0284c7; color: #fff; border: none; padding: 8px 18px; border-radius: 8px; font-weight: bold; cursor: pointer; font-family: inherit; font-size: 14px; }
+            .print-btn:hover { background: #0369a1; }
+            @media print {
+              .no-print { display: none !important; }
+              body { padding: 0; }
+            }
           </style>
         </head>
         <body>
+          <div class="print-toolbar no-print">
+            <button class="print-btn" onclick="window.print()">🖨️ طباعة المستند الآن</button>
+          </div>
           <div class="print-logo-box">
             <img src="images/logo.svg" alt="ريد ماجيك" onerror="this.style.display='none'" />
           </div>
           ${bodyHtml}
-          <script>window.onload = function(){ window.print(); };<\/script>
         </body>
       </html>
     `);
@@ -1204,12 +1366,26 @@ service cloud.firestore {
       if (e.key === "F1") {
         e.preventDefault();
         openPosModal();
+      } else if (e.key === "F3") {
+        e.preventDefault();
+        window.BarcodeService?.openModal?.();
+      } else if (e.key === "F4") {
+        e.preventDefault();
+        window.BarcodeService?.toggleMode?.();
+      } else if (e.key === "F6") {
+        e.preventDefault();
+        window.BarcodeService?.openDedicatedScanner?.("intake");
+      } else if (e.key === "F7") {
+        e.preventDefault();
+        window.BarcodeService?.openDedicatedScanner?.("sale");
       } else if (e.key === "Escape") {
         closeModal("globalDrawerModal");
         closeModal("globalPosModal");
         closeModal("globalFirebaseModal");
         closeModal("globalThemeModal");
         window.BarcodeService?.closeModal?.();
+        window.BarcodeService?.closeDedicatedScanner?.();
+        window.BarcodeService?.closeControlCardsModal?.();
         window.BarcodeService?.closeCameraInputModal?.();
         cancelPinModal();
       }
@@ -1274,6 +1450,7 @@ service cloud.firestore {
     setModalDrawerState,
     openPosModal,
     addToPosCart,
+    handlePosBarcodeEnter,
     updatePosCartQty,
     renderPosCatalog,
     submitPosCheckout,
@@ -1290,6 +1467,9 @@ service cloud.firestore {
     openThemeModal,
     selectTheme,
     renderThemeOptions,
-    openBarcodeStockModal: (code) => window.BarcodeService?.openModal?.(code)
+    openBarcodeStockModal: (code) => window.BarcodeService?.openModal?.(code),
+    setBarcodeMode: (m) => window.BarcodeService?.setMode?.(m),
+    toggleBarcodeMode: () => window.BarcodeService?.toggleMode?.(),
+    undoLastBarcodeAction: () => window.BarcodeService?.undoLastAction?.()
   };
 })();

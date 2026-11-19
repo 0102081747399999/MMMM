@@ -467,6 +467,22 @@
     await db.collection("wallets").doc(walletId).set({ walletId, ...data, updatedAtMs: now }, { merge: true });
   }
 
+  function resetAllWalletsDataToZero() {
+    writeLocalDocMap("wallets", {
+      cash_1: { id: "cash_1", walletId: "cash_1", simNumber: "", openingBalance: 0, isActive: true },
+      cash_2: { id: "cash_2", walletId: "cash_2", simNumber: "", openingBalance: 0, isActive: true },
+      cash_3: { id: "cash_3", walletId: "cash_3", simNumber: "", openingBalance: 0, isActive: true }
+    });
+    writeLocalCollection("walletTransactions", []);
+  }
+
+  try {
+    if (typeof localStorage !== "undefined" && localStorage.getItem("pos_wallets_zeroed_v2") !== "true") {
+      resetAllWalletsDataToZero();
+      localStorage.setItem("pos_wallets_zeroed_v2", "true");
+    }
+  } catch (e) {}
+
   // Wallet Transactions
   function subscribeWalletTransactions(walletId, callback) {
     return subscribeCollection(

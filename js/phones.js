@@ -5,6 +5,7 @@
 
   const state = {
     devices: [],
+    highlightCode: null,
     editingDeviceId: null,
     pendingDeleteDevice: null,
     pendingSellDevice: null,
@@ -20,7 +21,7 @@
     const dateInput = document.getElementById("deviceDate");
     if (dateInput) dateInput.value = DB.todayDateStr();
     const chk = document.getElementById("phoneDeductFromDrawer");
-    if (chk) chk.checked = false;
+    if (chk) chk.checked = true;
     const prev = document.getElementById("phoneCostPreviewText");
     if (prev) prev.textContent = "0.00 ج.م";
   }
@@ -155,10 +156,18 @@
     emptyState.classList.add("hidden");
     tbody.innerHTML = filtered
       .map((item, idx) => {
-        const zebra = idx % 2 === 0 ? "bg-white" : "bg-slate-50/70";
+        const isHighlighted = state.highlightCode && (
+          (item.imei1 && item.imei1.toLowerCase() === state.highlightCode) ||
+          (item.imei2 && item.imei2.toLowerCase() === state.highlightCode) ||
+          (item.barcode && item.barcode.toLowerCase() === state.highlightCode) ||
+          (item.model && item.model.toLowerCase().includes(state.highlightCode))
+        );
+        const zebra = isHighlighted
+          ? "ring-4 ring-sky-500 bg-sky-50/90 shadow-lg scale-[1.01] transition-all font-semibold"
+          : (idx % 2 === 0 ? "bg-white" : "bg-slate-50/70");
         const isNew = (item.condition || "").includes("جديد");
         return `
-          <tr class="${zebra} hover:bg-primary-fixed/20 transition-colors border-b border-slate-100">
+          <tr id="${isHighlighted ? 'highlighted-phone-row' : ''}" class="${zebra} hover:bg-primary-fixed/20 transition-colors border-b border-slate-100">
             <td class="py-3 px-4">
               <div class="flex flex-col">
                 <div class="flex items-center gap-1.5 font-numeric-table text-body-md text-primary font-bold" dir="ltr">
@@ -199,6 +208,9 @@
                 ${
                   !item.isSold
                     ? `
+                  <button type="button" onclick="BarcodeService.openLabelStudio({ name: '${escapeHtml(item.brand)} ${escapeHtml(item.model)}', price: '${item.sellingPrice || 0}', code: '${escapeHtml(item.imei1 || '')}' })" title="طباعة ملصق استيكر باركود الهاتف" class="p-1.5 rounded-lg bg-amber-50 hover:bg-amber-500 hover:text-white text-amber-700 transition-colors">
+                    <span class="material-symbols-outlined text-base">label</span>
+                  </button>
                   <button type="button" onclick="PhonesPage.openSellModal('${item.id}')" title="إتمام بيع وطباعة فاتورة" class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-tertiary hover:bg-tertiary-container text-white text-xs font-semibold shadow-sm transition-all">
                     <span class="material-symbols-outlined text-base">shopping_cart_checkout</span>
                     <span>بيع وفاتورة</span>
@@ -226,6 +238,12 @@
         `;
       })
       .join("");
+
+    if (state.highlightCode) {
+      setTimeout(() => {
+        document.getElementById("highlighted-phone-row")?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 150);
+    }
   }
 
   function editDevice(id) {
@@ -390,9 +408,18 @@
     const dateInput = document.getElementById("deviceDate");
     if (dateInput) dateInput.value = DB.todayDateStr();
     const chk = document.getElementById("phoneDeductFromDrawer");
-    if (chk) chk.checked = false;
+    if (chk) chk.checked = true;
     const prev = document.getElementById("phoneCostPreviewText");
     if (prev) prev.textContent = "0.00 ج.م";
+
+    // Check URL parameters for smart auto-navigation / highlight
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchParam = urlParams.get("search") || urlParams.get("highlight") || urlParams.get("imei") || urlParams.get("barcode");
+    if (searchParam) {
+      state.highlightCode = (urlParams.get("highlight") || searchParam).trim().toLowerCase();
+      const searchInp = document.getElementById("tableSearchInput");
+      if (searchInp) searchInp.value = searchParam.trim();
+    }
 
     DB.subscribePhones((list) => {
       state.devices = list;
@@ -401,7 +428,25 @@
 
     document.getElementById("newPhoneForm")?.addEventListener("submit", handleDeviceSubmit);
     document.getElementById("sellPhoneForm")?.addEventListener("submit", handleSellSubmit);
-    document.getElementById("tableSearchInput")?.addEventListener("input", renderDevices);
+    
+    const searchInp = document.getElementById("tableSearchInput");
+    if (searchInp) {
+      searchInp.addEventListener("input", renderDevices);
+      searchInp.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          const val = searchInp.value.trim();
+          if (!val) return;
+          if (window.BarcodeService && typeof window.BarcodeService.detectProductSection === "function") {
+            const detectedSec = window.BarcodeService.detectProductSection(val);
+            if (detectedSec && detectedSec !== "phones") {
+              e.preventDefault();
+              window.BarcodeService.navigateToProductPage(val);
+            }
+          }
+        }
+      });
+    }
+
     document.getElementById("filterStatus")?.addEventListener("change", renderDevices);
     document.getElementById("deviceCost")?.addEventListener("input", (e) => {
       const v = parseFloat(e.target.value) || 0;

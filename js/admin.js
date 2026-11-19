@@ -966,7 +966,7 @@
     document.getElementById("actualHandCashInput")?.addEventListener("input", updateVariance);
     document.getElementById("saveShiftOpeningBtn")?.addEventListener("click", saveShiftOpening);
     document.getElementById("commitShiftCloseBtn")?.addEventListener("click", commitShiftClose);
-    document.getElementById("exportShiftReportBtn")?.addEventListener("click", () => window.print());
+    // exportShiftReportBtn removed from startup view to prevent accidental print dialog prompts
 
     document.getElementById("openManualTxModalBtn")?.addEventListener("click", openNewManualTxModal);
     document.getElementById("tableAddManualBtn")?.addEventListener("click", openNewManualTxModal);
