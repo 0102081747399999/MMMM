@@ -4170,6 +4170,147 @@ try {
   console.warn('Clean slate init note:', e);
 }
 
+// ==============================================================
+// RED MAGIC - TOTAL ZERO INITIALIZATION (تصفير شامل لجميع الفلوس والمبيعات والمخزن)
+// ==============================================================
+const REDMAGIC_TOTAL_ZERO_KEY = 'redmagic_total_zero_applied_v1';
+try {
+  // Blacklist all legacy test/mock sales IDs
+  [
+    'inv_1795018543177', 'INV-1013',
+    'inv_1795012438516', 'INV-1012',
+    'E1RvID4j38nBgtqdlnRo', 'INV-1011',
+    'i6fVbQeRQ1mb67bNQVn2', 'INV-1010',
+    'QSo4djW7jZjPVb1rM7B9', 'INV-1009',
+    'lhIydF8Kog7aedFYRabQ', 'INV-1007',
+    'VRcm43NBv6v3jn3qkIOW', 'INV-1006',
+    'vduKWGoFcRrgjcjfZ2K0', 'INV-1005',
+    'RnrcY13YBCQgvbzRrYaU', 'INV-1004',
+    'AUPMu5RSUiAixfnhyCzr', 'INV-1003',
+    'inv_1795097100346', 'INV-1015',
+    'inv_1795018445701', 'INV-1014'
+  ].forEach(id => blacklistSale(id));
+
+  if (!localStorage.getItem(REDMAGIC_TOTAL_ZERO_KEY)) {
+    // Zero out sales
+    Store.salesInvoices = [];
+    setLocal(STORAGE_KEYS.SALES, []);
+
+    // Zero out products
+    Store.products = [];
+    setLocal(STORAGE_KEYS.PRODUCTS, []);
+
+    // Zero out drawer completely
+    Store.drawer = {
+      shiftId: '#101',
+      openingCash: 0,
+      currentCash: 0,
+      history: []
+    };
+    setLocal(STORAGE_KEYS.DRAWER, Store.drawer);
+
+    // Zero out Vodafone lines balances
+    Store.vodafoneTransactions = [];
+    setLocal(STORAGE_KEYS.VODAFONE_TXS, []);
+
+    Store.vodafoneLines = [1, 2, 3].map(i => {
+      const existing = (Store.vodafoneLines || []).find(l => l.lineNum === i) || {};
+      return {
+        ...existing,
+        id: existing.id || `line_${i}`,
+        lineNum: i,
+        phone: existing.phone || '',
+        balance: 0.00,
+        totalTransferredMonth: 0.00,
+        monthlyLimit: 100000,
+        isActive: true,
+        deviceName: existing.deviceName || `هاتف محمول خط ${i}`,
+        deviceStatus: 'connected'
+      };
+    });
+    setLocal(STORAGE_KEYS.VODAFONE_LINES, Store.vodafoneLines);
+
+    // Zero out SMS
+    Store.smsInbox = [];
+    setLocal(STORAGE_KEYS.SMS_INBOX, []);
+
+    localStorage.setItem(REDMAGIC_TOTAL_ZERO_KEY, 'true');
+    syncToLocalServer();
+    console.log('✨ [ريد ماجيك] تم تصفير كافة الحسابات والفلوس والمخزن بالكامل (كلو صفر)!');
+  }
+} catch (e) {
+  console.warn('Total zero init note:', e);
+}
+
+// Global Total Zero Reset Function
+window.totalSystemZeroReset = async function(force = false) {
+  if (!force && !confirm("⚠️ هل أنت متأكد من تصفير النظام بالكامل؟\n(سيتم تصفير المخزن، المبيعات، حركات الكاش، الدرج، وأرصدة الخطوط لتصبح صفر تماماً)")) {
+    return;
+  }
+
+  // 1. Blacklist & delete local products
+  (Store.products || []).forEach(p => { if (p && p.id) blacklistProduct(p.id); });
+  (Store.salesInvoices || []).forEach(s => { if (s && s.id) blacklistSale(s.id); if (s && s.invoiceNumber) blacklistSale(s.invoiceNumber); });
+  (Store.vodafoneTransactions || []).forEach(t => { if (t && t.id) blacklistVodafoneTx(t.id); if (t && t.transactionId) blacklistVodafoneTx(t.transactionId); });
+
+  // 2. Wipe Firestore docs if connected
+  if (db) {
+    try {
+      const pSnap = await getDocs(collection(db, "products"));
+      pSnap.forEach(d => { blacklistProduct(d.id); deleteDoc(doc(db, "products", d.id)).catch(console.warn); });
+      const sSnap = await getDocs(collection(db, "sales_invoices"));
+      sSnap.forEach(d => { blacklistSale(d.id); deleteDoc(doc(db, "sales_invoices", d.id)).catch(console.warn); });
+      const tSnap = await getDocs(collection(db, "vodafone_transactions"));
+      tSnap.forEach(d => { blacklistVodafoneTx(d.id); deleteDoc(doc(db, "vodafone_transactions", d.id)).catch(console.warn); });
+      for (let i = 1; i <= 3; i++) {
+        setDoc(doc(db, "vodafone_lines", `line_${i}`), { balance: 0.00, totalTransferredMonth: 0.00 }, { merge: true }).catch(console.warn);
+      }
+    } catch(e) {}
+  }
+
+  // 3. Clear all Store objects
+  Store.products = [];
+  setLocal(STORAGE_KEYS.PRODUCTS, []);
+  Store.salesInvoices = [];
+  setLocal(STORAGE_KEYS.SALES, []);
+  Store.vodafoneTransactions = [];
+  setLocal(STORAGE_KEYS.VODAFONE_TXS, []);
+  Store.smsInbox = [];
+  setLocal(STORAGE_KEYS.SMS_INBOX, []);
+
+  Store.drawer = {
+    shiftId: '#101',
+    openingCash: 0,
+    currentCash: 0,
+    history: []
+  };
+  setLocal(STORAGE_KEYS.DRAWER, Store.drawer);
+
+  Store.vodafoneLines = [1, 2, 3].map(i => ({
+    id: `line_${i}`,
+    lineNum: i,
+    phone: '',
+    balance: 0.00,
+    totalTransferredMonth: 0.00,
+    monthlyLimit: 100000,
+    isActive: true,
+    deviceName: `هاتف محمول خط ${i}`,
+    deviceStatus: 'connected'
+  }));
+  setLocal(STORAGE_KEYS.VODAFONE_LINES, Store.vodafoneLines);
+
+  syncToLocalServer();
+  notifySubscribers("products_updated", []);
+  notifySubscribers("sales_updated", []);
+  notifySubscribers("drawer_updated", Store.drawer);
+  notifySubscribers("vodafone_lines_updated", Store.vodafoneLines);
+  notifySubscribers("vodafone_txs_updated", []);
+  updateGlobalHeaderBadges();
+  renderDashboard();
+  showToast("تم تصفير النظام بالكامل بنجاح — كل الحسابات والمخزن أصبحت صفر!", "success");
+};
+
+
 // Global user-callable clean warehouse function
 window.clearWarehouseCleanSlate = async function(force = false) {
   if (!force && !confirm("هل أنت متأكد من تفريغ المخزن بالكامل والبدء من جديد على نظيف؟\n(سيتم مسح جميع الأصناف لبدء الجرد الجديد على نظيف)")) {
@@ -4299,7 +4440,14 @@ async function loadFromLocalServer() {
 
     let salesChanged = false;
     const salesBlacklist = getDeletedSalesBlacklist();
-    if (Array.isArray(json.data.salesInvoices) && json.data.salesInvoices.length > 0) {
+    if (Array.isArray(json.data.salesInvoices)) {
+      if (json.data.salesInvoices.length === 0 && localStorage.getItem('redmagic_total_zero_applied_v1')) {
+        if ((Store.salesInvoices || []).length > 0) {
+          Store.salesInvoices = [];
+          setLocal(STORAGE_KEYS.SALES, []);
+          salesChanged = true;
+        }
+      } else if (json.data.salesInvoices.length > 0) {
       const curSales = Store.salesInvoices || [];
       json.data.salesInvoices.forEach(s => {
         if (!s || !s.id || salesBlacklist.has(s.id)) return;
@@ -4316,6 +4464,7 @@ async function loadFromLocalServer() {
         notifySubscribers("sales_updated", curSales);
       }
     }
+  }
 
     if (json.data.drawer && (!Store.drawer || (Store.drawer.history || []).length < (json.data.drawer.history || []).length)) {
       Store.drawer = json.data.drawer;
@@ -4557,6 +4706,19 @@ async function initRealtimeSync() {
     // 3. Sync Vodafone Transactions (Filtered with permanent deleted blacklist & Local merge protection)
     const txCol = collection(db, "vodafone_transactions");
     onSnapshot(txCol, (snapshot) => {
+      // First-time clean purge of legacy vodafone transactions from remote cloud
+      if (!localStorage.getItem('redmagic_clean_vtx_zero_v2')) {
+        snapshot.forEach(docSnap => {
+          blacklistVodafoneTx(docSnap.id);
+          deleteDoc(doc(db, "vodafone_transactions", docSnap.id)).catch(console.warn);
+        });
+        localStorage.setItem('redmagic_clean_vtx_zero_v2', 'true');
+        Store.vodafoneTransactions = [];
+        setLocal(STORAGE_KEYS.VODAFONE_TXS, []);
+        syncToLocalServer();
+        notifySubscribers("vodafone_txs_updated", []);
+        return;
+      }
       const blacklist = getDeletedVodaTxsBlacklist();
       const txs = [];
       snapshot.forEach(docSnap => {
@@ -4606,6 +4768,20 @@ async function initRealtimeSync() {
     // 4. Sync Sales Invoices (Filtered with permanent deleted blacklist & Local merge protection)
     const salesCol = collection(db, "sales_invoices");
     onSnapshot(salesCol, (snapshot) => {
+      // First-time clean purge of legacy sales from remote cloud
+      if (!localStorage.getItem('redmagic_clean_sales_zero_v2')) {
+        snapshot.forEach(docSnap => {
+          blacklistSale(docSnap.id);
+          deleteDoc(doc(db, "sales_invoices", docSnap.id)).catch(console.warn);
+        });
+        localStorage.setItem('redmagic_clean_sales_zero_v2', 'true');
+        Store.salesInvoices = [];
+        setLocal(STORAGE_KEYS.SALES, []);
+        syncToLocalServer();
+        notifySubscribers("sales_updated", []);
+        updateGlobalHeaderBadges();
+        return;
+      }
       const salesBlacklist = getDeletedSalesBlacklist();
       const remoteInvoices = [];
       
