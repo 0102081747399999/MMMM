@@ -2,176 +2,176 @@
   "products": [],
   "salesInvoices": [],
   "drawer": {
+    "shiftId": "#402",
     "history": [
       {
-        "type": "set_opening",
-        "reason": "تحديد رصيد افتتاح الدرج",
-        "balanceAfter": 0,
         "amount": 0,
-        "timestamp": "2026-11-23T15:36:53.786Z"
+        "reason": "تحديد رصيد افتتاح الدرج",
+        "timestamp": "2026-11-23T15:36:53.786Z",
+        "balanceAfter": 0,
+        "type": "set_opening"
       },
       {
-        "amount": 180,
-        "type": "out",
-        "timestamp": "2026-11-23T15:36:11.470Z",
         "balanceAfter": -180,
-        "reason": "إلغاء وحذف نهائي لفاتورة بيع INV-1011"
-      },
-      {
-        "amount": 0,
-        "balanceAfter": 0,
-        "timestamp": "2026-11-19T16:54:16.307Z",
-        "type": "set_opening",
-        "reason": "تحديد رصيد افتتاح الدرج"
-      },
-      {
-        "reason": "إلغاء وحذف نهائي لفاتورة بيع INV-1015",
+        "timestamp": "2026-11-23T15:36:11.470Z",
         "type": "out",
-        "balanceAfter": -2585736,
-        "amount": 2585736,
-        "timestamp": "2026-11-19T14:07:08.990Z"
+        "reason": "إلغاء وحذف نهائي لفاتورة بيع INV-1011",
+        "amount": 180
       },
       {
-        "balanceAfter": 0,
         "type": "set_opening",
+        "balanceAfter": 0,
         "reason": "تحديد رصيد افتتاح الدرج",
-        "amount": 0,
-        "timestamp": "2026-11-19T14:06:52.353Z"
+        "timestamp": "2026-11-19T16:54:16.307Z",
+        "amount": 0
       },
       {
-        "amount": 0,
-        "balanceAfter": 0,
-        "type": "set_opening",
-        "timestamp": "2026-11-19T14:06:47.411Z",
-        "reason": "تحديد رصيد افتتاح الدرج"
-      },
-      {
-        "type": "in",
-        "balanceAfter": 2585736,
+        "balanceAfter": -2585736,
+        "timestamp": "2026-11-19T14:07:08.990Z",
         "amount": 2585736,
-        "reason": "فاتورة بيع INV-1015 - بيع مباشر بالكود (333) - شاحن",
-        "timestamp": "2026-11-19T14:05:00.344Z"
-      },
-      {
-        "balanceAfter": 0,
-        "timestamp": "2026-11-18T18:12:45.701Z",
-        "amount": 1800,
-        "type": "out",
-        "reason": "إلغاء وحذف نهائي لفاتورة بيع INV-1014"
-      },
-      {
-        "amount": 1800,
-        "timestamp": "2026-11-18T18:12:14.472Z",
-        "type": "in",
-        "balanceAfter": 1800,
-        "reason": "فاتورة بيع INV-1014"
-      },
-      {
-        "balanceAfter": 0,
-        "timestamp": "2026-11-18T17:38:31.773Z",
-        "amount": 0,
-        "type": "set_opening",
-        "reason": "تحديد رصيد افتتاح الدرج"
-      },
-      {
-        "amount": 1500,
-        "reason": "إلغاء وحذف نهائي لفاتورة بيع INV-1013",
-        "timestamp": "2026-11-18T17:38:21.691Z",
-        "balanceAfter": -1500,
+        "reason": "إلغاء وحذف نهائي لفاتورة بيع INV-1015",
         "type": "out"
       },
       {
         "type": "set_opening",
-        "balanceAfter": 0,
-        "amount": 0,
+        "timestamp": "2026-11-19T14:06:52.353Z",
         "reason": "تحديد رصيد افتتاح الدرج",
-        "timestamp": "2026-11-18T17:38:04.244Z"
+        "balanceAfter": 0,
+        "amount": 0
       },
       {
-        "balanceAfter": 1250,
-        "timestamp": "2026-11-18T17:14:06.872Z",
-        "amount": 1250,
+        "timestamp": "2026-11-19T14:06:47.411Z",
+        "amount": 0,
+        "balanceAfter": 0,
         "reason": "تحديد رصيد افتتاح الدرج",
         "type": "set_opening"
       },
       {
-        "reason": "فاتورة بيع INV-1013 - بيع مباشر بالكود (555) - شاحن",
+        "type": "in",
+        "timestamp": "2026-11-19T14:05:00.344Z",
+        "reason": "فاتورة بيع INV-1015 - بيع مباشر بالكود (333) - شاحن",
+        "balanceAfter": 2585736,
+        "amount": 2585736
+      },
+      {
+        "type": "out",
+        "reason": "إلغاء وحذف نهائي لفاتورة بيع INV-1014",
+        "amount": 1800,
+        "timestamp": "2026-11-18T18:12:45.701Z",
+        "balanceAfter": 0
+      },
+      {
+        "amount": 1800,
+        "reason": "فاتورة بيع INV-1014",
+        "balanceAfter": 1800,
+        "type": "in",
+        "timestamp": "2026-11-18T18:12:14.472Z"
+      },
+      {
+        "balanceAfter": 0,
+        "amount": 0,
+        "type": "set_opening",
+        "reason": "تحديد رصيد افتتاح الدرج",
+        "timestamp": "2026-11-18T17:38:31.773Z"
+      },
+      {
+        "timestamp": "2026-11-18T17:38:21.691Z",
+        "type": "out",
+        "reason": "إلغاء وحذف نهائي لفاتورة بيع INV-1013",
+        "amount": 1500,
+        "balanceAfter": -1500
+      },
+      {
+        "timestamp": "2026-11-18T17:38:04.244Z",
+        "balanceAfter": 0,
+        "amount": 0,
+        "reason": "تحديد رصيد افتتاح الدرج",
+        "type": "set_opening"
+      },
+      {
+        "amount": 1250,
+        "reason": "تحديد رصيد افتتاح الدرج",
+        "balanceAfter": 1250,
+        "type": "set_opening",
+        "timestamp": "2026-11-18T17:14:06.872Z"
+      },
+      {
+        "timestamp": "2026-11-18T16:15:43.176Z",
+        "amount": 1500,
         "type": "in",
         "balanceAfter": 1250,
-        "timestamp": "2026-11-18T16:15:43.176Z",
-        "amount": 1500
+        "reason": "فاتورة بيع INV-1013 - بيع مباشر بالكود (555) - شاحن"
       },
       {
         "amount": 70,
-        "balanceAfter": -250,
+        "timestamp": "2026-11-18T16:12:39.483Z",
         "reason": "إلغاء وحذف نهائي لفاتورة بيع INV-1010",
         "type": "out",
-        "timestamp": "2026-11-18T16:12:39.483Z"
+        "balanceAfter": -250
       },
       {
-        "reason": "إلغاء وحذف نهائي لفاتورة بيع INV-1011",
         "balanceAfter": -180,
-        "type": "out",
+        "amount": 180,
         "timestamp": "2026-11-18T16:12:32.623Z",
-        "amount": 180
+        "reason": "إلغاء وحذف نهائي لفاتورة بيع INV-1011",
+        "type": "out"
       },
       {
         "balanceAfter": 0,
-        "type": "set_opening",
         "amount": 0,
         "reason": "تحديد رصيد افتتاح الدرج",
-        "timestamp": "2026-11-18T16:12:23.623Z"
+        "timestamp": "2026-11-18T16:12:23.623Z",
+        "type": "set_opening"
       },
       {
-        "type": "in",
-        "balanceAfter": 0,
         "amount": 0,
         "reason": "فاتورة بيع INV-1012",
+        "type": "in",
+        "balanceAfter": 0,
         "timestamp": "2026-11-18T14:33:58.516Z"
       }
     ],
-    "shiftId": "#402",
     "currentCash": 0,
     "openingCash": 0
   },
   "vodafoneLines": [
     {
       "id": "line_1",
-      "totalTransferredMonth": 0,
-      "deviceName": "هاتف محمول خط 1",
-      "isActive": true,
       "monthlyLimit": 100000,
       "phone": "",
-      "lineNum": 1,
-      "deviceStatus": "connected",
+      "deviceName": "هاتف محمول خط 1",
+      "isActive": true,
       "balance": 0,
-      "updatedAt": "2026-11-18T12:21:28.688Z"
+      "updatedAt": "2026-11-18T12:21:28.688Z",
+      "lineNum": 1,
+      "totalTransferredMonth": 0,
+      "deviceStatus": "connected"
     },
     {
       "id": "line_2",
-      "deviceStatus": "connected",
-      "lineNum": 2,
-      "isActive": true,
-      "phone": "",
       "deviceName": "هاتف محمول خط 2",
-      "balance": 0,
-      "updatedAt": "2026-11-18T12:21:28.688Z",
+      "deviceStatus": "connected",
       "totalTransferredMonth": 0,
+      "lineNum": 2,
+      "phone": "",
+      "isActive": true,
+      "updatedAt": "2026-11-18T12:21:28.688Z",
+      "balance": 0,
       "monthlyLimit": 100000
     },
     {
       "id": "line_3",
+      "deviceStatus": "connected",
+      "balance": 0,
+      "isActive": true,
+      "deviceName": "هاتف محمول خط 3",
       "updatedAt": "2026-11-18T12:21:28.688Z",
-      "monthlyLimit": 100000,
       "lineNum": 3,
       "totalTransferredMonth": 0,
       "phone": "",
-      "balance": 0,
-      "deviceName": "هاتف محمول خط 3",
-      "deviceStatus": "connected",
-      "isActive": true
+      "monthlyLimit": 100000
     }
   ],
   "vodafoneTransactions": [],
-  "lastUpdated": "2026-11-23T18:46:14.767Z"
+  "lastUpdated": "2026-11-23T19:01:09.699Z"
 }

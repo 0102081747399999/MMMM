@@ -324,7 +324,7 @@
 
         <a href="javascript:void(0)" data-path="screens-inventory" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-300 hover:bg-navy-card hover:text-rose-400 transition-colors text-xs font-bold">
           <span class="material-symbols-outlined text-lg text-rose-400">fit_screen</span>
-          <span>قسم الشاشات والاسكرينات</span>
+          <span>قسم الشاشات</span>
         </a>
 
         <a href="javascript:void(0)" data-path="phones-sales-inventory" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-300 hover:bg-navy-card hover:text-rose-400 transition-colors text-xs font-bold">
@@ -338,11 +338,7 @@
           <span>مخزن الجرابات والحمايات ★</span>
         </a>
 
-        <!-- Screens & Protectors Warehouse -->
-        <a href="javascript:void(0)" data-path="screens-inventory" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-300 hover:bg-navy-card hover:text-rose-400 transition-colors text-xs font-bold">
-          <span class="material-symbols-outlined text-lg text-slate-400">fit_screen</span>
-          <span>مخزن الاسكرينات والحماية ★</span>
-        </a>
+        
 
         <!-- Smartwatches Warehouse -->
         <a href="javascript:void(0)" data-path="smartwatches-inventory" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-300 hover:bg-navy-card hover:text-rose-400 transition-colors text-xs font-bold">
@@ -1783,7 +1779,7 @@
                 <h2 class="font-bold text-on-surface text-lg">مخزن الإكسسوارات العامة</h2>
                 <span id="accessories-count-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30">0 إكسسوارات</span>
               </div>
-              <p class="text-xs text-on-surface-variant mt-0.5">اسكرينات، فلاشات، كروت ميموري، باور بانك - إدارة المخزون والكميات والأسعار</p>
+              <p class="text-xs text-on-surface-variant mt-0.5">كروت ميموري، فلاشات، باور بانك، إكسسوارات متنوعة - إدارة المخزون والكميات والأسعار</p>
             </div>
           </div>
           <button onclick="window.openAddProductModal('accessories')" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-bold text-xs shadow-md shadow-rose-950/40 flex items-center gap-2 transition-all cursor-pointer">
@@ -1826,7 +1822,7 @@
       </section>
 
       <!-- ==========================================
-           VIEW: مخزن الاسكرينات ولصقات الحماية
+           VIEW: قسم الشاشات
            ========================================== -->
       <section id="view-screens-inventory" class="hidden flex flex-col gap-6">
         <div class="bg-slate-900/90 p-5 rounded-2xl shadow-xl border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4 backdrop-blur-md text-white">
@@ -1836,10 +1832,10 @@
             </div>
             <div>
               <div class="flex items-center gap-2 flex-wrap">
-                <h2 class="font-bold text-on-surface text-lg">قسم الشاشات والاسكرينات</h2>
+                <h2 class="font-bold text-on-surface text-lg">قسم الشاشات</h2>
                 <span id="screens-count-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30">0 أصناف</span>
               </div>
-              <p class="text-xs text-on-surface-variant mt-0.5">شاشات الهواتف الأصلية وبدائل الشاشات، اسكرينات زجاج وسيراميك مط، ولصقات حماية - إدارة المخزون</p>
+              <p class="text-xs text-on-surface-variant mt-0.5">شاشات الهواتف الأصلية، شاشات التبديل، الشاشات الكاملة والتاتش - إدارة مخزون الشاشات والأسعار</p>
             </div>
           </div>
           <button onclick="window.openAddProductModal('screens')" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-bold text-xs shadow-md shadow-rose-950/40 flex items-center gap-2 transition-all cursor-pointer">
@@ -1871,17 +1867,16 @@
         <!-- Filter Tabs -->
         <div class="flex items-center gap-2 flex-wrap">
           
-    <button onclick="window.setScreensTab('all')" data-screens-tab="all" class="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-primary text-white shadow-sm ring-1 ring-rose-500/40 cursor-pointer">الكل</button>
+    <button onclick="window.setScreensTab('all')" data-screens-tab="all" class="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-primary text-white shadow-sm ring-1 ring-rose-500/40 cursor-pointer">كل الشاشات</button>
   
-    <button onclick="window.setScreensTab('glass')" data-screens-tab="glass" class="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-surface-container-low hover:bg-surface-container text-on-surface border border-outline-variant/30 cursor-pointer">اسكرينة زجاج (9D/11D/21D)</button>
+    <button onclick="window.setScreensTab('original')" data-screens-tab="original" class="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-surface-container-low hover:bg-surface-container text-on-surface border border-outline-variant/30 cursor-pointer">شاشات أصلية توكيل (Original)</button>
   
-    <button onclick="window.setScreensTab('privacy')" data-screens-tab="privacy" class="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-surface-container-low hover:bg-surface-container text-on-surface border border-outline-variant/30 cursor-pointer">اسكرينة خصوصية (سيراميك/ضد التجسس)</button>
+    <button onclick="window.setScreensTab('oled')" data-screens-tab="oled" class="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-surface-container-low hover:bg-surface-container text-on-surface border border-outline-variant/30 cursor-pointer">شاشات OLED / AMOLED</button>
   
-    <button onclick="window.setScreensTab('camera')" data-screens-tab="camera" class="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-surface-container-low hover:bg-surface-container text-on-surface border border-outline-variant/30 cursor-pointer">حماية عدسات كاميرا</button>
+    <button onclick="window.setScreensTab('incell')" data-screens-tab="incell" class="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-surface-container-low hover:bg-surface-container text-on-surface border border-outline-variant/30 cursor-pointer">شاشات Incell / هاي كوبي</button>
   
-    <button onclick="window.setScreensTab('back')" data-screens-tab="back" class="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-surface-container-low hover:bg-surface-container text-on-surface border border-outline-variant/30 cursor-pointer">حماية ظهر وجلد</button>
-  
-        </div>
+    <button onclick="window.setScreensTab('touch')" data-screens-tab="touch" class="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-surface-container-low hover:bg-surface-container text-on-surface border border-outline-variant/30 cursor-pointer">تاتش وباغات شاشة</button>
+  </div>
 
         <!-- Inventory Table Card -->
         <div class="bg-slate-900/90 rounded-2xl shadow-xl border border-slate-800 overflow-hidden flex flex-col backdrop-blur-md text-white">
@@ -1920,7 +1915,7 @@
           <div class="p-4 border-b border-slate-800 flex items-center justify-between">
             <div class="flex items-center gap-2">
               <span class="material-symbols-outlined text-rose-400">receipt_long</span>
-              <h3 class="font-bold text-sm">سجل مبيعات مخزن الاسكرينات ولصقات الحماية</h3>
+              <h3 class="font-bold text-sm">سجل مبيعات قسم الشاشات</h3>
             </div>
             <span id="screens-sales-count-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-800 text-slate-300">0 مبيعات</span>
           </div>
@@ -2673,7 +2668,7 @@
                 <option value="chargers">الشواحن</option>
                 <option value="cables">الوصلات</option>
                 <option value="headphones">السماعات</option>
-                <option value="screens">قسم الشاشات والاسكرينات</option>
+                <option value="screens">قسم الشاشات</option>
                 <option value="covers">الجرابات</option>
                 <option value="accessories">الإكسسوارات</option>
                 <option value="manual">المخزن اليدوي</option>
@@ -3180,10 +3175,10 @@
               <option value="headphones">قسم السماعات والصوتيات</option>
               <option value="chargers">قسم الشواحن</option>
               <option value="cables">قسم الوصلات والكابلات</option>
-              <option value="screens">قسم الشاشات والاسكرينات</option>
+              <option value="screens">قسم الشاشات</option>
               <option value="phones">قسم التليفونات (IMEI)</option>
               <option value="covers">قسم الجرابات والحمايات</option>
-              <option value="screens">مخزن الاسكرينات ولصقات الحماية</option>
+              <option value="screens">قسم الشاشات</option>
               <option value="smartwatches">مخزن الساعات الذكية والسمارت ووتش</option>
               <option value="powerbanks">مخزن الباور بانك وبنوك الطاقة</option>
               <option value="storage">مخزن الفلاشات وكروت الميموري</option>
@@ -9393,7 +9388,7 @@ function updateProductModalFields(category) {
         `;
       } else if (category === 'accessories') {
         subcatSelect.innerHTML = `
-          <option value="screen_protector">اسكرينة حماية شاشة</option>
+          <option value="screen_part">شاشة كاملة / باغة</option>
           <option value="holder">حامل هاتف / ستاند سيارة</option>
           <option value="memory">كارت ميموري / فلاشة</option>
           <option value="powerbank">باور بانك</option>
@@ -10189,7 +10184,7 @@ function getCategoryArabicName(cat) {
     case 'speakers': return 'قسم الصبات والمكبرات';
     case 'phones': return 'قسم التليفونات';
     case 'covers': return 'قسم الجرابات والحمايات';
-    case 'screens': return 'مخزن الاسكرينات والحماية';
+    case 'screens': return 'قسم الشاشات';
     case 'smartwatches': return 'مخزن الساعات الذكية';
     case 'powerbanks': return 'مخزن الباور بانك';
     case 'storage': return 'مخزن الفلاشات والميموري';
@@ -10851,15 +10846,15 @@ function updateTabButtons(catKey, selectedTab) {
 
 // 1. Screens Warehouse
 export function renderScreensPage() {
-  renderWarehouseHelper('screens', 'مخزن الاسكرينات والحماية', 'activeScreensTab', 'screens-search-input', 'screens-table-body', 'screens-sales-table-body', getScreensSubcategoryLabel);
+  renderWarehouseHelper('screens', 'قسم الشاشات', 'activeScreensTab', 'screens-search-input', 'screens-table-body', 'screens-sales-table-body', getScreensSubcategoryLabel);
 }
 function getScreensSubcategoryLabel(sub) {
   switch (sub) {
-    case 'glass': return 'اسكرينة زجاج';
-    case 'privacy': return 'اسكرينة خصوصية / سيراميك';
-    case 'camera': return 'حماية عدسات كاميرا';
-    case 'back': return 'حماية ظهر';
-    default: return 'اسكرينة / حماية';
+    case 'original': return 'شاشة أصلية توكيل';
+    case 'oled': return 'شاشة OLED / AMOLED';
+    case 'incell': return 'شاشة Incell / هاي كوبي';
+    case 'touch': return 'تاتش / باغة شاشة';
+    default: return 'شاشة هاتف';
   }
 }
 window.renderScreensPage = renderScreensPage;
