@@ -1,8 +1,321 @@
 {
   "products": [],
-  "salesInvoices": [],
+  "salesInvoices": [
+    {
+      "discount": 0,
+      "customerName": "عميل نقدي",
+      "items": [
+        {
+          "price": 150,
+          "category": "chargers",
+          "quantity": 10,
+          "buyPrice": 100,
+          "name": "شاحن",
+          "productId": "7GD1O0dn3kOjhsWO6SoQ",
+          "total": 1500,
+          "profit": 500,
+          "barcode": "555"
+        }
+      ],
+      "invoiceNumber": "INV-1013",
+      "subtotal": 1500,
+      "totalAmount": 1500,
+      "customerPhone": "01022484839",
+      "cashier": "كاشير سنترال حلمي",
+      "timestamp": "2026-11-18T16:15:43.176Z",
+      "id": "inv_1795018543177",
+      "change": 0,
+      "cashPaid": 1500
+    },
+    {
+      "discount": 0,
+      "customerName": "عميل نقدي",
+      "change": 0,
+      "totalAmount": 0,
+      "invoiceNumber": "INV-1012",
+      "cashPaid": 0,
+      "customerPhone": "",
+      "timestamp": "2026-11-18T14:33:58.516Z",
+      "id": "inv_1795012438516",
+      "items": [
+        {
+          "profit": 0,
+          "total": 0,
+          "barcode": "76",
+          "buyPrice": 0,
+          "price": 0,
+          "name": "قسم الشواحن (76)",
+          "productId": "nMc8qVcjcQXXXFj6aUP5",
+          "category": "chargers",
+          "quantity": 1
+        }
+      ],
+      "cashier": "كاشير سنترال حلمي",
+      "subtotal": 0
+    },
+    {
+      "cashPaid": 180,
+      "change": 0,
+      "cashier": "كاشير سنترال حلمي",
+      "timestamp": "2026-11-16T12:53:06.039Z",
+      "id": "E1RvID4j38nBgtqdlnRo",
+      "items": [
+        {
+          "quantity": 1,
+          "category": "chargers",
+          "total": 180,
+          "barcode": "ch262",
+          "buyPrice": 155,
+          "name": "شاحن",
+          "price": 180,
+          "profit": 25,
+          "productId": "9m9MTEni7j6wGywxkaVM"
+        }
+      ],
+      "subtotal": 180,
+      "discount": 0,
+      "invoiceNumber": "INV-1011",
+      "totalAmount": 180,
+      "customerName": "عميل نقدي",
+      "customerPhone": ""
+    },
+    {
+      "timestamp": "2026-11-16T12:39:02.215Z",
+      "customerName": "عبدالله",
+      "customerPhone": "01020817473",
+      "change": 0,
+      "items": [
+        {
+          "name": "وصلة",
+          "category": "cables",
+          "quantity": 1,
+          "productId": "TB6FEZN2XCcWyoKqhwYD",
+          "price": 70,
+          "buyPrice": 45,
+          "total": 70,
+          "profit": 25,
+          "barcode": "st361"
+        }
+      ],
+      "invoiceNumber": "INV-1010",
+      "discount": 0,
+      "totalAmount": 70,
+      "cashPaid": 70,
+      "cashier": "كاشير سنترال حلمي",
+      "subtotal": 70,
+      "id": "i6fVbQeRQ1mb67bNQVn2"
+    },
+    {
+      "items": [
+        {
+          "barcode": "st361",
+          "profit": 25,
+          "name": "وصلة",
+          "price": 70,
+          "productId": "TB6FEZN2XCcWyoKqhwYD",
+          "buyPrice": 45,
+          "total": 70,
+          "category": "cables",
+          "quantity": 1
+        }
+      ],
+      "invoiceNumber": "INV-1009",
+      "timestamp": "2026-11-16T12:38:54.449Z",
+      "subtotal": 70,
+      "customerPhone": "01020817473",
+      "totalAmount": 70,
+      "id": "QSo4djW7jZjPVb1rM7B9",
+      "customerName": "عبدالله",
+      "cashPaid": 70,
+      "change": 0,
+      "cashier": "كاشير سنترال حلمي",
+      "discount": 0
+    },
+    {
+      "customerName": "عبدالله",
+      "subtotal": 70,
+      "change": 0,
+      "id": "lhIydF8Kog7aedFYRabQ",
+      "timestamp": "2026-11-16T12:38:54.094Z",
+      "cashPaid": 70,
+      "invoiceNumber": "INV-1007",
+      "discount": 0,
+      "items": [
+        {
+          "barcode": "st361",
+          "profit": 25,
+          "total": 70,
+          "quantity": 1,
+          "price": 70,
+          "productId": "TB6FEZN2XCcWyoKqhwYD",
+          "category": "cables",
+          "name": "وصلة",
+          "buyPrice": 45
+        }
+      ],
+      "customerPhone": "01020817473",
+      "totalAmount": 70,
+      "cashier": "كاشير سنترال حلمي"
+    },
+    {
+      "customerName": "عبدالله",
+      "totalAmount": 70,
+      "subtotal": 70,
+      "change": 0,
+      "items": [
+        {
+          "productId": "TB6FEZN2XCcWyoKqhwYD",
+          "profit": 25,
+          "total": 70,
+          "price": 70,
+          "barcode": "st361",
+          "quantity": 1,
+          "name": "وصلة",
+          "category": "cables",
+          "buyPrice": 45
+        }
+      ],
+      "cashPaid": 70,
+      "discount": 0,
+      "customerPhone": "01020817473",
+      "invoiceNumber": "INV-1006",
+      "id": "VRcm43NBv6v3jn3qkIOW",
+      "cashier": "كاشير سنترال حلمي",
+      "timestamp": "2026-11-16T12:38:53.548Z"
+    },
+    {
+      "invoiceNumber": "INV-1005",
+      "change": 0,
+      "items": [
+        {
+          "barcode": "st361",
+          "profit": 25,
+          "name": "وصلة",
+          "price": 70,
+          "productId": "TB6FEZN2XCcWyoKqhwYD",
+          "buyPrice": 45,
+          "total": 70,
+          "category": "cables",
+          "quantity": 1
+        }
+      ],
+      "customerPhone": "01020817473",
+      "discount": 0,
+      "customerName": "عبدالله",
+      "totalAmount": 70,
+      "cashPaid": 70,
+      "id": "vduKWGoFcRrgjcjfZ2K0",
+      "timestamp": "2026-11-16T12:38:45.715Z",
+      "cashier": "كاشير سنترال حلمي",
+      "subtotal": 70
+    },
+    {
+      "cashPaid": 70,
+      "subtotal": 70,
+      "customerPhone": "01020817473",
+      "items": [
+        {
+          "productId": "TB6FEZN2XCcWyoKqhwYD",
+          "total": 70,
+          "barcode": "st361",
+          "name": "وصلة",
+          "price": 70,
+          "buyPrice": 45,
+          "profit": 25,
+          "quantity": 1,
+          "category": "cables"
+        }
+      ],
+      "invoiceNumber": "INV-1004",
+      "cashier": "كاشير سنترال حلمي",
+      "customerName": "عبدالله",
+      "id": "RnrcY13YBCQgvbzRrYaU",
+      "change": 0,
+      "timestamp": "2026-11-16T12:38:45.492Z",
+      "discount": 0,
+      "totalAmount": 70
+    },
+    {
+      "id": "AUPMu5RSUiAixfnhyCzr",
+      "timestamp": "2026-11-16T12:38:44.234Z",
+      "customerName": "عبدالله",
+      "discount": 0,
+      "change": 0,
+      "cashier": "كاشير سنترال حلمي",
+      "customerPhone": "01020817473",
+      "subtotal": 70,
+      "invoiceNumber": "INV-1003",
+      "items": [
+        {
+          "name": "وصلة",
+          "productId": "TB6FEZN2XCcWyoKqhwYD",
+          "total": 70,
+          "barcode": "st361",
+          "profit": 25,
+          "quantity": 1,
+          "category": "cables",
+          "price": 70,
+          "buyPrice": 45
+        }
+      ],
+      "totalAmount": 70,
+      "cashPaid": 70
+    }
+  ],
   "drawer": {
+    "openingCash": 0,
+    "shiftId": "#402",
+    "currentCash": 0,
     "history": [
+      {
+        "balanceAfter": 0,
+        "amount": 0,
+        "reason": "تحديد رصيد افتتاح الدرج",
+        "timestamp": "2026-11-23T15:36:53.786Z",
+        "type": "set_opening"
+      },
+      {
+        "balanceAfter": -180,
+        "reason": "إلغاء وحذف نهائي لفاتورة بيع INV-1011",
+        "amount": 180,
+        "type": "out",
+        "timestamp": "2026-11-23T15:36:11.470Z"
+      },
+      {
+        "reason": "تحديد رصيد افتتاح الدرج",
+        "timestamp": "2026-11-19T16:54:16.307Z",
+        "amount": 0,
+        "type": "set_opening",
+        "balanceAfter": 0
+      },
+      {
+        "balanceAfter": -2585736,
+        "timestamp": "2026-11-19T14:07:08.990Z",
+        "reason": "إلغاء وحذف نهائي لفاتورة بيع INV-1015",
+        "amount": 2585736,
+        "type": "out"
+      },
+      {
+        "timestamp": "2026-11-19T14:06:52.353Z",
+        "type": "set_opening",
+        "reason": "تحديد رصيد افتتاح الدرج",
+        "amount": 0,
+        "balanceAfter": 0
+      },
+      {
+        "type": "set_opening",
+        "reason": "تحديد رصيد افتتاح الدرج",
+        "timestamp": "2026-11-19T14:06:47.411Z",
+        "amount": 0,
+        "balanceAfter": 0
+      },
+      {
+        "type": "in",
+        "timestamp": "2026-11-19T14:05:00.344Z",
+        "balanceAfter": 2585736,
+        "amount": 2585736,
+        "reason": "فاتورة بيع INV-1015 - بيع مباشر بالكود (333) - شاحن"
+      },
       {
         "type": "out",
         "timestamp": "2026-11-18T18:12:45.701Z",
@@ -11,118 +324,115 @@
         "balanceAfter": 0
       },
       {
-        "balanceAfter": 1800,
-        "amount": 1800,
         "reason": "فاتورة بيع INV-1014",
+        "amount": 1800,
+        "timestamp": "2026-11-18T18:12:14.472Z",
         "type": "in",
-        "timestamp": "2026-11-18T18:12:14.472Z"
+        "balanceAfter": 1800
       },
       {
         "amount": 0,
-        "type": "set_opening",
         "reason": "تحديد رصيد افتتاح الدرج",
-        "balanceAfter": 0,
-        "timestamp": "2026-11-18T17:38:31.773Z"
-      },
-      {
-        "reason": "إلغاء وحذف نهائي لفاتورة بيع INV-1013",
-        "balanceAfter": -1500,
-        "amount": 1500,
-        "type": "out",
-        "timestamp": "2026-11-18T17:38:21.691Z"
-      },
-      {
-        "timestamp": "2026-11-18T17:38:04.244Z",
-        "amount": 0,
-        "reason": "تحديد رصيد افتتاح الدرج",
+        "timestamp": "2026-11-18T17:38:31.773Z",
         "type": "set_opening",
         "balanceAfter": 0
       },
       {
-        "type": "set_opening",
-        "amount": 1250,
-        "timestamp": "2026-11-18T17:14:06.872Z",
-        "balanceAfter": 1250,
-        "reason": "تحديد رصيد افتتاح الدرج"
-      },
-      {
-        "reason": "فاتورة بيع INV-1013 - بيع مباشر بالكود (555) - شاحن",
-        "balanceAfter": 1250,
-        "timestamp": "2026-11-18T16:15:43.176Z",
-        "type": "in",
+        "type": "out",
+        "balanceAfter": -1500,
+        "timestamp": "2026-11-18T17:38:21.691Z",
+        "reason": "إلغاء وحذف نهائي لفاتورة بيع INV-1013",
         "amount": 1500
       },
       {
-        "amount": 70,
-        "timestamp": "2026-11-18T16:12:39.483Z",
-        "balanceAfter": -250,
-        "reason": "إلغاء وحذف نهائي لفاتورة بيع INV-1010",
-        "type": "out"
-      },
-      {
-        "type": "out",
-        "reason": "إلغاء وحذف نهائي لفاتورة بيع INV-1011",
-        "amount": 180,
-        "timestamp": "2026-11-18T16:12:32.623Z",
-        "balanceAfter": -180
-      },
-      {
         "reason": "تحديد رصيد افتتاح الدرج",
         "amount": 0,
         "type": "set_opening",
-        "timestamp": "2026-11-18T16:12:23.623Z",
+        "timestamp": "2026-11-18T17:38:04.244Z",
         "balanceAfter": 0
       },
       {
-        "timestamp": "2026-11-18T14:33:58.516Z",
-        "balanceAfter": 0,
+        "balanceAfter": 1250,
+        "amount": 1250,
+        "reason": "تحديد رصيد افتتاح الدرج",
+        "type": "set_opening",
+        "timestamp": "2026-11-18T17:14:06.872Z"
+      },
+      {
+        "balanceAfter": 1250,
         "type": "in",
+        "timestamp": "2026-11-18T16:15:43.176Z",
+        "amount": 1500,
+        "reason": "فاتورة بيع INV-1013 - بيع مباشر بالكود (555) - شاحن"
+      },
+      {
+        "type": "out",
+        "balanceAfter": -250,
+        "timestamp": "2026-11-18T16:12:39.483Z",
+        "reason": "إلغاء وحذف نهائي لفاتورة بيع INV-1010",
+        "amount": 70
+      },
+      {
+        "reason": "إلغاء وحذف نهائي لفاتورة بيع INV-1011",
+        "amount": 180,
+        "balanceAfter": -180,
+        "type": "out",
+        "timestamp": "2026-11-18T16:12:32.623Z"
+      },
+      {
+        "balanceAfter": 0,
+        "reason": "تحديد رصيد افتتاح الدرج",
         "amount": 0,
-        "reason": "فاتورة بيع INV-1012"
+        "type": "set_opening",
+        "timestamp": "2026-11-18T16:12:23.623Z"
+      },
+      {
+        "type": "in",
+        "reason": "فاتورة بيع INV-1012",
+        "amount": 0,
+        "timestamp": "2026-11-18T14:33:58.516Z",
+        "balanceAfter": 0
       }
-    ],
-    "openingCash": 0,
-    "currentCash": 0,
-    "shiftId": "#402"
+    ]
   },
   "vodafoneLines": [
     {
       "id": "line_1",
-      "balance": 0,
+      "totalTransferredMonth": 0,
+      "phone": "",
+      "deviceName": "هاتف محمول خط 1",
+      "updatedAt": "2026-11-18T12:21:28.688Z",
+      "isActive": true,
+      "deviceStatus": "connected",
       "monthlyLimit": 100000,
       "lineNum": 1,
-      "phone": "",
-      "totalTransferredMonth": 0,
-      "deviceStatus": "connected",
-      "deviceName": "هاتف محمول خط 1",
-      "isActive": true,
-      "updatedAt": "2026-11-18T12:21:28.688Z"
+      "balance": 0
     },
     {
       "id": "line_2",
-      "isActive": true,
-      "totalTransferredMonth": 0,
-      "updatedAt": "2026-11-18T12:21:28.688Z",
-      "balance": 0,
       "lineNum": 2,
       "deviceName": "هاتف محمول خط 2",
-      "deviceStatus": "connected",
+      "balance": 0,
+      "isActive": true,
       "phone": "",
-      "monthlyLimit": 100000
+      "monthlyLimit": 100000,
+      "deviceStatus": "connected",
+      "updatedAt": "2026-11-18T12:21:28.688Z",
+      "totalTransferredMonth": 0
     },
     {
       "id": "line_3",
-      "deviceName": "هاتف محمول خط 3",
       "updatedAt": "2026-11-18T12:21:28.688Z",
       "balance": 0,
       "lineNum": 3,
-      "monthlyLimit": 100000,
       "isActive": true,
-      "deviceStatus": "connected",
+      "phone": "",
       "totalTransferredMonth": 0,
-      "phone": ""
+      "deviceName": "هاتف محمول خط 3",
+      "deviceStatus": "connected",
+      "monthlyLimit": 100000
     }
   ],
   "vodafoneTransactions": [],
-  "lastUpdated": "2026-11-19T13:52:46.151Z"
+  "lastUpdated": "2026-11-23T18:36:57.002Z"
 }

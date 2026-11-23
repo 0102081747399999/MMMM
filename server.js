@@ -165,7 +165,7 @@ const server = http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
     res.end(JSON.stringify({
       success: true,
-      shop: 'سنترال حلمي',
+      shop: 'ريد ماجيك',
       sms: receivedSmsQueue.slice(0, 50)
     }));
     return;
@@ -189,7 +189,7 @@ const server = http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
     res.end(JSON.stringify({
       success: true,
-      shop: 'سنترال حلمي',
+      shop: 'ريد ماجيك',
       data: localPosData
     }));
     return;
@@ -220,7 +220,7 @@ const server = http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
     res.end(JSON.stringify({
       success: true,
-      shop: 'سنترال حلمي',
+      shop: 'ريد ماجيك',
       port: PORT,
       ips,
       urls: ips.map(ip => `http://${ip}:${PORT}`)

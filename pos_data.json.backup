@@ -1,0 +1,230 @@
+{
+  "products": [
+    {
+      "storage": "128GB",
+      "imei": "333",
+      "subcategory": "",
+      "status": "available",
+      "notes": "",
+      "customerPhone": "",
+      "name": "شاحن",
+      "buyPrice": 4545,
+      "model": "",
+      "quantity": 66,
+      "id": "NIk2S6bOIaLaKRBZ1vvl",
+      "brand": "",
+      "lastRestockedAt": "2026-11-19T14:04:10.649Z",
+      "createdAt": "2026-11-19T14:04:10.649Z",
+      "color": "أسود",
+      "sellPrice": 646434,
+      "category": "spareparts",
+      "updatedAt": "2026-11-19T14:07:08.977Z",
+      "barcode": "333",
+      "linkedPhoneNumber": "",
+      "customerName": ""
+    },
+    {
+      "quantity": 66,
+      "name": "شاحن",
+      "customerPhone": "",
+      "color": "أسود",
+      "subcategory": "",
+      "brand": "",
+      "lastRestockedAt": "2026-11-19T14:04:10.622Z",
+      "category": "spareparts",
+      "barcode": "333",
+      "imei": "333",
+      "customerName": "",
+      "storage": "128GB",
+      "createdAt": "2026-11-19T14:04:10.622Z",
+      "sellPrice": 646434,
+      "linkedPhoneNumber": "",
+      "model": "",
+      "notes": "",
+      "id": "NWHD527fhjVs9r9hj2lF",
+      "updatedAt": "2026-11-19T14:04:10.622Z",
+      "buyPrice": 4545,
+      "status": "available"
+    }
+  ],
+  "salesInvoices": [
+    {
+      "change": 0,
+      "cashPaid": 2585736,
+      "customerPhone": "",
+      "totalAmount": 2585736,
+      "timestamp": "2026-11-19T14:05:00.344Z",
+      "items": [
+        {
+          "quantity": 4,
+          "profit": 2567556,
+          "total": 2585736,
+          "productId": "NIk2S6bOIaLaKRBZ1vvl",
+          "name": "شاحن",
+          "barcode": "333",
+          "category": "spareparts",
+          "price": 646434,
+          "buyPrice": 4545
+        }
+      ],
+      "discount": 0,
+      "id": "inv_1795097100346",
+      "invoiceNumber": "INV-1015",
+      "customerName": "عميل نقدي",
+      "subtotal": 2585736,
+      "cashier": "كاشير ريد ماجيك"
+    }
+  ],
+  "drawer": {
+    "openingCash": 0,
+    "history": [
+      {
+        "balanceAfter": -2585736,
+        "type": "out",
+        "amount": 2585736,
+        "timestamp": "2026-11-19T14:07:08.990Z",
+        "reason": "إلغاء وحذف نهائي لفاتورة بيع INV-1015"
+      },
+      {
+        "type": "set_opening",
+        "timestamp": "2026-11-19T14:06:52.353Z",
+        "amount": 0,
+        "reason": "تحديد رصيد افتتاح الدرج",
+        "balanceAfter": 0
+      },
+      {
+        "reason": "تحديد رصيد افتتاح الدرج",
+        "balanceAfter": 0,
+        "amount": 0,
+        "type": "set_opening",
+        "timestamp": "2026-11-19T14:06:47.411Z"
+      },
+      {
+        "balanceAfter": 2585736,
+        "amount": 2585736,
+        "timestamp": "2026-11-19T14:05:00.344Z",
+        "type": "in",
+        "reason": "فاتورة بيع INV-1015 - بيع مباشر بالكود (333) - شاحن"
+      },
+      {
+        "timestamp": "2026-11-18T18:12:45.701Z",
+        "amount": 1800,
+        "reason": "إلغاء وحذف نهائي لفاتورة بيع INV-1014",
+        "balanceAfter": 0,
+        "type": "out"
+      },
+      {
+        "timestamp": "2026-11-18T18:12:14.472Z",
+        "balanceAfter": 1800,
+        "reason": "فاتورة بيع INV-1014",
+        "type": "in",
+        "amount": 1800
+      },
+      {
+        "balanceAfter": 0,
+        "reason": "تحديد رصيد افتتاح الدرج",
+        "timestamp": "2026-11-18T17:38:31.773Z",
+        "amount": 0,
+        "type": "set_opening"
+      },
+      {
+        "balanceAfter": -1500,
+        "timestamp": "2026-11-18T17:38:21.691Z",
+        "reason": "إلغاء وحذف نهائي لفاتورة بيع INV-1013",
+        "type": "out",
+        "amount": 1500
+      },
+      {
+        "type": "set_opening",
+        "reason": "تحديد رصيد افتتاح الدرج",
+        "balanceAfter": 0,
+        "amount": 0,
+        "timestamp": "2026-11-18T17:38:04.244Z"
+      },
+      {
+        "reason": "تحديد رصيد افتتاح الدرج",
+        "balanceAfter": 1250,
+        "amount": 1250,
+        "timestamp": "2026-11-18T17:14:06.872Z",
+        "type": "set_opening"
+      },
+      {
+        "amount": 1500,
+        "reason": "فاتورة بيع INV-1013 - بيع مباشر بالكود (555) - شاحن",
+        "balanceAfter": 1250,
+        "timestamp": "2026-11-18T16:15:43.176Z",
+        "type": "in"
+      },
+      {
+        "amount": 70,
+        "reason": "إلغاء وحذف نهائي لفاتورة بيع INV-1010",
+        "type": "out",
+        "timestamp": "2026-11-18T16:12:39.483Z",
+        "balanceAfter": -250
+      },
+      {
+        "reason": "إلغاء وحذف نهائي لفاتورة بيع INV-1011",
+        "type": "out",
+        "amount": 180,
+        "timestamp": "2026-11-18T16:12:32.623Z",
+        "balanceAfter": -180
+      },
+      {
+        "balanceAfter": 0,
+        "type": "set_opening",
+        "timestamp": "2026-11-18T16:12:23.623Z",
+        "amount": 0,
+        "reason": "تحديد رصيد افتتاح الدرج"
+      },
+      {
+        "type": "in",
+        "reason": "فاتورة بيع INV-1012",
+        "amount": 0,
+        "timestamp": "2026-11-18T14:33:58.516Z",
+        "balanceAfter": 0
+      }
+    ],
+    "currentCash": -2585736,
+    "shiftId": "#402"
+  },
+  "vodafoneLines": [
+    {
+      "id": "line_1",
+      "balance": 0,
+      "monthlyLimit": 100000,
+      "lineNum": 1,
+      "phone": "",
+      "totalTransferredMonth": 0,
+      "deviceStatus": "connected",
+      "deviceName": "هاتف محمول خط 1",
+      "isActive": true,
+      "updatedAt": "2026-11-18T12:21:28.688Z"
+    },
+    {
+      "id": "line_2",
+      "isActive": true,
+      "totalTransferredMonth": 0,
+      "updatedAt": "2026-11-18T12:21:28.688Z",
+      "balance": 0,
+      "lineNum": 2,
+      "deviceName": "هاتف محمول خط 2",
+      "deviceStatus": "connected",
+      "phone": "",
+      "monthlyLimit": 100000
+    },
+    {
+      "id": "line_3",
+      "deviceName": "هاتف محمول خط 3",
+      "updatedAt": "2026-11-18T12:21:28.688Z",
+      "balance": 0,
+      "lineNum": 3,
+      "monthlyLimit": 100000,
+      "isActive": true,
+      "deviceStatus": "connected",
+      "totalTransferredMonth": 0,
+      "phone": ""
+    }
+  ],
+  "vodafoneTransactions": [],
+  "lastUpdated": "2026-11-19T14:10:07.122Z"
+}

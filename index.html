@@ -153,6 +153,76 @@
     table thead tr:first-child th:last-child {
       border-top-left-radius: 24px !important;
     }
+  
+    /* ==========================================================
+       TEXT STABILIZATION & ANTI-FLICKER SYSTEM ("تثبيت الكلام ومنع الرعشة")
+       ========================================================== */
+    html, body, * {
+      -webkit-font-smoothing: antialiased !important;
+      -moz-osx-font-smoothing: grayscale !important;
+      text-rendering: optimizeLegibility !important;
+    }
+
+    /* Fixed background container on GPU layer (Prevents scroll repaint jitter) */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -20;
+      pointer-events: none;
+      background-color: #070913;
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(225, 29, 72, 0.16) 0%, transparent 55%),
+        radial-gradient(circle at 100% 40%, rgba(56, 189, 248, 0.06) 0%, transparent 45%),
+        radial-gradient(circle at 0% 70%, rgba(245, 158, 11, 0.05) 0%, transparent 45%),
+        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 100% 100%, 44px 44px, 44px 44px;
+      transform: translate3d(0, 0, 0);
+      backface-visibility: hidden;
+      will-change: transform;
+    }
+
+    /* Disable body fixed attachment which repaints viewport on scroll */
+    body {
+      background-attachment: scroll !important;
+      background-image: none !important;
+      background-color: #070913 !important;
+      color: var(--text-main) !important;
+      overflow-x: hidden;
+    }
+
+    /* Prevent text shaking / blurring during hover and scale transitions */
+    .group, .group:hover, button, a, [class*="hover:"], .dark-glass-card, .bg-slate-900, .bg-slate-900\/90 {
+      backface-visibility: hidden !important;
+      -webkit-backface-visibility: hidden !important;
+      transform: translateZ(0);
+    }
+
+    /* Arabic typography: normalize letter-spacing to prevent broken ligatures and character vibration */
+    body, h1, h2, h3, h4, h5, h6, p, span, a, button, input, label, select, textarea {
+      letter-spacing: normal !important;
+    }
+
+    /* Stabilize pulse animations to avoid subpixel glyph jumping */
+    @keyframes smoothPulse {
+      0%, 100% { opacity: 1; transform: translateZ(0); }
+      50% { opacity: 0.65; transform: translateZ(0); }
+    }
+    .animate-pulse {
+      animation: smoothPulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite !important;
+      will-change: opacity;
+      transform: translateZ(0) !important;
+    }
+
+    /* Stable tabular numerals: prevent number width wobbling */
+    .font-numeric-table {
+      font-family: var(--font-table) !important;
+      font-variant-numeric: tabular-nums !important;
+      font-feature-settings: "tnum" 1 !important;
+      letter-spacing: 0 !important;
+    }
+
   </style>
 </head>
 <body class="bg-background font-body-md text-on-surface antialiased selection:bg-rose-600 selection:text-white pb-16 lg:pb-0">
@@ -252,9 +322,9 @@
           <span>مخزن الوصلات والكابلات</span>
         </a>
 
-        <a href="javascript:void(0)" data-path="speakers-sound" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-300 hover:bg-navy-card hover:text-rose-400 transition-colors text-xs font-bold">
-          <span class="material-symbols-outlined text-lg text-slate-400">speaker</span>
-          <span>مخزن الصبات والمكبرات</span>
+        <a href="javascript:void(0)" data-path="screens-inventory" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-300 hover:bg-navy-card hover:text-rose-400 transition-colors text-xs font-bold">
+          <span class="material-symbols-outlined text-lg text-rose-400">fit_screen</span>
+          <span>قسم الشاشات والاسكرينات</span>
         </a>
 
         <a href="javascript:void(0)" data-path="phones-sales-inventory" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-300 hover:bg-navy-card hover:text-rose-400 transition-colors text-xs font-bold">
@@ -487,7 +557,7 @@
                   autocomplete="off"
                   spellcheck="false"
                   placeholder="اكتب الكود هنا... (مثال: 777)" 
-                  style="color: #fde047 !important; font-weight: 900 !important; font-size: 1.25rem !important; caret-color: #fde047; letter-spacing: 0.05em;"
+                  style="color: #fde047 !important; font-weight: 900 !important; font-size: 1.25rem !important; caret-color: #fde047; letter-spacing: normal;"
                   class="w-full h-11 bg-slate-950 border-2 border-amber-500/90 focus:border-amber-300 rounded-xl pr-12 pl-10 text-center sm:text-right font-numeric-table font-black shadow-inner shadow-black/80 focus:outline-none focus:ring-2 focus:ring-amber-400/30 transition-all text-amber-300 placeholder:text-slate-600 placeholder:text-sm placeholder:font-normal"
                 />
                 <button 
@@ -588,7 +658,7 @@
                   ⚡ درج نقدية تلقائي
                 </span>
                 <span class="text-slate-400 text-[11px] hidden md:inline">
-                  (شواحن • وصلات • سماعات • صبات • تليفونات • جرابات • حمايات • إكسسوارات • مخزن يدوي)
+                  (شواحن • وصلات • سماعات • شاشات • تليفونات • جرابات • حمايات • إكسسوارات • مخزن يدوي)
                 </span>
               </div>
             </div>
@@ -783,10 +853,10 @@
               <span class="font-bold text-xs text-white">السماعات</span>
               <span id="dash-cat-count-headphones" class="font-numeric-table font-bold text-[11px] text-rose-300">0 صنف</span>
             </button>
-            <button onclick="window.navigateTo('speakers-sound')" class="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 flex flex-col items-center gap-1 text-center transition-all cursor-pointer">
-              <span class="material-symbols-outlined text-purple-400 text-xl">speaker</span>
-              <span class="font-bold text-xs text-white">الصبات والمكبرات</span>
-              <span id="dash-cat-count-speakers" class="font-numeric-table font-bold text-[11px] text-purple-300">0 صنف</span>
+            <button onclick="window.navigateTo('screens-inventory')" class="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 flex flex-col items-center gap-1 text-center transition-all cursor-pointer">
+              <span class="material-symbols-outlined text-purple-400 text-xl">fit_screen</span>
+              <span class="font-bold text-xs text-white">قسم الشاشات</span>
+              <span id="dash-cat-count-screens" class="font-numeric-table font-bold text-[11px] text-purple-300">0 صنف</span>
             </button>
             <button onclick="window.navigateTo('phones-sales-inventory')" class="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 flex flex-col items-center gap-1 text-center transition-all cursor-pointer">
               <span class="material-symbols-outlined text-emerald-400 text-xl">smartphone</span>
@@ -1766,10 +1836,10 @@
             </div>
             <div>
               <div class="flex items-center gap-2 flex-wrap">
-                <h2 class="font-bold text-on-surface text-lg">مخزن الاسكرينات ولصقات الحماية</h2>
+                <h2 class="font-bold text-on-surface text-lg">قسم الشاشات والاسكرينات</h2>
                 <span id="screens-count-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30">0 أصناف</span>
               </div>
-              <p class="text-xs text-on-surface-variant mt-0.5">اسكرينات زجاج، سيراميك مط، حماية عدسات كاميرا، حماية ظهر - إدارة المخزون</p>
+              <p class="text-xs text-on-surface-variant mt-0.5">شاشات الهواتف الأصلية وبدائل الشاشات، اسكرينات زجاج وسيراميك مط، ولصقات حماية - إدارة المخزون</p>
             </div>
           </div>
           <button onclick="window.openAddProductModal('screens')" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-bold text-xs shadow-md shadow-rose-950/40 flex items-center gap-2 transition-all cursor-pointer">
@@ -2603,7 +2673,7 @@
                 <option value="chargers">الشواحن</option>
                 <option value="cables">الوصلات</option>
                 <option value="headphones">السماعات</option>
-                <option value="speakers">الصبات</option>
+                <option value="screens">قسم الشاشات والاسكرينات</option>
                 <option value="covers">الجرابات</option>
                 <option value="accessories">الإكسسوارات</option>
                 <option value="manual">المخزن اليدوي</option>
@@ -3110,7 +3180,7 @@
               <option value="headphones">قسم السماعات والصوتيات</option>
               <option value="chargers">قسم الشواحن</option>
               <option value="cables">قسم الوصلات والكابلات</option>
-              <option value="speakers">قسم الصبات والمكبرات</option>
+              <option value="screens">قسم الشاشات والاسكرينات</option>
               <option value="phones">قسم التليفونات (IMEI)</option>
               <option value="covers">قسم الجرابات والحمايات</option>
               <option value="screens">مخزن الاسكرينات ولصقات الحماية</option>
@@ -4054,6 +4124,86 @@ const Store = {
   isFirebaseConnected: false
 };
 
+// ==============================================================
+// RED MAGIC - CLEAN SLATE SYSTEM (تصفير المخزن وبدء العمل على نظيف تماماً)
+// ==============================================================
+const REDMAGIC_CLEAN_SLATE_KEY = 'redmagic_clean_slate_init_v2';
+try {
+  // Always blacklist test IDs so they never return from cloud or storage
+  blacklistProduct('NIk2S6bOIaLaKRBZ1vvl');
+  
+  // Permanent Blacklist of all legacy test/mock product IDs
+  [
+    '7GD1O0dn3kOjhsWO6SoQ',
+    '7pK8gJnvWrA62vyLDRdb',
+    '9m9MTEni7j6wGywxkaVM',
+    'TB6FEZN2XCcWyoKqhwYD',
+    'gbXcQuv0EnAPLajWIkvI',
+    'nMc8qVcjcQXXXFj6aUP5',
+    'pYiwELVjNmE2d2O5Zdqy',
+    'sBk8ScX9i3Avr0ZTAVqG',
+    'tkPGafWOUt1hlh3GPy34',
+    'NIk2S6bOIaLaKRBZ1vvl',
+    'NWHD527fhjVs9r9hj2lF'
+  ].forEach(id => blacklistProduct(id));
+
+  blacklistSale('inv_1795097100346');
+  blacklistSale('INV-1015');
+
+  if (!localStorage.getItem(REDMAGIC_CLEAN_SLATE_KEY)) {
+    Store.products = [];
+    setLocal(STORAGE_KEYS.PRODUCTS, []);
+    Store.salesInvoices = [];
+    setLocal(STORAGE_KEYS.SALES, []);
+    Store.drawer = {
+      shiftId: '#101',
+      openingCash: 0,
+      currentCash: 0,
+      history: []
+    };
+    setLocal(STORAGE_KEYS.DRAWER, Store.drawer);
+    localStorage.setItem(REDMAGIC_CLEAN_SLATE_KEY, 'true');
+    syncToLocalServer();
+    console.log('✨ [ريد ماجيك] تم تصفير المخزن والمبيعات بنجاح لبدء العمل على نظيف!');
+  }
+} catch (e) {
+  console.warn('Clean slate init note:', e);
+}
+
+// Global user-callable clean warehouse function
+window.clearWarehouseCleanSlate = async function(force = false) {
+  if (!force && !confirm("هل أنت متأكد من تفريغ المخزن بالكامل والبدء من جديد على نظيف؟\n(سيتم مسح جميع الأصناف لبدء الجرد الجديد على نظيف)")) {
+    return;
+  }
+  // Blacklist all current products
+  (Store.products || []).forEach(p => {
+    if (p && p.id) {
+      blacklistProduct(p.id);
+      if (db) deleteDoc(doc(db, "products", p.id)).catch(console.warn);
+    }
+  });
+
+  // Query Firestore and delete all docs
+  if (db) {
+    try {
+      const snap = await getDocs(collection(db, "products"));
+      snap.forEach(d => {
+        blacklistProduct(d.id);
+        deleteDoc(doc(db, "products", d.id)).catch(console.warn);
+      });
+    } catch(e) {}
+  }
+
+  Store.products = [];
+  setLocal(STORAGE_KEYS.PRODUCTS, []);
+  syncToLocalServer();
+  notifySubscribers("products_updated", []);
+  updateGlobalHeaderBadges();
+  renderDashboard();
+  showToast("تم تصفير المخزن بالكامل بنجاح — جاهز للعمل على نظيف!", "success");
+};
+
+
 // Event emitter for UI updates
 const subscribers = new Set();
 function subscribeToStore(callback) {
@@ -4122,7 +4272,14 @@ async function loadFromLocalServer() {
 
     let prodsChanged = false;
     const blacklist = getDeletedBlacklist();
-    if (Array.isArray(json.data.products) && json.data.products.length > 0) {
+    if (Array.isArray(json.data.products)) {
+      if (json.data.products.length === 0 && localStorage.getItem('redmagic_clean_slate_init_v2')) {
+        if ((Store.products || []).length > 0) {
+          Store.products = [];
+          setLocal(STORAGE_KEYS.PRODUCTS, []);
+          prodsChanged = true;
+        }
+      } else if (json.data.products.length > 0) {
       const curProds = Store.products || [];
       json.data.products.forEach(p => {
         if (!p || !p.id || blacklist.has(p.id)) return;
@@ -4138,6 +4295,7 @@ async function loadFromLocalServer() {
         notifySubscribers("products_updated", curProds);
       }
     }
+  }
 
     let salesChanged = false;
     const salesBlacklist = getDeletedSalesBlacklist();
@@ -4283,6 +4441,20 @@ async function initRealtimeSync() {
     // 1. Sync Products (Filtered with permanent deleted blacklist & Local merge protection)
     const productsCol = collection(db, "products");
     onSnapshot(productsCol, (snapshot) => {
+      // First-time clean purge of legacy test data from remote cloud
+      if (!localStorage.getItem('redmagic_clean_warehouse_v3')) {
+        snapshot.forEach(docSnap => {
+          blacklistProduct(docSnap.id);
+          deleteDoc(doc(db, "products", docSnap.id)).catch(console.warn);
+        });
+        localStorage.setItem('redmagic_clean_warehouse_v3', 'true');
+        Store.products = [];
+        setLocal(STORAGE_KEYS.PRODUCTS, []);
+        syncToLocalServer();
+        notifySubscribers("products_updated", []);
+        updateGlobalHeaderBadges();
+        return;
+      }
       Store.isFirebaseConnected = true;
       updateConnectionUI(true, "متصل بالسيرفر (Firebase Live)");
       
@@ -6477,7 +6649,7 @@ function updateDashboardWarehouseCounts() {
   const countChargers = prods.filter(p => p.category === 'chargers').reduce((a, p) => a + (p.quantity || 0), 0);
   const countCables = prods.filter(p => p.category === 'cables').reduce((a, p) => a + (p.quantity || 0), 0);
   const countHeadphones = prods.filter(p => p.category === 'headphones').reduce((a, p) => a + (p.quantity || 0), 0);
-  const countSpeakers = prods.filter(p => p.category === 'speakers').reduce((a, p) => a + (p.quantity || 0), 0);
+  const countScreens = prods.filter(p => p.category === 'screens').reduce((a, p) => a + (p.quantity || 0), 0);
   const countPhones = prods.filter(p => p.category === 'phones' && p.status !== 'sold').length;
   const countCovers = prods.filter(p => p.category === 'covers').reduce((a, p) => a + (p.quantity || 0), 0);
   const countAccessories = prods.filter(p => p.category === 'accessories').reduce((a, p) => a + (p.quantity || 0), 0);
@@ -6486,7 +6658,7 @@ function updateDashboardWarehouseCounts() {
   setElemText('dash-cat-count-chargers', `${countChargers} صنف`);
   setElemText('dash-cat-count-cables', `${countCables} صنف`);
   setElemText('dash-cat-count-headphones', `${countHeadphones} صنف`);
-  setElemText('dash-cat-count-speakers', `${countSpeakers} صنف`);
+  setElemText('dash-cat-count-screens', `${countScreens} صنف`);
   setElemText('dash-cat-count-phones', `${countPhones} هاتف`);
   setElemText('dash-cat-count-covers', `${countCovers} صنف`);
   setElemText('dash-cat-count-accessories', `${countAccessories} صنف`);
@@ -10350,6 +10522,61 @@ window.quickRestockFromShortageModal = async function(prodId, delta) {
 };
 
 // =========================================================================
+
+// =========================================================================
+// CATEGORY SALES HELPER
+// =========================================================================
+function getCategorySales(catKey) {
+  const result = [];
+  (Store.salesInvoices || []).forEach(inv => {
+    if (!inv || !Array.isArray(inv.items)) return;
+    inv.items.forEach(item => {
+      if (!catKey || item.category === catKey) {
+        result.push({
+          ...item,
+          invoiceNumber: inv.invoiceNumber,
+          timestamp: inv.timestamp,
+          customerName: inv.customerName,
+          cashier: inv.cashier
+        });
+      }
+    });
+  });
+  return result;
+}
+window.getCategorySales = getCategorySales;
+
+// =========================================================================
+// RENDER SALES TABLE HTML FOR WAREHOUSES
+// =========================================================================
+function renderSalesTableHTML(salesList, catName = 'هذا القسم') {
+  if (!salesList || salesList.length === 0) {
+    return `
+      <tr>
+        <td colspan="7" class="py-8 text-center text-slate-500">
+          <div class="flex flex-col items-center justify-center gap-1">
+            <span class="material-symbols-outlined text-2xl opacity-40">receipt_long</span>
+            <span class="text-xs">لا توجد مبيعات مسجلة في ${catName} حتى الآن</span>
+          </div>
+        </td>
+      </tr>
+    `;
+  }
+  return salesList.map(item => `
+    <tr class="hover:bg-slate-800/40 transition-colors">
+      <td class="py-2 px-3 font-numeric-table font-bold text-rose-400">${item.invoiceNumber || '-'}</td>
+      <td class="py-2 px-3 text-slate-400 text-[11px] font-numeric-table">${item.timestamp ? new Date(item.timestamp).toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'}) : '-'}</td>
+      <td class="py-2 px-3 font-bold text-white">${item.name || item.model || 'صنف'}</td>
+      <td class="py-2 px-3 text-center font-numeric-table font-bold text-amber-300">${item.quantity || 1}</td>
+      <td class="py-2 px-3 font-numeric-table font-bold text-emerald-400">${formatMoney(item.price || item.sellPrice || 0)} ج.م</td>
+      <td class="py-2 px-3 font-numeric-table font-bold text-emerald-300">+${formatMoney(item.profit || 0)} ج.م</td>
+      <td class="py-2 px-3 text-slate-300 text-[11px]">${item.customerName || 'عميل نقدي'}</td>
+    </tr>
+  `).join('');
+}
+window.renderSalesTableHTML = renderSalesTableHTML;
+
+
 // WAREHOUSES RENDERER HELPER FOR NEW WAREHOUSES
 // =========================================================================
 
@@ -10413,7 +10640,7 @@ function renderWarehouseHelper(catKey, catTitle, activeTabKey, searchInputId, tb
           <td class="py-3 px-4 font-numeric-table font-bold text-emerald-400 text-sm">${formatMoney(item.sellPrice)} ج.م</td>
           <td class="py-3 px-4">
             <div class="flex items-center gap-1.5 font-numeric-table font-bold text-sm">
-              <span class="${(item.quantity || 0) <= 2 ? 'text-rose-400 font-black animate-pulse' : 'text-on-surface'}">${item.quantity || 0}</span>
+              <span class="${(item.quantity || 0) <= 2 ? 'text-rose-400 font-black' : 'text-on-surface'}">${item.quantity || 0}</span>
               <button onclick="window.quickAdjustStock('${item.id}', 1)" class="w-6 h-6 rounded bg-surface-container hover:bg-surface-container-high text-xs font-bold cursor-pointer" title="زيادة 1">+</button>
               <button onclick="window.quickAdjustStock('${item.id}', -1)" class="w-6 h-6 rounded bg-surface-container hover:bg-surface-container-high text-xs font-bold cursor-pointer" title="خصم 1">-</button>
             </div>
