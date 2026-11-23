@@ -458,8 +458,15 @@
         </button>
       </div>
 
-      <!-- Left: Cash Drawer, Low Stock, Cloud Sync & POS (Compact & Sleek) -->
+      <!-- Left: Cash Drawer, Inventory Cost, Low Stock, Cloud Sync & POS (Compact & Sleek) -->
       <div class="flex items-center gap-1.5 shrink-0">
+        <!-- إجمالي رأس مال البضاعة الداخلة في الهيدر -->
+        <button onclick="window.openInventoryValuationModal()" class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/50 hover:bg-amber-500/25 text-xs transition-all cursor-pointer shadow-sm group" title="إجمالي رأس مال وتكلفة البضاعة الداخلة بالسستم (انقر لعرض الكشف التفصيلي)">
+          <span class="material-symbols-outlined text-amber-400 text-xs group-hover:scale-110 transition-transform">inventory_2</span>
+          <span class="text-slate-300 text-[11px] font-bold hidden md:inline">رأس مال البضاعة:</span>
+          <span id="header-inventory-cost" class="font-numeric-table font-black text-amber-300 text-xs">0.00 ج.م</span>
+        </button>
+
         <button onclick="window.openOpeningCashModal()" class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-low border border-slate-700/50 hover:border-emerald-500/50 text-xs transition-all cursor-pointer" title="درج النقدية">
           <span class="material-symbols-outlined text-emerald-400 text-xs">payments</span>
           <span id="header-cash-balance" class="font-numeric-table font-bold text-emerald-400 text-xs">0.00 ج.م</span>
@@ -677,36 +684,115 @@
           </div>
         </div>
 
-        <!-- Dashboard KPI Summary Cards -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
-          <!-- إجمالي أصناف المخازن -->
-          <div onclick="window.navigateTo('manual-inventory')" class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 shadow-lg flex flex-col gap-1 backdrop-blur-md hover:border-slate-700 transition-all text-white cursor-pointer group">
-            <span class="text-xs text-on-surface-variant font-bold flex items-center gap-1.5">
-              <span class="material-symbols-outlined text-rose-500 text-base group-hover:scale-110 transition-transform">inventory_2</span>
-              <span>إجمالي أصناف المخازن</span>
-            </span>
-            <span id="stat-dash-stock-total" class="font-numeric-table font-bold text-xl text-on-surface">0</span>
-            <span class="text-[11px] text-on-surface-variant">جميع الأقسام مسجلة</span>
+        <!-- ==============================================================
+             INVENTORY VALUATION & GOODS FINANCIAL HIGHLIGHT BAR
+             (إجمالي مبلغ وتكلفة البضاعة الداخلة ورأس المال والقيمة البيعية)
+             ============================================================== -->
+        <div class="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 rounded-2xl p-4 border-2 border-amber-500/50 shadow-xl backdrop-blur-md flex flex-col gap-3 text-white">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-slate-800/80 pb-2.5">
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center border border-amber-500/40 shadow-inner">
+                <span class="material-symbols-outlined text-2xl">account_balance</span>
+              </div>
+              <div>
+                <h3 class="font-bold text-sm sm:text-base text-white flex items-center gap-2">
+                  <span>إجمالي رأس مال وقيمة البضاعة المسجلة بالسستم</span>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold">محدث لحظياً</span>
+                </h3>
+                <p class="text-xs text-slate-400">حساب فوري وتلقائي لإجمالي المبالغ والتكلفة لجميع الأصناف والكميات المدخلة في المخازن</p>
+              </div>
+            </div>
+            <button onclick="window.openInventoryValuationModal()" class="px-3.5 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/50 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm active:scale-95">
+              <span class="material-symbols-outlined text-sm">receipt_long</span>
+              <span>📋 كشف تفصيلي برأس مال وأرباح المخازن</span>
+            </button>
           </div>
 
-          <!-- إجمالي المبيعات -->
-          <div onclick="window.navigateTo('all-sales-master')" class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 shadow-lg flex flex-col gap-1 backdrop-blur-md hover:border-slate-700 transition-all text-white cursor-pointer group">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <!-- 1. إجمالي مبلغ البضاعة الداخلة (سعر الشراء / رأس المال) -->
+            <div onclick="window.openInventoryValuationModal()" class="p-3.5 rounded-xl bg-gradient-to-br from-amber-500/15 via-slate-900 to-slate-900 border-2 border-amber-500/50 shadow-md flex flex-col gap-1 cursor-pointer hover:border-amber-400 transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-amber-300 font-bold flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-amber-400 text-base group-hover:scale-110 transition-transform">attach_money</span>
+                  <span>إجمالي مبلغ البضاعة (سعر الشراء)</span>
+                </span>
+                <span class="text-[10px] bg-amber-500/25 text-amber-300 px-2 py-0.5 rounded font-black border border-amber-500/40">رأس المال الفعلي</span>
+              </div>
+              <span id="stat-dash-stock-cost" class="font-numeric-table font-black text-2xl text-amber-300 tracking-tight">0.00 ج.م</span>
+              <span class="text-[11px] text-slate-400 font-medium">إجمالي التكلفة المدفوعة في البضاعة الموجودة بالمخازن</span>
+            </div>
+
+            <!-- 2. إجمالي قيمة البضاعة بسعر البيع -->
+            <div onclick="window.openInventoryValuationModal()" class="p-3.5 rounded-xl bg-gradient-to-br from-emerald-500/15 via-slate-900 to-slate-900 border border-emerald-500/40 shadow-md flex flex-col gap-1 cursor-pointer hover:border-emerald-400 transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-emerald-300 font-bold flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-emerald-400 text-base group-hover:scale-110 transition-transform">sell</span>
+                  <span>إجمالي قيمة البضاعة (بسعر البيع)</span>
+                </span>
+                <span class="text-[10px] bg-emerald-500/25 text-emerald-300 px-2 py-0.5 rounded font-black border border-emerald-500/40">القيمة السوقية</span>
+              </div>
+              <span id="stat-dash-stock-retail" class="font-numeric-table font-black text-2xl text-emerald-400 tracking-tight">0.00 ج.م</span>
+              <span id="stat-dash-stock-profit-val" class="text-[11px] text-emerald-300 font-bold">أرباح متوقعة: +0.00 ج.م</span>
+            </div>
+
+            <!-- 3. إجمالي كمية البضاعة المتوفرة -->
+            <div onclick="window.navigateTo('manual-inventory')" class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 shadow-md flex flex-col gap-1 cursor-pointer hover:border-slate-700 transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-sky-300 font-bold flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-sky-400 text-base group-hover:scale-110 transition-transform">inventory_2</span>
+                  <span>إجمالي كمية البضاعة</span>
+                </span>
+                <span id="stat-dash-stock-types-badge" class="text-[10px] bg-sky-500/20 text-sky-300 px-2 py-0.5 rounded font-bold border border-sky-500/30">0 أصناف</span>
+              </div>
+              <span id="stat-dash-stock-pieces" class="font-numeric-table font-black text-2xl text-white tracking-tight">0 قطعة</span>
+              <span class="text-[11px] text-slate-400 font-medium">إجمالي القطع في جميع المخازن والأقسام</span>
+            </div>
+
+            <!-- 4. المبيعات المحققة -->
+            <div onclick="window.navigateTo('all-sales-master')" class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 shadow-md flex flex-col gap-1 cursor-pointer hover:border-slate-700 transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-rose-300 font-bold flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-rose-400 text-base group-hover:scale-110 transition-transform">point_of_sale</span>
+                  <span>المبيعات المحققة</span>
+                </span>
+                <span id="stat-dash-sales-count-badge" class="text-[10px] bg-rose-500/20 text-rose-300 px-2 py-0.5 rounded font-bold border border-rose-500/30">0 بيع</span>
+              </div>
+              <span id="stat-dash-sales" class="font-numeric-table font-black text-2xl text-rose-400 tracking-tight">0.00 ج.م</span>
+              <span id="stat-dash-sales-count" class="text-[11px] text-slate-300 font-bold">0 عمليات بيع مسجلة</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dashboard Secondary Operation Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
+          <!-- درج النقدية -->
+          <div onclick="window.openOpeningCashModal()" class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 shadow-lg flex flex-col gap-1 backdrop-blur-md hover:border-emerald-500/50 transition-all text-white cursor-pointer group">
             <span class="text-xs text-on-surface-variant font-bold flex items-center gap-1.5">
-              <span class="material-symbols-outlined text-emerald-500 text-base group-hover:scale-110 transition-transform">point_of_sale</span>
-              <span>إجمالي المبيعات</span>
+              <span class="material-symbols-outlined text-emerald-400 text-base group-hover:scale-110 transition-transform">payments</span>
+              <span>درج النقدية الفعلي</span>
             </span>
-            <span id="stat-dash-sales" class="font-numeric-table font-bold text-xl text-emerald-400">0.00 ج.م</span>
-            <span id="stat-dash-sales-count" class="text-[11px] text-on-surface-variant">0 عمليات بيع</span>
+            <span id="dash-drawer-cash-val" class="font-numeric-table font-bold text-xl text-emerald-400">0.00 ج.م</span>
+            <span class="text-[11px] text-on-surface-variant">الكاش الفعلي في الدرج</span>
           </div>
 
           <!-- أرصدة الـ 3 خطوط -->
-          <div onclick="window.navigateTo('vodafone-cash-wallets')" class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 shadow-lg flex flex-col gap-1 backdrop-blur-md hover:border-slate-700 transition-all text-white cursor-pointer group">
+          <div onclick="window.navigateTo('vodafone-cash-wallets')" class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 shadow-lg flex flex-col gap-1 backdrop-blur-md hover:border-sky-500/50 transition-all text-white cursor-pointer group">
             <span class="text-xs text-on-surface-variant font-bold flex items-center gap-1.5">
               <span class="material-symbols-outlined text-sky-500 text-base group-hover:scale-110 transition-transform">account_balance_wallet</span>
               <span>أرصدة الـ 3 خطوط (كاش)</span>
             </span>
             <span id="stat-dash-voda-total" class="font-numeric-table font-bold text-xl text-sky-400">0.00 ج.م</span>
             <span id="stat-dash-voda-sub" class="text-[11px] text-sky-300 font-bold">3 خطوط فودافون كاش</span>
+          </div>
+
+          <!-- إجمالي أصناف المخازن المسجلة -->
+          <div onclick="window.openInventoryValuationModal()" class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 shadow-lg flex flex-col gap-1 backdrop-blur-md hover:border-amber-500/50 transition-all text-white cursor-pointer group">
+            <span class="text-xs text-on-surface-variant font-bold flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-amber-400 text-base group-hover:scale-110 transition-transform">inventory_2</span>
+              <span>إجمالي أصناف المخازن</span>
+            </span>
+            <span id="stat-dash-stock-total" class="font-numeric-table font-bold text-xl text-amber-300">0</span>
+            <span class="text-[11px] text-on-surface-variant">جميع الأقسام مسجلة</span>
           </div>
 
           <!-- تنبيه النواقص -->
@@ -1403,6 +1489,45 @@
 
         <!-- INVENTORY CONTAINER (مخزن فقط) -->
         <div id="chargers-inventory-container" class="flex flex-col gap-4">
+          <!-- Chargers Financial & Stock KPIs -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 shadow flex flex-col gap-1">
+              <span class="text-xs text-amber-300 font-bold flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-amber-400 text-base">attach_money</span>
+                <span>رأس مال الشواحن (الشراء)</span>
+              </span>
+              <span id="chargers-stat-cost" class="font-numeric-table font-black text-xl text-amber-400">0.00 ج.م</span>
+              <span class="text-[10px] text-slate-400">إجمالي ما تم دفعه في الشواحن</span>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 shadow flex flex-col gap-1">
+              <span class="text-xs text-emerald-300 font-bold flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-emerald-400 text-base">sell</span>
+                <span>إجمالي القيمة بسعر البيع</span>
+              </span>
+              <span id="chargers-stat-retail" class="font-numeric-table font-black text-xl text-emerald-400">0.00 ج.م</span>
+              <span id="chargers-stat-profit" class="text-[10px] text-emerald-300 font-bold">أرباح متوقعة: 0.00 ج.م</span>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 shadow flex flex-col gap-1">
+              <span class="text-xs text-sky-300 font-bold flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sky-400 text-base">inventory_2</span>
+                <span>إجمالي عدد القطع</span>
+              </span>
+              <span id="chargers-stat-qty" class="font-numeric-table font-black text-xl text-white">0</span>
+              <span class="text-[10px] text-slate-400">شواحن متوفرة بالمخزن</span>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 shadow flex flex-col gap-1">
+              <span class="text-xs text-rose-300 font-bold flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-rose-400 text-base">receipt_long</span>
+                <span>المبيعات المحققة</span>
+              </span>
+              <span id="chargers-sales-total-val" class="font-numeric-table font-black text-xl text-rose-400">0.00 ج.م</span>
+              <span id="chargers-sales-count-badge" class="text-[10px] text-slate-400">0 مبيعات</span>
+            </div>
+          </div>
+
           <!-- Category Filter Pills -->
           <div class="flex items-center gap-2 flex-wrap">
             <button onclick="window.setChargerTab('all')" data-charger-tab="all" class="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-primary text-white shadow-sm ring-1 ring-rose-500/40 cursor-pointer">الكل</button>
@@ -1428,9 +1553,12 @@
                     <th class="py-3 px-4 font-bold">الكود / الباركود</th>
                     <th class="py-3 px-4 font-bold">اسم المنتج والموديل</th>
                     <th class="py-3 px-4 font-bold">التصنيف</th>
-                    <th class="py-3 px-4 font-bold">سعر البيع</th>
+                    <th class="py-3 px-4 font-bold text-amber-300">سعر الشراء (للقطعة)</th>
+                    <th class="py-3 px-4 font-bold text-amber-400 bg-amber-500/10">إجمالي مبلغ الشراء</th>
+                    <th class="py-3 px-4 font-bold text-emerald-300">سعر البيع</th>
+                    <th class="py-3 px-4 font-bold text-emerald-400 bg-emerald-500/10">إجمالي مبلغ البيع</th>
                     <th class="py-3 px-4 font-bold">الكمية بالمخزن</th>
-                    <th class="py-3 px-4 font-bold">تاريخ التوريد / الإضافة</th>
+                    <th class="py-3 px-4 font-bold">تاريخ التوريد</th>
                     <th class="py-3 px-4 font-bold text-center">إجراءات سريعة</th>
                   </tr>
                 </thead>
@@ -1469,6 +1597,45 @@
 
         <!-- INVENTORY CONTAINER (مخزن فقط) -->
         <div id="cables-inventory-container" class="flex flex-col gap-4">
+          <!-- Cables Financial & Stock KPIs -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 shadow flex flex-col gap-1">
+              <span class="text-xs text-amber-300 font-bold flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-amber-400 text-base">attach_money</span>
+                <span>رأس مال الوصلات (الشراء)</span>
+              </span>
+              <span id="cables-stat-cost" class="font-numeric-table font-black text-xl text-amber-400">0.00 ج.م</span>
+              <span class="text-[10px] text-slate-400">إجمالي ما تم دفعه في الوصلات</span>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 shadow flex flex-col gap-1">
+              <span class="text-xs text-emerald-300 font-bold flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-emerald-400 text-base">sell</span>
+                <span>إجمالي القيمة بسعر البيع</span>
+              </span>
+              <span id="cables-stat-retail" class="font-numeric-table font-black text-xl text-emerald-400">0.00 ج.م</span>
+              <span id="cables-stat-profit" class="text-[10px] text-emerald-300 font-bold">أرباح متوقعة: 0.00 ج.م</span>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 shadow flex flex-col gap-1">
+              <span class="text-xs text-sky-300 font-bold flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sky-400 text-base">inventory_2</span>
+                <span>إجمالي عدد القطع</span>
+              </span>
+              <span id="cables-stat-qty" class="font-numeric-table font-black text-xl text-white">0</span>
+              <span class="text-[10px] text-slate-400">قطع وصلات متوفرة بالمخزن</span>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 shadow flex flex-col gap-1">
+              <span class="text-xs text-rose-300 font-bold flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-rose-400 text-base">receipt_long</span>
+                <span>المبيعات المحققة</span>
+              </span>
+              <span id="cables-sales-total-val" class="font-numeric-table font-black text-xl text-rose-400">0.00 ج.م</span>
+              <span id="cables-sales-count-badge" class="text-[10px] text-slate-400">0 مبيعات</span>
+            </div>
+          </div>
+
           <div class="flex items-center gap-2 flex-wrap">
             <button onclick="window.setCablesTab('all')" data-cables-tab="all" class="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-primary text-white shadow-sm ring-1 ring-rose-500/40 cursor-pointer">الكل</button>
             <button onclick="window.setCablesTab('typec')" data-cables-tab="typec" class="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-surface-container-low hover:bg-surface-container text-on-surface border border-outline-variant/30 cursor-pointer">Type-C عريضة</button>
@@ -1492,9 +1659,12 @@
                     <th class="py-3 px-4 font-bold">الكود / الباركود</th>
                     <th class="py-3 px-4 font-bold">اسم الوصلة والموديل</th>
                     <th class="py-3 px-4 font-bold">النوع</th>
-                    <th class="py-3 px-4 font-bold">سعر البيع</th>
+                    <th class="py-3 px-4 font-bold text-amber-300">سعر الشراء (للقطعة)</th>
+                    <th class="py-3 px-4 font-bold text-amber-400 bg-amber-500/10">إجمالي مبلغ الشراء</th>
+                    <th class="py-3 px-4 font-bold text-emerald-300">سعر البيع</th>
+                    <th class="py-3 px-4 font-bold text-emerald-400 bg-emerald-500/10">إجمالي مبلغ البيع</th>
                     <th class="py-3 px-4 font-bold">الكمية بالمخزن</th>
-                    <th class="py-3 px-4 font-bold">تاريخ التوريد / الإضافة</th>
+                    <th class="py-3 px-4 font-bold">تاريخ التوريد</th>
                     <th class="py-3 px-4 font-bold text-center">إجراءات سريعة</th>
                   </tr>
                 </thead>
@@ -2467,8 +2637,8 @@
         <!-- MANUAL INVENTORY CONTAINER (المخزون اليدوي فقط) -->
         <div id="manual-inventory-container" class="flex flex-col gap-6">
         <!-- KPI Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-lg flex flex-col gap-1 backdrop-blur-md hover:border-slate-700 transition-all text-white">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-lg flex flex-col gap-1 backdrop-blur-md hover:border-slate-700 transition-all text-white">
             <span class="text-xs text-on-surface-variant font-bold flex items-center gap-1.5">
               <span class="material-symbols-outlined text-amber-500 text-base">format_list_bulleted</span>
               <span>عدد الأصناف اليدوية</span>
@@ -2477,22 +2647,31 @@
             <span class="text-[11px] text-on-surface-variant">أصناف مسجلة يدوياً</span>
           </div>
 
-          <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-lg flex flex-col gap-1 backdrop-blur-md hover:border-slate-700 transition-all text-white">
+          <div class="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-lg flex flex-col gap-1 backdrop-blur-md hover:border-slate-700 transition-all text-white">
             <span class="text-xs text-on-surface-variant font-bold flex items-center gap-1.5">
-              <span class="material-symbols-outlined text-emerald-500 text-base">inventory</span>
-              <span>إجمالي عدد القطع بالمخزن</span>
+              <span class="material-symbols-outlined text-sky-400 text-base">inventory</span>
+              <span>إجمالي عدد القطع</span>
             </span>
-            <span id="manual-stat-qty" class="font-numeric-table font-bold text-2xl text-emerald-500">0</span>
-            <span class="text-[11px] text-on-surface-variant">قطع متوفرة حالياً</span>
+            <span id="manual-stat-qty" class="font-numeric-table font-bold text-2xl text-white">0</span>
+            <span class="text-[11px] text-on-surface-variant">قطع متوفرة بالمخزن</span>
           </div>
 
-          <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-lg flex flex-col gap-1 backdrop-blur-md hover:border-slate-700 transition-all text-white">
-            <span class="text-xs text-on-surface-variant font-bold flex items-center gap-1.5">
-              <span class="material-symbols-outlined text-rose-500 text-base">warning</span>
-              <span>أصناف نفدت الكمية (0)</span>
+          <div class="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-lg flex flex-col gap-1 backdrop-blur-md hover:border-amber-500/50 transition-all text-white">
+            <span class="text-xs text-amber-300 font-bold flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-amber-400 text-base">attach_money</span>
+              <span>رأس مال المخزن اليدوي</span>
             </span>
-            <span id="manual-stat-depleted" class="font-numeric-table font-bold text-2xl text-rose-500">0</span>
-            <span class="text-[11px] text-rose-400 font-bold">تحتاج توريد فوري</span>
+            <span id="manual-stat-cost" class="font-numeric-table font-black text-2xl text-amber-400">0.00 ج.م</span>
+            <span class="text-[11px] text-slate-400 font-medium">سعر الشراء الإجمالي</span>
+          </div>
+
+          <div class="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-lg flex flex-col gap-1 backdrop-blur-md hover:border-emerald-500/50 transition-all text-white">
+            <span class="text-xs text-emerald-300 font-bold flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-emerald-400 text-base">sell</span>
+              <span>إجمالي قيمة البيع</span>
+            </span>
+            <span id="manual-stat-total-retail" class="font-numeric-table font-black text-2xl text-emerald-400">0.00 ج.م</span>
+            <span id="manual-stat-profit" class="text-[11px] text-emerald-300 font-bold">أرباح متوقعة</span>
           </div>
         </div>
 
@@ -2537,9 +2716,9 @@
               <input type="text" id="manual-entry-notes" placeholder="أي تفاصيل أو رقم..." class="w-full bg-surface-container-low text-on-surface rounded-xl px-3 py-2 text-xs border border-outline-variant/40 focus:outline-none"/>
             </div>
 
-            <div class="hidden">
-              <label class="block text-[11px] font-bold text-on-surface-variant mb-1">سعر الجملة / الشراء</label>
-              <input type="number" id="manual-entry-buy-price" step="any" placeholder="0.00" value="0" class="w-full bg-surface-container-low text-on-surface font-numeric-table rounded-xl px-3 py-2 text-xs border border-outline-variant/40 focus:outline-none"/>
+            <div>
+              <label class="block text-[11px] font-bold text-amber-300 mb-1">سعر الشراء / الجملة</label>
+              <input type="number" id="manual-entry-buy-price" step="any" placeholder="0.00" value="0" class="w-full bg-surface-container-low text-amber-300 font-numeric-table font-bold rounded-xl px-3 py-2 text-xs border border-amber-500/40 focus:outline-none"/>
             </div>
 
             <div>
@@ -3737,6 +3916,93 @@
       </div>
       <div id="theme-options-container" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-80 overflow-y-auto pr-1">
         <!-- Populated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL: INVENTORY VALUATION & TOTAL GOODS REPORT
+       (كشف تقييم وجرد رأس مال بضاعة المحل والمخازن)
+       ========================================== -->
+  <div id="modal-inventory-valuation" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-3 sm:p-5">
+    <div class="bg-slate-900 text-slate-100 rounded-3xl shadow-2xl w-full max-w-4xl overflow-hidden border border-slate-800 animate-in zoom-in-95 duration-150 flex flex-col max-h-[92vh]">
+      <!-- Header -->
+      <div class="p-4 sm:p-5 bg-navy-dark text-white border-b border-slate-800 flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center shadow-md">
+            <span class="material-symbols-outlined text-2xl">account_balance</span>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="font-bold text-white text-base sm:text-lg">كشف تقييم وجرد رأس مال بضاعة المحل</h3>
+              <span class="px-2 py-0.5 rounded-full text-[10px] bg-amber-500/20 text-amber-300 font-bold border border-amber-500/40">حسابات التكلفة والبيع</span>
+            </div>
+            <span class="text-xs text-slate-400">إجمالي المبالغ المدفوعة في البضاعة الداخلة، قيمتها بسعر البيع، وصافي الأرباح المتوقعة</span>
+          </div>
+        </div>
+        <button onclick="window.closeInventoryValuationModal()" class="text-slate-400 hover:text-white p-1 rounded-lg cursor-pointer">
+          <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+      </div>
+
+      <!-- Financial KPI Summary Ribbon inside Modal -->
+      <div class="p-4 bg-slate-950/80 border-b border-slate-800/80 grid grid-cols-2 sm:grid-cols-4 gap-3 shrink-0">
+        <div class="p-3 rounded-xl bg-slate-900 border border-amber-500/30 flex flex-col gap-0.5">
+          <span class="text-[11px] font-bold text-amber-300">إجمالي رأس المال (سعر الشراء)</span>
+          <span id="modal-val-total-cost" class="font-numeric-table font-black text-xl text-amber-400">0.00 ج.م</span>
+          <span class="text-[10px] text-slate-400">المبلغ المدفوع في البضاعة</span>
+        </div>
+
+        <div class="p-3 rounded-xl bg-slate-900 border border-emerald-500/30 flex flex-col gap-0.5">
+          <span class="text-[11px] font-bold text-emerald-300">إجمالي القيمة بسعر البيع</span>
+          <span id="modal-val-total-retail" class="font-numeric-table font-black text-xl text-emerald-400">0.00 ج.م</span>
+          <span class="text-[10px] text-slate-400">القيمة السوقية للبضاعة</span>
+        </div>
+
+        <div class="p-3 rounded-xl bg-slate-900 border border-teal-500/30 flex flex-col gap-0.5">
+          <span class="text-[11px] font-bold text-teal-300">صافي الأرباح المتوقعة</span>
+          <span id="modal-val-total-profit" class="font-numeric-table font-black text-xl text-teal-400">+0.00 ج.م</span>
+          <span id="modal-val-margin-pct" class="text-[10px] text-teal-300 font-bold">هامش ربح تقديري</span>
+        </div>
+
+        <div class="p-3 rounded-xl bg-slate-900 border border-sky-500/30 flex flex-col gap-0.5">
+          <span class="text-[11px] font-bold text-sky-300">إجمالي عدد القطع والأصناف</span>
+          <span id="modal-val-total-pieces" class="font-numeric-table font-black text-xl text-white">0 قطعة</span>
+          <span id="modal-val-total-types" class="text-[10px] text-slate-400">0 صنف مسجل</span>
+        </div>
+      </div>
+
+      <!-- Categories Detailed Breakdown Table -->
+      <div class="p-4 overflow-y-auto flex-1 max-h-[55vh]">
+        <div class="overflow-x-auto rounded-xl border border-slate-800">
+          <table class="w-full text-right text-xs">
+            <thead class="bg-slate-950 text-slate-300 border-b border-slate-800 font-bold">
+              <tr>
+                <th class="py-3 px-3">القسم / المخزن</th>
+                <th class="py-3 px-3 text-center">عدد الأصناف</th>
+                <th class="py-3 px-3 text-center">إجمالي القطع</th>
+                <th class="py-3 px-3 text-amber-300">رأس المال (سعر الشراء)</th>
+                <th class="py-3 px-3 text-emerald-300">القيمة بسعر البيع</th>
+                <th class="py-3 px-3 text-teal-300">الربح المتوقع</th>
+                <th class="py-3 px-3 text-center">إجراء</th>
+              </tr>
+            </thead>
+            <tbody id="modal-inventory-valuation-tbody" class="divide-y divide-slate-800/60 bg-slate-900/60 font-numeric-table">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Footer Actions -->
+      <div class="p-4 bg-slate-950/80 border-t border-slate-800 flex items-center justify-between gap-2 shrink-0 flex-wrap">
+        <div class="flex items-center gap-2">
+          <button onclick="window.printInventoryValuationReport()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/40 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer">
+            <span class="material-symbols-outlined text-base">print</span>
+            <span>طباعة تقرير رأس مال البضاعة</span>
+          </button>
+        </div>
+        <button onclick="window.closeInventoryValuationModal()" class="px-5 py-2 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-bold text-xs cursor-pointer transition-all">إغلاق النافذة</button>
       </div>
     </div>
   </div>
@@ -6553,13 +6819,38 @@ function updateGlobalHeaderBadges() {
   setElemText('sidebar-drawer-val', `${formatMoney(drawerCash)} ج.م`);
   setElemText('dash-drawer-cash-val', `${formatMoney(drawerCash)} ج.م`);
 
-  // Calculate totals
-  const totalProds = (Store.products || []).reduce((acc, p) => acc + (parseInt(p.quantity, 10) || 0), 0);
+  // Calculate totals & Inventory Valuation
+  const prods = (Store.products || []);
+  const totalProds = prods.reduce((acc, p) => acc + (parseInt(p.quantity, 10) || 0), 0);
   const totalSalesVal = (Store.salesInvoices || []).reduce((acc, s) => acc + (parseFloat(s.totalAmount) || 0), 0);
   const lowStockProducts = getLowStockProducts();
   const lowStockCount = lowStockProducts.length;
 
   const totalVodaBalance = (Store.vodafoneLines || []).slice(0, 3).reduce((acc, l) => acc + (parseFloat(l.balance) || 0), 0);
+
+  // حساب رأس مال البضاعة الداخلة وتكلفتها وقيمتها البيعية لحظياً
+  const totalInventoryCost = prods.reduce((acc, p) => {
+    const qty = Math.max(0, parseInt(p.quantity, 10) || 0);
+    const buy = parseFloat(p.buyPrice) || 0;
+    return acc + (qty * buy);
+  }, 0);
+
+  const totalInventoryRetail = prods.reduce((acc, p) => {
+    const qty = Math.max(0, parseInt(p.quantity, 10) || 0);
+    const sell = parseFloat(p.sellPrice) || 0;
+    return acc + (qty * sell);
+  }, 0);
+
+  const expectedProfit = totalInventoryRetail - totalInventoryCost;
+
+  // Header & Main Dashboard Goods Valuation Elements
+  setElemText('header-inventory-cost', `${formatMoney(totalInventoryCost)} ج.م`);
+  setElemText('stat-dash-stock-cost', `${formatMoney(totalInventoryCost)} ج.م`);
+  setElemText('stat-dash-stock-retail', `${formatMoney(totalInventoryRetail)} ج.م`);
+  setElemText('stat-dash-stock-profit-val', `أرباح متوقعة: +${formatMoney(expectedProfit)} ج.م`);
+  setElemText('stat-dash-stock-pieces', `${totalProds.toLocaleString('ar-EG')} قطعة`);
+  setElemText('stat-dash-stock-types-badge', `${prods.length} أصناف`);
+  setElemText('stat-dash-sales-count-badge', `${Store.salesInvoices.length} بيع`);
 
   setElemText('stat-dash-stock-total', totalProds);
   setElemText('stat-dash-sales', `${formatMoney(totalSalesVal)} ج.م`);
@@ -6813,26 +7104,37 @@ function renderDashboardShortages() {
   }
 }
 
-// Update Warehouse Counts on Dashboard
+// Update Warehouse Counts and Total Cost on Dashboard
 function updateDashboardWarehouseCounts() {
   const prods = Store.products || [];
-  const countManual = prods.filter(p => p.category === 'manual').reduce((a, p) => a + (p.quantity || 0), 0);
-  const countChargers = prods.filter(p => p.category === 'chargers').reduce((a, p) => a + (p.quantity || 0), 0);
-  const countCables = prods.filter(p => p.category === 'cables').reduce((a, p) => a + (p.quantity || 0), 0);
-  const countHeadphones = prods.filter(p => p.category === 'headphones').reduce((a, p) => a + (p.quantity || 0), 0);
-  const countScreens = prods.filter(p => p.category === 'screens').reduce((a, p) => a + (p.quantity || 0), 0);
-  const countPhones = prods.filter(p => p.category === 'phones' && p.status !== 'sold').length;
-  const countCovers = prods.filter(p => p.category === 'covers').reduce((a, p) => a + (p.quantity || 0), 0);
-  const countAccessories = prods.filter(p => p.category === 'accessories').reduce((a, p) => a + (p.quantity || 0), 0);
 
-  setElemText('dash-cat-count-manual', `${countManual} صنف`);
-  setElemText('dash-cat-count-chargers', `${countChargers} صنف`);
-  setElemText('dash-cat-count-cables', `${countCables} صنف`);
-  setElemText('dash-cat-count-headphones', `${countHeadphones} صنف`);
-  setElemText('dash-cat-count-screens', `${countScreens} صنف`);
-  setElemText('dash-cat-count-phones', `${countPhones} هاتف`);
-  setElemText('dash-cat-count-covers', `${countCovers} صنف`);
-  setElemText('dash-cat-count-accessories', `${countAccessories} صنف`);
+  const getCatStats = (cat) => {
+    const items = prods.filter(p => p.category === cat);
+    const qty = items.reduce((a, p) => a + (parseInt(p.quantity, 10) || 0), 0);
+    const cost = items.reduce((a, p) => a + ((parseFloat(p.buyPrice) || 0) * (parseInt(p.quantity, 10) || 0)), 0);
+    return { qty, cost, count: items.length };
+  };
+
+  const manualStats = getCatStats('manual');
+  const chargersStats = getCatStats('chargers');
+  const cablesStats = getCatStats('cables');
+  const headphonesStats = getCatStats('headphones');
+  const screensStats = getCatStats('screens');
+  const coversStats = getCatStats('covers');
+  const accessoriesStats = getCatStats('accessories');
+
+  const phoneItems = prods.filter(p => p.category === 'phones' && p.status !== 'sold');
+  const phoneCount = phoneItems.length;
+  const phoneCost = phoneItems.reduce((a, p) => a + (parseFloat(p.buyPrice) || 0), 0);
+
+  setElemText('dash-cat-count-manual', `${manualStats.qty} قطعة • ${formatMoney(manualStats.cost)} ج.م`);
+  setElemText('dash-cat-count-chargers', `${chargersStats.qty} قطعة • ${formatMoney(chargersStats.cost)} ج.م`);
+  setElemText('dash-cat-count-cables', `${cablesStats.qty} قطعة • ${formatMoney(cablesStats.cost)} ج.م`);
+  setElemText('dash-cat-count-headphones', `${headphonesStats.qty} قطعة • ${formatMoney(headphonesStats.cost)} ج.م`);
+  setElemText('dash-cat-count-screens', `${screensStats.qty} قطعة • ${formatMoney(screensStats.cost)} ج.م`);
+  setElemText('dash-cat-count-phones', `${phoneCount} هاتف • ${formatMoney(phoneCost)} ج.م`);
+  setElemText('dash-cat-count-covers', `${coversStats.qty} قطعة • ${formatMoney(coversStats.cost)} ج.م`);
+  setElemText('dash-cat-count-accessories', `${accessoriesStats.qty} قطعة • ${formatMoney(accessoriesStats.cost)} ج.م`);
 }
 
 // Vodafone Quick Deposit/Withdraw
@@ -7543,10 +7845,12 @@ function renderChargersPage() {
   const totalProfitVal = sales.reduce((acc, s) => acc + (s.profit || 0), 0);
 
   setElemText('chargers-stat-qty', totalQty);
-  setElemText('chargers-stat-cost', formatMoney(costVal));
-  setElemText('chargers-stat-retail', formatMoney(retailVal));
-  setElemText('chargers-stat-profit', `أرباح تقديرية: ${formatMoney(retailVal - costVal)} ج.م`);
+  setElemText('chargers-stat-cost', `${formatMoney(costVal)} ج.م`);
+  setElemText('chargers-stat-retail', `${formatMoney(retailVal)} ج.م`);
+  setElemText('chargers-stat-profit', `أرباح تقديرية: +${formatMoney(retailVal - costVal)} ج.م`);
   setElemText('chargers-count-badge', `${allChargers.length} أصناف`);
+  setElemText('chargers-sales-total-val', `${formatMoney(totalSalesVal)} ج.م`);
+  setElemText('chargers-sales-count-badge', `${sales.length} مبيعات`);
 
   // Warehouse only: No sales badges
 
@@ -7576,25 +7880,29 @@ function renderChargersPage() {
     } else {
       tbody.innerHTML = filtered.map(item => `
         <tr class="border-b border-surface-container-low hover:bg-surface-container-high transition-colors text-xs">
-          <td class="py-3 px-4 font-numeric-table font-bold text-secondary text-sm">
-            <span class="cursor-pointer hover:underline" onclick="window.openSmartCodeActionModal('${item.id}')">${item.barcode || 'بدون كود'}</span>
+          <td class="py-3 px-4 font-numeric-table font-bold text-amber-300 text-sm">
+            <span class="cursor-pointer hover:underline bg-amber-500/10 px-2 py-0.5 rounded-lg border border-amber-500/30" onclick="window.openSmartCodeActionModal('${item.id}')">${item.barcode || 'بدون كود'}</span>
           </td>
           <td class="py-3 px-4 font-bold text-on-surface text-sm">${item.name}</td>
           <td class="py-3 px-4"><span class="px-2 py-0.5 rounded-lg text-xs bg-surface-container text-on-surface-variant">${getChargerSubcategoryLabel(item.subcategory)}</span></td>
-          <td class="py-3 px-4 font-numeric-table font-bold text-emerald-400">${formatMoney(item.sellPrice)} ج.م</td>
+          <td class="py-3 px-4 font-numeric-table font-bold text-slate-300">${formatMoney(item.buyPrice || 0)} ج.م</td>
+          <td class="py-3 px-4 font-numeric-table font-black text-amber-400 text-sm bg-amber-500/10">${formatMoney((item.buyPrice || 0) * (item.quantity || 0))} ج.م</td>
+          <td class="py-3 px-4 font-numeric-table font-bold text-emerald-400">${formatMoney(item.sellPrice || 0)} ج.م</td>
+          <td class="py-3 px-4 font-numeric-table font-black text-emerald-400 text-sm bg-emerald-500/10">${formatMoney((item.sellPrice || 0) * (item.quantity || 0))} ج.م</td>
           <td class="py-3 px-4">
             <div class="flex items-center gap-1.5 font-numeric-table font-bold text-sm">
-              <span class="${item.quantity <= 2 ? 'text-rose-400' : 'text-on-surface'}">${item.quantity}</span>
-              <button onclick="window.quickAdjustStock('${item.id}', 1)" class="w-6 h-6 rounded bg-surface-container hover:bg-surface-container-high text-xs font-bold">+</button>
-              <button onclick="window.quickAdjustStock('${item.id}', -1)" class="w-6 h-6 rounded bg-surface-container hover:bg-surface-container-high text-xs font-bold">-</button>
+              <span class="${item.quantity <= 2 ? 'text-rose-400 font-black' : 'text-on-surface'}">${item.quantity}</span>
+              <button onclick="window.quickAdjustStock('${item.id}', 1)" class="w-6 h-6 rounded bg-surface-container hover:bg-surface-container-high text-xs font-bold cursor-pointer">+</button>
+              <button onclick="window.quickAdjustStock('${item.id}', -1)" class="w-6 h-6 rounded bg-surface-container hover:bg-surface-container-high text-xs font-bold cursor-pointer">-</button>
             </div>
           </td>
           <td class="py-3 px-4 font-numeric-table text-on-surface-variant text-[11px]">${formatDateArabic(item.lastRestockedAt || item.createdAt)}</td>
           <td class="py-3 px-4 text-center">
             <div class="flex items-center justify-center gap-1.5">
-              <button onclick="window.openSmartCodeActionModal('${item.id}', 'restock')" class="px-3 py-1 rounded-lg bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600 hover:text-white font-bold transition-colors" title="توريد مخزون">+ توريد</button>
-              <button onclick="window.openEditProductModal('${item.id}')" class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant"><span class="material-symbols-outlined text-[17px]">edit</span></button>
-              <button onclick="window.confirmDeleteProduct('${item.id}')" class="p-1.5 rounded-lg hover:bg-rose-500/20 text-on-surface-variant hover:text-rose-400"><span class="material-symbols-outlined text-[17px]">delete</span></button>
+              <button onclick="window.openSmartCodeActionModal('${item.id}', 'sale')" class="px-2.5 py-1 rounded-lg bg-rose-600/20 text-rose-400 hover:bg-rose-600 hover:text-white font-bold transition-colors cursor-pointer text-xs" title="بيع فوري">💰 بيع</button>
+              <button onclick="window.openSmartCodeActionModal('${item.id}', 'restock')" class="px-2.5 py-1 rounded-lg bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600 hover:text-white font-bold transition-colors cursor-pointer text-xs" title="توريد مخزون">+ توريد</button>
+              <button onclick="window.openEditProductModal('${item.id}')" class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant cursor-pointer" title="تعديل"><span class="material-symbols-outlined text-[17px]">edit</span></button>
+              <button onclick="window.confirmDeleteProduct('${item.id}')" class="p-1.5 rounded-lg hover:bg-rose-500/20 text-on-surface-variant hover:text-rose-400 cursor-pointer" title="حذف"><span class="material-symbols-outlined text-[17px]">delete</span></button>
             </div>
           </td>
         </tr>
@@ -7644,8 +7952,9 @@ function renderCablesPage() {
   const totalProfitVal = sales.reduce((acc, s) => acc + (s.profit || 0), 0);
 
   setElemText('cables-stat-qty', totalQty);
-  setElemText('cables-stat-cost', formatMoney(costVal));
-  setElemText('cables-stat-retail', formatMoney(retailVal));
+  setElemText('cables-stat-cost', `${formatMoney(costVal)} ج.م`);
+  setElemText('cables-stat-retail', `${formatMoney(retailVal)} ج.م`);
+  setElemText('cables-stat-profit', `أرباح متوقعة: +${formatMoney(retailVal - costVal)} ج.م`);
   setElemText('cables-count-badge', `${allCables.length} أصناف`);
 
   setElemText('cables-sales-total-val', `${formatMoney(totalSalesVal)} ج.م`);
@@ -7676,25 +7985,29 @@ function renderCablesPage() {
     } else {
       tbody.innerHTML = filtered.map(item => `
         <tr class="border-b border-surface-container-low hover:bg-surface-container-high transition-colors text-xs">
-          <td class="py-3 px-4 font-numeric-table font-bold text-secondary text-sm">
-            <span class="cursor-pointer hover:underline" onclick="window.openSmartCodeActionModal('${item.id}')">${item.barcode || 'بدون كود'}</span>
+          <td class="py-3 px-4 font-numeric-table font-bold text-amber-300 text-sm">
+            <span class="cursor-pointer hover:underline bg-amber-500/10 px-2 py-0.5 rounded-lg border border-amber-500/30" onclick="window.openSmartCodeActionModal('${item.id}')">${item.barcode || 'بدون كود'}</span>
           </td>
           <td class="py-3 px-4 font-bold text-on-surface text-sm">${item.name}</td>
           <td class="py-3 px-4"><span class="px-2 py-0.5 rounded-lg text-xs bg-surface-container text-on-surface-variant">${getCableSubcategoryLabel(item.subcategory)}</span></td>
-          <td class="py-3 px-4 font-numeric-table font-bold text-emerald-400">${formatMoney(item.sellPrice)} ج.م</td>
+          <td class="py-3 px-4 font-numeric-table font-bold text-slate-300">${formatMoney(item.buyPrice || 0)} ج.م</td>
+          <td class="py-3 px-4 font-numeric-table font-black text-amber-400 text-sm bg-amber-500/10">${formatMoney((item.buyPrice || 0) * (item.quantity || 0))} ج.م</td>
+          <td class="py-3 px-4 font-numeric-table font-bold text-emerald-400">${formatMoney(item.sellPrice || 0)} ج.م</td>
+          <td class="py-3 px-4 font-numeric-table font-black text-emerald-400 text-sm bg-emerald-500/10">${formatMoney((item.sellPrice || 0) * (item.quantity || 0))} ج.م</td>
           <td class="py-3 px-4">
             <div class="flex items-center gap-1.5 font-numeric-table font-bold text-sm">
-              <span class="${item.quantity <= 2 ? 'text-rose-400' : 'text-on-surface'}">${item.quantity}</span>
-              <button onclick="window.quickAdjustStock('${item.id}', 1)" class="w-6 h-6 rounded bg-surface-container hover:bg-surface-container-high text-xs font-bold">+</button>
-              <button onclick="window.quickAdjustStock('${item.id}', -1)" class="w-6 h-6 rounded bg-surface-container hover:bg-surface-container-high text-xs font-bold">-</button>
+              <span class="${item.quantity <= 2 ? 'text-rose-400 font-black' : 'text-on-surface'}">${item.quantity}</span>
+              <button onclick="window.quickAdjustStock('${item.id}', 1)" class="w-6 h-6 rounded bg-surface-container hover:bg-surface-container-high text-xs font-bold cursor-pointer">+</button>
+              <button onclick="window.quickAdjustStock('${item.id}', -1)" class="w-6 h-6 rounded bg-surface-container hover:bg-surface-container-high text-xs font-bold cursor-pointer">-</button>
             </div>
           </td>
           <td class="py-3 px-4 font-numeric-table text-on-surface-variant text-[11px]">${formatDateArabic(item.lastRestockedAt || item.createdAt)}</td>
           <td class="py-3 px-4 text-center">
             <div class="flex items-center justify-center gap-1.5">
-              <button onclick="window.openSmartCodeActionModal('${item.id}', 'restock')" class="px-2.5 py-1 rounded-lg bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600 hover:text-white font-bold transition-colors">+ توريد</button>
-              <button onclick="window.openEditProductModal('${item.id}')" class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant"><span class="material-symbols-outlined text-[17px]">edit</span></button>
-              <button onclick="window.confirmDeleteProduct('${item.id}')" class="p-1.5 rounded-lg hover:bg-rose-500/20 text-on-surface-variant hover:text-rose-400"><span class="material-symbols-outlined text-[17px]">delete</span></button>
+              <button onclick="window.openSmartCodeActionModal('${item.id}', 'sale')" class="px-2.5 py-1 rounded-lg bg-rose-600/20 text-rose-400 hover:bg-rose-600 hover:text-white font-bold transition-colors cursor-pointer text-xs" title="بيع فوري">💰 بيع</button>
+              <button onclick="window.openSmartCodeActionModal('${item.id}', 'restock')" class="px-2.5 py-1 rounded-lg bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600 hover:text-white font-bold transition-colors cursor-pointer text-xs" title="توريد مخزون">+ توريد</button>
+              <button onclick="window.openEditProductModal('${item.id}')" class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant cursor-pointer" title="تعديل"><span class="material-symbols-outlined text-[17px]">edit</span></button>
+              <button onclick="window.confirmDeleteProduct('${item.id}')" class="p-1.5 rounded-lg hover:bg-rose-500/20 text-on-surface-variant hover:text-rose-400 cursor-pointer" title="حذف"><span class="material-symbols-outlined text-[17px]">delete</span></button>
             </div>
           </td>
         </tr>
@@ -10538,6 +10851,205 @@ export function getLowStockProducts() {
   }).sort((a, b) => (a.quantity || 0) - (b.quantity || 0));
 }
 
+// ==========================================
+// INVENTORY VALUATION & GOODS FINANCIAL AUDIT
+// (كشف تقييم وجرد رأس مال بضاعة المحل والمخازن)
+// ==========================================
+
+const WAREHOUSE_CAT_DEFS = [
+  { key: 'cables', name: 'الكابلات والوصلات', icon: 'cable', path: 'cables-inventory' },
+  { key: 'chargers', name: 'الشواحن ورؤوس الشحن', icon: 'power', path: 'chargers-inventory' },
+  { key: 'headphones', name: 'السماعات والصوتيات', icon: 'headphones', path: 'headphones-audio' },
+  { key: 'phones', name: 'الهواتف المحمولة (IMEI)', icon: 'smartphone', path: 'phones-sales-inventory' },
+  { key: 'screens', name: 'قسم الشاشات', icon: 'fit_screen', path: 'screens-inventory' },
+  { key: 'covers', name: 'الجرابات والحمايات', icon: 'shield', path: 'covers-inventory' },
+  { key: 'accessories', name: 'إكسسوارات عامة', icon: 'devices_other', path: 'accessories-inventory' },
+  { key: 'manual', name: 'المخزن اليدوي (أصناف حرة)', icon: 'edit_note', path: 'manual-inventory' },
+  { key: 'smartwatches', name: 'الساعات الذكية', icon: 'watch', path: 'smartwatches-inventory' },
+  { key: 'powerbanks', name: 'الباور بانك', icon: 'battery_charging_full', path: 'powerbanks-inventory' },
+  { key: 'storage', name: 'الفلاشات والميموري', icon: 'sd_card', path: 'storage-inventory' },
+  { key: 'spareparts', name: 'قطع الغيار والصيانة', icon: 'build', path: 'spareparts-inventory' },
+  { key: 'speakers', name: 'الصبات ومكبرات الصوت', icon: 'speaker', path: 'speakers-sound' }
+];
+
+window.openInventoryValuationModal = function() {
+  renderInventoryValuationModalContent();
+  const modal = document.getElementById('modal-inventory-valuation');
+  if (modal) {
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+  }
+};
+
+window.closeInventoryValuationModal = function() {
+  const modal = document.getElementById('modal-inventory-valuation');
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+};
+
+function renderInventoryValuationModalContent() {
+  const prods = Store.products || [];
+
+  let grandCost = 0;
+  let grandRetail = 0;
+  let grandPieces = 0;
+
+  const rowsHTML = WAREHOUSE_CAT_DEFS.map(cat => {
+    let items = prods.filter(p => p.category === cat.key);
+    if (cat.key === 'phones') {
+      items = items.filter(p => p.status !== 'sold');
+    }
+
+    const count = items.length;
+    const pieces = items.reduce((acc, p) => acc + (parseInt(p.quantity, 10) || 0), 0);
+    const cost = items.reduce((acc, p) => acc + ((parseFloat(p.buyPrice) || 0) * (parseInt(p.quantity, 10) || 0)), 0);
+    const retail = items.reduce((acc, p) => acc + ((parseFloat(p.sellPrice) || 0) * (parseInt(p.quantity, 10) || 0)), 0);
+    const profit = retail - cost;
+
+    grandCost += cost;
+    grandRetail += retail;
+    grandPieces += pieces;
+
+    return `
+      <tr class="hover:bg-slate-800/50 transition-colors">
+        <td class="py-3 px-3">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-amber-400 text-base">${cat.icon}</span>
+            <span class="font-bold text-white text-xs">${cat.name}</span>
+          </div>
+        </td>
+        <td class="py-3 px-3 text-center text-slate-300 font-bold">${count}</td>
+        <td class="py-3 px-3 text-center text-white font-black">${pieces.toLocaleString('ar-EG')}</td>
+        <td class="py-3 px-3 font-black text-amber-300 bg-amber-500/5">${formatMoney(cost)} ج.م</td>
+        <td class="py-3 px-3 font-black text-emerald-400 bg-emerald-500/5">${formatMoney(retail)} ج.م</td>
+        <td class="py-3 px-3 font-bold text-teal-300">${profit >= 0 ? '+' : ''}${formatMoney(profit)} ج.م</td>
+        <td class="py-3 px-3 text-center">
+          <button onclick="window.closeInventoryValuationModal(); window.navigateTo('${cat.path}')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-sky-300 border border-slate-700 hover:border-sky-500/40 text-[11px] font-bold cursor-pointer transition-all">
+            فتح المخزن ➔
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+
+  // Append Grand Total Row
+  const grandProfit = grandRetail - grandCost;
+  const marginPct = grandRetail > 0 ? ((grandProfit / grandRetail) * 100).toFixed(1) : '0';
+
+  const finalRowsHTML = rowsHTML + `
+    <tr class="bg-amber-500/10 border-t-2 border-amber-500/40 font-black text-sm">
+      <td class="py-3.5 px-3 text-amber-300 flex items-center gap-1.5">
+        <span class="material-symbols-outlined text-lg">verified</span>
+        <span>الإجمالي العام لجميع بضاعة السستم</span>
+      </td>
+      <td class="py-3.5 px-3 text-center text-amber-200">${prods.length} صنف</td>
+      <td class="py-3.5 px-3 text-center text-white font-black text-base">${grandPieces.toLocaleString('ar-EG')} قطعة</td>
+      <td class="py-3.5 px-3 text-amber-300 text-base font-black">${formatMoney(grandCost)} ج.م</td>
+      <td class="py-3.5 px-3 text-emerald-300 text-base font-black">${formatMoney(grandRetail)} ج.م</td>
+      <td class="py-3.5 px-3 text-teal-300 font-black">+${formatMoney(grandProfit)} ج.م</td>
+      <td class="py-3.5 px-3 text-center text-[11px] text-amber-400 font-bold">100% المخزون</td>
+    </tr>
+  `;
+
+  const tbody = document.getElementById('modal-inventory-valuation-tbody');
+  if (tbody) tbody.innerHTML = finalRowsHTML;
+
+  // Update top cards in modal
+  setElemText('modal-val-total-cost', `${formatMoney(grandCost)} ج.م`);
+  setElemText('modal-val-total-retail', `${formatMoney(grandRetail)} ج.م`);
+  setElemText('modal-val-total-profit', `+${formatMoney(grandProfit)} ج.م`);
+  setElemText('modal-val-margin-pct', `هامش ربح تقديري: ${marginPct}%`);
+  setElemText('modal-val-total-pieces', `${grandPieces.toLocaleString('ar-EG')} قطعة`);
+  setElemText('modal-val-total-types', `${prods.length} صنف مسجل بالسستم`);
+}
+
+window.printInventoryValuationReport = function() {
+  const prods = Store.products || [];
+  let grandCost = 0;
+  let grandRetail = 0;
+  let grandPieces = 0;
+
+  const rows = WAREHOUSE_CAT_DEFS.map(cat => {
+    let items = prods.filter(p => p.category === cat.key);
+    if (cat.key === 'phones') items = items.filter(p => p.status !== 'sold');
+    const pieces = items.reduce((acc, p) => acc + (parseInt(p.quantity, 10) || 0), 0);
+    const cost = items.reduce((acc, p) => acc + ((parseFloat(p.buyPrice) || 0) * (parseInt(p.quantity, 10) || 0)), 0);
+    const retail = items.reduce((acc, p) => acc + ((parseFloat(p.sellPrice) || 0) * (parseInt(p.quantity, 10) || 0)), 0);
+    const profit = retail - cost;
+    grandCost += cost; grandRetail += retail; grandPieces += pieces;
+
+    return `
+      <tr>
+        <td style="padding: 8px; border: 1px solid #ccc;">${cat.name}</td>
+        <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">${items.length}</td>
+        <td style="padding: 8px; border: 1px solid #ccc; text-align: center; font-weight: bold;">${pieces}</td>
+        <td style="padding: 8px; border: 1px solid #ccc; text-align: right; font-weight: bold;">${formatMoney(cost)} ج.م</td>
+        <td style="padding: 8px; border: 1px solid #ccc; text-align: right; font-weight: bold;">${formatMoney(retail)} ج.م</td>
+        <td style="padding: 8px; border: 1px solid #ccc; text-align: right; font-weight: bold; color: #047857;">+${formatMoney(profit)} ج.م</td>
+      </tr>
+    `;
+  }).join('');
+
+  const printWindow = window.open('', '_blank');
+  if (!printWindow) return;
+  printWindow.document.write(`
+    <!DOCTYPE html>
+    <html dir="rtl" lang="ar">
+    <head>
+      <meta charset="utf-8">
+      <title>تقرير تقييم وجرد رأس مال البضاعة</title>
+      <style>
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; padding: 25px; color: #111; }
+        h1, h2 { text-align: center; margin: 5px 0; }
+        .meta { text-align: center; color: #555; font-size: 13px; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
+        th { background: #f3f4f6; padding: 10px; border: 1px solid #999; text-align: right; }
+        .summary-box { display: flex; justify-content: space-around; background: #fafafa; border: 2px solid #333; padding: 15px; border-radius: 8px; margin-top: 20px; font-weight: bold; font-size: 15px; }
+      </style>
+    </head>
+    <body>
+      <h1>سستم كاشير وإدارة المخازن</h1>
+      <h2>تقرير جرد وتقييم رأس مال البضاعة الداخلة</h2>
+      <div class="meta">تاريخ الطباعة: ${new Date().toLocaleString('ar-EG')}</div>
+      <table>
+        <thead>
+          <tr>
+            <th>القسم / المخزن</th>
+            <th style="text-align: center;">عدد الأصناف</th>
+            <th style="text-align: center;">إجمالي القطع</th>
+            <th>رأس المال (سعر الشراء)</th>
+            <th>القيمة بسعر البيع</th>
+            <th>الربح المتوقع</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows}
+          <tr style="background: #e5e7eb; font-weight: bold; font-size: 14px;">
+            <td style="padding: 10px; border: 1px solid #999;">الإجمالي العام</td>
+            <td style="padding: 10px; border: 1px solid #999; text-align: center;">${prods.length}</td>
+            <td style="padding: 10px; border: 1px solid #999; text-align: center;">${grandPieces}</td>
+            <td style="padding: 10px; border: 1px solid #999; text-align: right;">${formatMoney(grandCost)} ج.م</td>
+            <td style="padding: 10px; border: 1px solid #999; text-align: right;">${formatMoney(grandRetail)} ج.م</td>
+            <td style="padding: 10px; border: 1px solid #999; text-align: right;">+${formatMoney(grandRetail - grandCost)} ج.م</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="summary-box">
+        <div>إجمالي رأس مال البضاعة: ${formatMoney(grandCost)} ج.م</div>
+        <div>إجمالي قيمة البيع: ${formatMoney(grandRetail)} ج.م</div>
+        <div>صافي الأرباح المتوقعة: +${formatMoney(grandRetail - grandCost)} ج.م</div>
+      </div>
+      <script>
+        window.onload = function() { window.print(); };
+      <\/script>
+    </body>
+    </html>
+  `);
+  printWindow.document.close();
+};
+
 window.openLowStockModal = function() {
   AppState.activeLowStockFilter = 'all';
   renderLowStockModalContent();
@@ -10953,6 +11465,7 @@ export function renderManualInventoryPage() {
   const allManual = (Store.products || []).filter(p => p.category === 'manual');
 
   const totalQty = allManual.reduce((acc, p) => acc + (p.quantity || 0), 0);
+  const costVal = allManual.reduce((acc, p) => acc + ((p.buyPrice || 0) * (p.quantity || 0)), 0);
   const totalRetail = allManual.reduce((acc, p) => acc + ((p.sellPrice || 0) * (p.quantity || 0)), 0);
   const depletedCount = allManual.filter(p => (p.quantity || 0) <= 0).length;
 
@@ -10960,8 +11473,10 @@ export function renderManualInventoryPage() {
   setElemText('manual-stat-total-items', allManual.length);
   setElemText('manual-stat-qty', totalQty);
   setElemText('manual-stat-total-qty', totalQty);
+  setElemText('manual-stat-cost', `${formatMoney(costVal)} ج.م`);
   setElemText('manual-stat-depleted', depletedCount);
   setElemText('manual-stat-total-retail', `${formatMoney(totalRetail)} ج.م`);
+  setElemText('manual-stat-profit', `أرباح متوقعة: +${formatMoney(totalRetail - costVal)} ج.م`);
   setElemText('manual-count-badge', `${allManual.length} أصناف مسجلة`);
 
   // Render Manual Warehouse Sales (Tab 2)
