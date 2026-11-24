@@ -255,9 +255,9 @@
       <!-- Navigation Links -->
       <nav class="flex-1 overflow-y-auto px-3 py-3 space-y-1">
         
-        <!-- Group 1: العمليات والمالية -->
-        <div class="pt-1 px-3 py-1 font-label-md text-[11px] text-rose-400/80 font-bold uppercase tracking-wider">
-          العمليات والمالية
+        <!-- Group 1: الإدارة والمبيعات -->
+        <div class="pt-1 px-3 py-1 font-label-md text-[11px] text-amber-400/80 font-bold uppercase tracking-wider">
+          الإدارة والمبيعات
         </div>
 
         <a href="javascript:void(0)" data-path="dashboard-overview" aria-current="page" class="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-amber-600/30 via-yellow-600/20 to-amber-700/30 border border-amber-500/50 text-amber-300 font-bold shadow-md transition-colors">
@@ -271,22 +271,6 @@
           <span class="px-1.5 py-0.5 rounded text-[10px] bg-rose-500/20 text-rose-300 font-bold">كل المبيعات والأيام</span>
         </a>
 
-        <a href="javascript:void(0)" data-path="vodafone-monitor" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-300 hover:bg-navy-card hover:text-rose-400 transition-colors text-xs font-bold bg-rose-600/10 border border-rose-500/25">
-          <span class="material-symbols-outlined text-lg text-rose-400">query_stats</span>
-          <span class="flex-1">متابعة فودافون كاش ★</span>
-          <span class="px-1.5 py-0.5 rounded text-[10px] bg-rose-500/20 text-rose-300 font-bold">3 خطوط</span>
-        </a>
-
-        <a href="javascript:void(0)" data-path="vodafone-cash-wallets" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-300 hover:bg-navy-card hover:text-sky-accent transition-colors">
-          <span class="material-symbols-outlined text-xl text-slate-400">account_balance_wallet</span>
-          <span class="font-body-md text-sm">محافظ فودافون كاش (3 خطوط)</span>
-        </a>
-
-        <a href="javascript:void(0)" data-path="sms-sync-hub" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-300 hover:bg-navy-card hover:text-emerald-400 transition-colors text-xs font-bold">
-          <span class="material-symbols-outlined text-lg text-emerald-400">mark_email_read</span>
-          <span>ربط رسائل الهاتف (SMS كاش)</span>
-        </a>
-
         <button onclick="window.openOpeningCashModal()" class="w-full flex items-center justify-between px-4 py-2 rounded-lg text-slate-400 hover:bg-navy-card hover:text-emerald-400 transition-colors text-xs cursor-pointer">
           <span class="flex items-center gap-2.5">
             <span class="material-symbols-outlined text-base text-emerald-400">payments</span>
@@ -295,9 +279,10 @@
           <span id="sidebar-drawer-val" class="font-numeric-table font-bold text-emerald-400">0.00 ج.م</span>
         </button>
 
-        <!-- Group 2: مخازن البضاعة (المخازن فقط) -->
-        <div class="pt-3 px-3 py-1 font-label-md text-[11px] text-rose-400/80 font-bold uppercase tracking-wider flex items-center justify-between">
-          <span>مخازن البضاعة (المخازن فقط)</span>
+        <!-- Group 2: مخازن البضاعة (المخازن أولاً للأعلى) -->
+        <div class="pt-3 px-3 py-1 font-label-md text-[11px] text-emerald-400/90 font-bold uppercase tracking-wider flex items-center justify-between">
+          <span>📦 مخازن البضاعة والأصناف</span>
+          <span class="text-[10px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300">مباشر</span>
         </div>
 
         <!-- Manual Open Warehouse Requested by User -->
@@ -338,8 +323,6 @@
           <span>مخزن الجرابات والحمايات ★</span>
         </a>
 
-        
-
         <!-- Smartwatches Warehouse -->
         <a href="javascript:void(0)" data-path="smartwatches-inventory" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-300 hover:bg-navy-card hover:text-rose-400 transition-colors text-xs font-bold">
           <span class="material-symbols-outlined text-lg text-slate-400">watch</span>
@@ -367,6 +350,27 @@
         <a href="javascript:void(0)" data-path="accessories-inventory" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-300 hover:bg-navy-card hover:text-rose-400 transition-colors text-xs font-bold">
           <span class="material-symbols-outlined text-lg text-slate-400">devices_other</span>
           <span>مخزن الإكسسوارات العامة</span>
+        </a>
+
+        <!-- Group 3: خدمات فودافون كاش والمحافظ (أسفل المخازن) -->
+        <div class="pt-4 px-3 py-1 font-label-md text-[11px] text-rose-400/90 font-bold uppercase tracking-wider flex items-center justify-between border-t border-slate-800/80 mt-2">
+          <span>📲 فودافون كاش والمحافظ (3 خطوط)</span>
+        </div>
+
+        <a href="javascript:void(0)" data-path="vodafone-monitor" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-300 hover:bg-navy-card hover:text-rose-400 transition-colors text-xs font-bold bg-rose-600/10 border border-rose-500/25">
+          <span class="material-symbols-outlined text-lg text-rose-400">query_stats</span>
+          <span class="flex-1">متابعة فودافون كاش ★</span>
+          <span class="px-1.5 py-0.5 rounded text-[10px] bg-rose-500/20 text-rose-300 font-bold">3 خطوط</span>
+        </a>
+
+        <a href="javascript:void(0)" data-path="vodafone-cash-wallets" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-300 hover:bg-navy-card hover:text-sky-accent transition-colors">
+          <span class="material-symbols-outlined text-xl text-slate-400">account_balance_wallet</span>
+          <span class="font-body-md text-sm">محافظ فودافون كاش (3 خطوط)</span>
+        </a>
+
+        <a href="javascript:void(0)" data-path="sms-sync-hub" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-300 hover:bg-navy-card hover:text-emerald-400 transition-colors text-xs font-bold">
+          <span class="material-symbols-outlined text-lg text-emerald-400">mark_email_read</span>
+          <span>ربط رسائل الهاتف (SMS كاش)</span>
         </a>
       </nav>
 
@@ -763,9 +767,19 @@
           </div>
         </div>
 
-        <!-- Dashboard Secondary Operation Cards -->
+        <!-- Dashboard Secondary Operation Cards (المخازن والمحل) -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
-          <!-- درج النقدية -->
+          <!-- إجمالي أصناف المخازن المسجلة -->
+          <div onclick="window.openInventoryValuationModal()" class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 shadow-lg flex flex-col gap-1 backdrop-blur-md hover:border-amber-500/50 transition-all text-white cursor-pointer group">
+            <span class="text-xs text-on-surface-variant font-bold flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-amber-400 text-base group-hover:scale-110 transition-transform">inventory_2</span>
+              <span>أصناف المخازن المسجلة</span>
+            </span>
+            <span id="stat-dash-stock-total" class="font-numeric-table font-bold text-xl text-amber-300">0</span>
+            <span class="text-[11px] text-on-surface-variant">جميع الأقسام مسجلة</span>
+          </div>
+
+          <!-- درج النقدية الفعلي -->
           <div onclick="window.openOpeningCashModal()" class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 shadow-lg flex flex-col gap-1 backdrop-blur-md hover:border-emerald-500/50 transition-all text-white cursor-pointer group">
             <span class="text-xs text-on-surface-variant font-bold flex items-center gap-1.5">
               <span class="material-symbols-outlined text-emerald-400 text-base group-hover:scale-110 transition-transform">payments</span>
@@ -775,24 +789,14 @@
             <span class="text-[11px] text-on-surface-variant">الكاش الفعلي في الدرج</span>
           </div>
 
-          <!-- أرصدة الـ 3 خطوط -->
-          <div onclick="window.navigateTo('vodafone-cash-wallets')" class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 shadow-lg flex flex-col gap-1 backdrop-blur-md hover:border-sky-500/50 transition-all text-white cursor-pointer group">
+          <!-- قيمة البضاعة بسعر البيع -->
+          <div onclick="window.openInventoryValuationModal()" class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 shadow-lg flex flex-col gap-1 backdrop-blur-md hover:border-emerald-500/50 transition-all text-white cursor-pointer group">
             <span class="text-xs text-on-surface-variant font-bold flex items-center gap-1.5">
-              <span class="material-symbols-outlined text-sky-500 text-base group-hover:scale-110 transition-transform">account_balance_wallet</span>
-              <span>أرصدة الـ 3 خطوط (كاش)</span>
+              <span class="material-symbols-outlined text-emerald-400 text-base group-hover:scale-110 transition-transform">sell</span>
+              <span>قيمة البضاعة بالبيع</span>
             </span>
-            <span id="stat-dash-voda-total" class="font-numeric-table font-bold text-xl text-sky-400">0.00 ج.م</span>
-            <span id="stat-dash-voda-sub" class="text-[11px] text-sky-300 font-bold">3 خطوط فودافون كاش</span>
-          </div>
-
-          <!-- إجمالي أصناف المخازن المسجلة -->
-          <div onclick="window.openInventoryValuationModal()" class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 shadow-lg flex flex-col gap-1 backdrop-blur-md hover:border-amber-500/50 transition-all text-white cursor-pointer group">
-            <span class="text-xs text-on-surface-variant font-bold flex items-center gap-1.5">
-              <span class="material-symbols-outlined text-amber-400 text-base group-hover:scale-110 transition-transform">inventory_2</span>
-              <span>إجمالي أصناف المخازن</span>
-            </span>
-            <span id="stat-dash-stock-total" class="font-numeric-table font-bold text-xl text-amber-300">0</span>
-            <span class="text-[11px] text-on-surface-variant">جميع الأقسام مسجلة</span>
+            <span id="stat-dash-stock-retail-sub" class="font-numeric-table font-bold text-xl text-emerald-400">0.00 ج.م</span>
+            <span class="text-[11px] text-emerald-300 font-bold">القيمة السوقية للمخازن</span>
           </div>
 
           <!-- تنبيه النواقص -->
@@ -810,24 +814,58 @@
         </div>
 
         <!-- ==============================================================
-             VODAFONE CASH 3 LINES DIRECT MANAGEMENT SECTION
+             WAREHOUSE CATEGORIES DIRECT ACCESS CARDS (المخازن لفوق)
              ============================================================== -->
         <div class="bg-slate-900/90 rounded-2xl p-3 border border-slate-800 shadow-lg backdrop-blur-md flex flex-col gap-2 text-white">
           <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
             <div class="flex items-center gap-2">
-              <span class="material-symbols-outlined text-rose-500 text-xl">sim_card</span>
-              <h3 class="font-bold text-sm text-white">إدارة ومتابعة خطوط فودافون كاش (3 خطوط)</h3>
+              <span class="material-symbols-outlined text-amber-400 text-xl">inventory_2</span>
+              <h3 class="font-bold text-sm text-white">إدارة مخازن البضاعة (المخازن والأقسام)</h3>
             </div>
-            <div class="flex items-center gap-2">
-              <button onclick="window.navigateTo('vodafone-cash-wallets')" class="text-xs text-rose-400 hover:underline font-bold flex items-center gap-1 cursor-pointer">
-                <span>فتح صفحة المحافظ</span>
-                <span class="material-symbols-outlined text-sm">arrow_forward</span>
-              </button>
-            </div>
+            <span class="text-xs text-slate-400">كل الأقسام مخازن فقط</span>
           </div>
 
-          <div id="dash-voda-lines-cards" class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
-            <!-- Populated by JS for Line 1, Line 2, Line 3 -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5">
+            <button onclick="window.navigateTo('manual-inventory')" class="p-2 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 flex flex-col items-center gap-1 text-center transition-all cursor-pointer">
+              <span class="material-symbols-outlined text-amber-400 text-xl">edit_note</span>
+              <span class="font-bold text-xs text-white">المخزن اليدوي</span>
+              <span id="dash-cat-count-manual" class="font-numeric-table font-bold text-[11px] text-amber-300">0 صنف</span>
+            </button>
+            <button onclick="window.navigateTo('chargers-inventory')" class="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 flex flex-col items-center gap-1 text-center transition-all cursor-pointer">
+              <span class="material-symbols-outlined text-sky-400 text-xl">power</span>
+              <span class="font-bold text-xs text-white">الشواحن</span>
+              <span id="dash-cat-count-chargers" class="font-numeric-table font-bold text-[11px] text-sky-300">0 صنف</span>
+            </button>
+            <button onclick="window.navigateTo('cables-inventory')" class="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 flex flex-col items-center gap-1 text-center transition-all cursor-pointer">
+              <span class="material-symbols-outlined text-sky-400 text-xl">cable</span>
+              <span class="font-bold text-xs text-white">الكابلات والوصلات</span>
+              <span id="dash-cat-count-cables" class="font-numeric-table font-bold text-[11px] text-sky-300">0 صنف</span>
+            </button>
+            <button onclick="window.navigateTo('headphones-audio')" class="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 flex flex-col items-center gap-1 text-center transition-all cursor-pointer">
+              <span class="material-symbols-outlined text-rose-400 text-xl">headphones</span>
+              <span class="font-bold text-xs text-white">السماعات</span>
+              <span id="dash-cat-count-headphones" class="font-numeric-table font-bold text-[11px] text-rose-300">0 صنف</span>
+            </button>
+            <button onclick="window.navigateTo('screens-inventory')" class="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 flex flex-col items-center gap-1 text-center transition-all cursor-pointer">
+              <span class="material-symbols-outlined text-purple-400 text-xl">fit_screen</span>
+              <span class="font-bold text-xs text-white">قسم الشاشات</span>
+              <span id="dash-cat-count-screens" class="font-numeric-table font-bold text-[11px] text-purple-300">0 صنف</span>
+            </button>
+            <button onclick="window.navigateTo('phones-sales-inventory')" class="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 flex flex-col items-center gap-1 text-center transition-all cursor-pointer">
+              <span class="material-symbols-outlined text-emerald-400 text-xl">smartphone</span>
+              <span class="font-bold text-xs text-white">التليفونات</span>
+              <span id="dash-cat-count-phones" class="font-numeric-table font-bold text-[11px] text-emerald-300">0 صنف</span>
+            </button>
+            <button onclick="window.navigateTo('covers-inventory')" class="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 flex flex-col items-center gap-1 text-center transition-all cursor-pointer">
+              <span class="material-symbols-outlined text-rose-400 text-xl">shield</span>
+              <span class="font-bold text-xs text-white">الجرابات والحمايات</span>
+              <span id="dash-cat-count-covers" class="font-numeric-table font-bold text-[11px] text-rose-300">0 صنف</span>
+            </button>
+            <button onclick="window.navigateTo('accessories-inventory')" class="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 flex flex-col items-center gap-1 text-center transition-all cursor-pointer">
+              <span class="material-symbols-outlined text-teal-400 text-xl">devices_other</span>
+              <span class="font-bold text-xs text-white">إكسسوارات عامة</span>
+              <span id="dash-cat-count-accessories" class="font-numeric-table font-bold text-[11px] text-teal-300">0 صنف</span>
+            </button>
           </div>
         </div>
 
@@ -903,103 +941,73 @@
         </div>
 
         <!-- ==============================================================
-             WAREHOUSE CATEGORIES DIRECT ACCESS CARDS
+             RECENT SALES & INVOICES
              ============================================================== -->
-        <div class="bg-slate-900/90 rounded-2xl p-3 border border-slate-800 shadow-lg backdrop-blur-md flex flex-col gap-2 text-white">
-          <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
-            <div class="flex items-center gap-2">
-              <span class="material-symbols-outlined text-amber-400 text-xl">inventory_2</span>
-              <h3 class="font-bold text-sm text-white">إدارة مخازن البضاعة (المخازن والأقسام)</h3>
-            </div>
-            <span class="text-xs text-slate-400">كل الأقسام مخازن فقط</span>
+        <div class="bg-slate-900/90 rounded-2xl shadow-lg border border-slate-800 p-3 flex flex-col gap-2 backdrop-blur-md text-white">
+          <div class="flex items-center justify-between pb-2 border-b border-outline-variant/20">
+            <h3 class="font-bold text-sm text-on-surface flex items-center gap-2">
+              <span class="material-symbols-outlined text-rose-500 text-lg">receipt_long</span>
+              <span>آخر المبيعات والفواتير</span>
+            </h3>
+            <button onclick="window.navigateTo('all-sales-master')" class="text-xs text-rose-500 hover:underline font-bold">شاشة المبيعات الشاملة ★</button>
           </div>
-
-          <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5">
-            <button onclick="window.navigateTo('manual-inventory')" class="p-2 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 flex flex-col items-center gap-1 text-center transition-all cursor-pointer">
-              <span class="material-symbols-outlined text-amber-400 text-xl">edit_note</span>
-              <span class="font-bold text-xs text-white">المخزن اليدوي</span>
-              <span id="dash-cat-count-manual" class="font-numeric-table font-bold text-[11px] text-amber-300">0 صنف</span>
-            </button>
-            <button onclick="window.navigateTo('chargers-inventory')" class="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 flex flex-col items-center gap-1 text-center transition-all cursor-pointer">
-              <span class="material-symbols-outlined text-sky-400 text-xl">power</span>
-              <span class="font-bold text-xs text-white">الشواحن</span>
-              <span id="dash-cat-count-chargers" class="font-numeric-table font-bold text-[11px] text-sky-300">0 صنف</span>
-            </button>
-            <button onclick="window.navigateTo('cables-inventory')" class="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 flex flex-col items-center gap-1 text-center transition-all cursor-pointer">
-              <span class="material-symbols-outlined text-sky-400 text-xl">cable</span>
-              <span class="font-bold text-xs text-white">الكابلات والوصلات</span>
-              <span id="dash-cat-count-cables" class="font-numeric-table font-bold text-[11px] text-sky-300">0 صنف</span>
-            </button>
-            <button onclick="window.navigateTo('headphones-audio')" class="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 flex flex-col items-center gap-1 text-center transition-all cursor-pointer">
-              <span class="material-symbols-outlined text-rose-400 text-xl">headphones</span>
-              <span class="font-bold text-xs text-white">السماعات</span>
-              <span id="dash-cat-count-headphones" class="font-numeric-table font-bold text-[11px] text-rose-300">0 صنف</span>
-            </button>
-            <button onclick="window.navigateTo('screens-inventory')" class="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 flex flex-col items-center gap-1 text-center transition-all cursor-pointer">
-              <span class="material-symbols-outlined text-purple-400 text-xl">fit_screen</span>
-              <span class="font-bold text-xs text-white">قسم الشاشات</span>
-              <span id="dash-cat-count-screens" class="font-numeric-table font-bold text-[11px] text-purple-300">0 صنف</span>
-            </button>
-            <button onclick="window.navigateTo('phones-sales-inventory')" class="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 flex flex-col items-center gap-1 text-center transition-all cursor-pointer">
-              <span class="material-symbols-outlined text-emerald-400 text-xl">smartphone</span>
-              <span class="font-bold text-xs text-white">التليفونات</span>
-              <span id="dash-cat-count-phones" class="font-numeric-table font-bold text-[11px] text-emerald-300">0 صنف</span>
-            </button>
-            <button onclick="window.navigateTo('covers-inventory')" class="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 flex flex-col items-center gap-1 text-center transition-all cursor-pointer">
-              <span class="material-symbols-outlined text-rose-400 text-xl">shield</span>
-              <span class="font-bold text-xs text-white">الجرابات والحمايات</span>
-              <span id="dash-cat-count-covers" class="font-numeric-table font-bold text-[11px] text-rose-300">0 صنف</span>
-            </button>
-            <button onclick="window.navigateTo('accessories-inventory')" class="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 flex flex-col items-center gap-1 text-center transition-all cursor-pointer">
-              <span class="material-symbols-outlined text-teal-400 text-xl">devices_other</span>
-              <span class="font-bold text-xs text-white">إكسسوارات عامة</span>
-              <span id="dash-cat-count-accessories" class="font-numeric-table font-bold text-[11px] text-teal-300">0 صنف</span>
-            </button>
+          <div class="overflow-x-auto">
+            <table class="w-full text-right text-xs">
+              <thead class="text-on-surface-variant border-b border-outline-variant/20">
+                <tr>
+                  <th class="py-2 px-3">رقم الفاتورة</th>
+                  <th class="py-2 px-3">الوقت</th>
+                  <th class="py-2 px-3">البيان</th>
+                  <th class="py-2 px-3">المبلغ</th>
+                  <th class="py-2 px-3">العميل</th>
+                  <th class="py-2 px-3 text-center">عرض</th>
+                </tr>
+              </thead>
+              <tbody id="dash-recent-invoices" class="divide-y divide-outline-variant/10">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
           </div>
         </div>
 
-        <!-- Recent Sales & Vodafone Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
-          <!-- Recent Invoices -->
-          <div class="bg-slate-900/90 rounded-2xl shadow-lg border border-slate-800 p-3 flex flex-col gap-2 backdrop-blur-md text-white">
-            <div class="flex items-center justify-between pb-2 border-b border-outline-variant/20">
-              <h3 class="font-bold text-sm text-on-surface flex items-center gap-2">
-                <span class="material-symbols-outlined text-rose-500 text-lg">receipt_long</span>
-                <span>آخر المبيعات والفواتير</span>
-              </h3>
-              <button onclick="window.navigateTo('all-sales-master')" class="text-xs text-rose-500 hover:underline font-bold">شاشة المبيعات الشاملة ★</button>
+        <!-- ==============================================================
+             VODAFONE CASH 3 LINES DIRECT MANAGEMENT SECTION (تحت المخازن بالكامل)
+             ============================================================== -->
+        <div class="bg-slate-900/90 rounded-2xl p-4 border border-slate-800 shadow-lg backdrop-blur-md flex flex-col gap-3 text-white">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+            <div class="flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-xl bg-rose-600/20 text-rose-400 flex items-center justify-center border border-rose-500/30">
+                <span class="material-symbols-outlined text-xl">sim_card</span>
+              </div>
+              <div>
+                <h3 class="font-bold text-sm text-white">إدارة ومتابعة خطوط فودافون كاش (3 خطوط)</h3>
+                <span class="text-[11px] text-slate-400">متابعة أرصدة الخطوط وسجل العمليات والإيداع والتحويل</span>
+              </div>
             </div>
-            <div class="overflow-x-auto">
-              <table class="w-full text-right text-xs">
-                <thead class="text-on-surface-variant border-b border-outline-variant/20">
-                  <tr>
-                    <th class="py-2 px-3">رقم الفاتورة</th>
-                    <th class="py-2 px-3">الوقت</th>
-                    <th class="py-2 px-3">البيان</th>
-                    <th class="py-2 px-3">المبلغ</th>
-                    <th class="py-2 px-3">العميل</th>
-                    <th class="py-2 px-3 text-center">عرض</th>
-                  </tr>
-                </thead>
-                <tbody id="dash-recent-invoices" class="divide-y divide-outline-variant/10">
-                  <!-- Populated by JS -->
-                </tbody>
-              </table>
+            <div class="flex items-center gap-2">
+              <button onclick="window.navigateTo('vodafone-cash-wallets')" class="text-xs text-rose-400 hover:underline font-bold flex items-center gap-1 cursor-pointer">
+                <span>فتح صفحة المحافظ</span>
+                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+              </button>
             </div>
           </div>
 
-          <!-- Recent Vodafone Transactions -->
-          <div class="bg-slate-900/90 rounded-2xl shadow-lg border border-slate-800 p-3 flex flex-col gap-2 backdrop-blur-md text-white">
-            <div class="flex items-center justify-between pb-2 border-b border-outline-variant/20">
-              <h3 class="font-bold text-sm text-on-surface flex items-center gap-2">
-                <span class="material-symbols-outlined text-sky-500 text-lg">account_balance_wallet</span>
-                <span>آخر حركات الكاش والـ 3 خطوط</span>
-              </h3>
-              <button onclick="window.navigateTo('vodafone-cash-wallets')" class="text-xs text-sky-500 hover:underline font-bold">عرض الـ 3 خطوط</button>
+          <div id="dash-voda-lines-cards" class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+            <!-- Populated by JS for Line 1, Line 2, Line 3 -->
+          </div>
+
+          <!-- جدول آخر حركات الكاش والـ 3 خطوط -->
+          <div class="mt-2 pt-2 border-t border-slate-800/80 flex flex-col gap-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sky-400 text-sm">history</span>
+                <span>آخر حركات الكاش والتحويلات للـ 3 خطوط</span>
+              </span>
+              <button onclick="window.navigateTo('vodafone-cash-wallets')" class="text-[11px] text-sky-400 hover:underline font-bold">عرض جميع العمليات</button>
             </div>
             <div class="overflow-x-auto">
               <table class="w-full text-right text-xs">
-                <thead class="text-on-surface-variant border-b border-outline-variant/20">
+                <thead class="text-slate-400 border-b border-slate-800">
                   <tr>
                     <th class="py-2 px-3">الخط</th>
                     <th class="py-2 px-3">العملية</th>
@@ -1009,7 +1017,7 @@
                     <th class="py-2 px-3">الوقت</th>
                   </tr>
                 </thead>
-                <tbody id="dash-recent-voda" class="divide-y divide-outline-variant/10">
+                <tbody id="dash-recent-voda" class="divide-y divide-slate-800/60">
                   <!-- Populated by JS -->
                 </tbody>
               </table>
@@ -3344,7 +3352,7 @@
         </button>
       </div>
 
-      <form id="form-product" novalidate onsubmit="event.preventDefault(); window.saveProductForm();" class="p-5 overflow-y-auto flex flex-col gap-3.5">
+      <form id="form-product" novalidate class="p-5 overflow-y-auto flex flex-col gap-3.5">
         <input type="hidden" id="prod-id" value=""/>
 
         <div class="grid grid-cols-2 gap-3">
@@ -3437,7 +3445,7 @@
 
         <div class="pt-3 border-t border-outline-variant/20 flex items-center justify-end gap-2">
           <button type="button" onclick="window.closeProductModal()" class="px-4 py-2 rounded-xl bg-surface-container-low text-on-surface font-bold text-xs cursor-pointer">إلغاء</button>
-          <button type="submit" class="px-6 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-bold text-xs shadow-md cursor-pointer">حفظ الصنف</button>
+          <button id="modal-prod-submit-btn" type="submit" class="px-6 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-bold text-xs shadow-md cursor-pointer transition-all">حفظ الصنف</button>
         </div>
       </form>
     </div>
@@ -4320,16 +4328,56 @@ function blacklistSMS(smsId) {
   setLocal(STORAGE_KEYS.DELETED_SMS_BLACKLIST, Array.from(set));
 }
 
+function deduplicateProductList(list) {
+  if (!Array.isArray(list)) return [];
+  const seenIds = new Set();
+  const seenBarcodes = new Map();
+  const seenNameCats = new Map();
+  const result = [];
+
+  for (const item of list) {
+    if (!item) continue;
+    const id = String(item.id || '').trim();
+    if (id && seenIds.has(id)) {
+      continue;
+    }
+
+    const barcode = String(item.barcode || '').trim();
+    const name = String(item.name || '').trim().toLowerCase();
+    const cat = String(item.category || '').trim();
+    const nameCatKey = cat + ':::' + name;
+
+    let duplicateFound = false;
+    if (barcode && seenBarcodes.has(barcode)) {
+      duplicateFound = true;
+    } else if (name && nameCatKey && seenNameCats.has(nameCatKey)) {
+      duplicateFound = true;
+    }
+
+    if (duplicateFound) {
+      console.warn("🔄 تم حذف صنف مكرر:", item.name, item.id);
+      continue;
+    }
+
+    if (id) seenIds.add(id);
+    if (barcode) seenBarcodes.set(barcode, item);
+    if (nameCatKey) seenNameCats.set(nameCatKey, item);
+    result.push(item);
+  }
+  return result;
+}
+
 function getInitialCleanProducts() {
   const rawList = getLocal(STORAGE_KEYS.PRODUCTS, []);
   const blacklist = getDeletedBlacklist();
   if (!Array.isArray(rawList)) return [];
-  return rawList.filter(p => {
+  const cleanList = rawList.filter(p => {
     if (!p) return false;
     const pid = p.id || '';
     if (pid && blacklist.has(pid)) return false;
     return true;
   });
+  return deduplicateProductList(cleanList);
 }
 
 function getInitialCleanSales() {
@@ -4682,21 +4730,28 @@ async function loadFromLocalServer() {
           prodsChanged = true;
         }
       } else if (json.data.products.length > 0) {
-      const curProds = Store.products || [];
-      json.data.products.forEach(p => {
-        if (!p || !p.id || blacklist.has(p.id)) return;
-        const exists = curProds.some(cp => cp.id === p.id);
-        if (!exists) {
-          curProds.push(p);
-          prodsChanged = true;
+        let curProds = Store.products || [];
+        json.data.products.forEach(p => {
+          if (!p || !p.id || blacklist.has(p.id)) return;
+          const cleanBarcode = String(p.barcode || '').trim();
+          const cleanName = String(p.name || '').trim().toLowerCase();
+          const exists = curProds.some(cp => 
+            cp.id === p.id || 
+            (cleanBarcode && String(cp.barcode || '').trim() === cleanBarcode) ||
+            (cleanName && cp.category === p.category && String(cp.name || '').trim().toLowerCase() === cleanName)
+          );
+          if (!exists) {
+            curProds.push(p);
+            prodsChanged = true;
+          }
+        });
+        const deduped = deduplicateProductList(curProds);
+        if (prodsChanged || deduped.length !== curProds.length) {
+          Store.products = deduped;
+          setLocal(STORAGE_KEYS.PRODUCTS, deduped);
+          notifySubscribers("products_updated", deduped);
         }
-      });
-      if (prodsChanged) {
-        Store.products = curProds;
-        setLocal(STORAGE_KEYS.PRODUCTS, curProds);
-        notifySubscribers("products_updated", curProds);
       }
-    }
   }
 
     let salesChanged = false;
@@ -4913,7 +4968,7 @@ async function initRealtimeSync() {
         }
       });
 
-      const mergedProducts = [...prods, ...pendingLocal];
+      const mergedProducts = deduplicateProductList([...prods, ...pendingLocal]);
       Store.products = mergedProducts;
       setLocal(STORAGE_KEYS.PRODUCTS, mergedProducts);
       syncToLocalServer();
@@ -5169,13 +5224,15 @@ async function addProduct(productData) {
   const now = new Date().toISOString();
   let cleanBarcode = String(productData.barcode != null ? productData.barcode : '').trim();
   const cleanImei = String(productData.imei != null ? productData.imei : '').trim();
+  const prodName = (productData.name || '').trim();
+  const prodCat = productData.category || 'chargers';
 
   // If no barcode provided, handle intelligently so product is ALWAYS saved and searchable
   if (!cleanBarcode) {
-    if (productData.category === 'phones' && cleanImei) {
+    if (prodCat === 'phones' && cleanImei) {
       cleanBarcode = cleanImei;
     } else {
-      cleanBarcode = generateNextProductCode(productData.category);
+      cleanBarcode = generateNextProductCode(prodCat);
     }
   }
 
@@ -5183,6 +5240,54 @@ async function addProduct(productData) {
   unblacklistProduct(cleanBarcode);
   if (cleanImei) unblacklistProduct(cleanImei);
   if (productData.id) unblacklistProduct(productData.id);
+
+  const buyP = !isNaN(parseFloat(productData.buyPrice)) ? Math.max(0, parseFloat(productData.buyPrice)) : 0;
+  const sellP = !isNaN(parseFloat(productData.sellPrice)) ? Math.max(0, parseFloat(productData.sellPrice)) : 0;
+  const qty = !isNaN(parseInt(productData.quantity, 10)) ? Math.max(0, parseInt(productData.quantity, 10)) : 1;
+
+  // --- DUPLICATE PREVENTION CHECK ---
+  // Ensure we NEVER add the same product twice
+  const existingIndex = (Store.products || []).findIndex(p => {
+    if (!p) return false;
+    // Check barcode match
+    if (cleanBarcode && String(p.barcode || '').trim() === cleanBarcode) return true;
+    // Check IMEI match for phones
+    if (prodCat === 'phones' && cleanImei && String(p.imei || '').trim() === cleanImei) return true;
+    // Check name + category match
+    if (prodName && p.name && p.category === prodCat && p.name.trim().toLowerCase() === prodName.toLowerCase()) return true;
+    return false;
+  });
+
+  if (existingIndex !== -1) {
+    const existing = Store.products[existingIndex];
+    const timeDiff = Math.abs(new Date(now).getTime() - new Date(existing.updatedAt || existing.createdAt || 0).getTime());
+    // If exact same product submitted within 10 seconds, ignore duplicate submission completely
+    if (timeDiff < 10000 && existing.name === prodName) {
+      console.warn("🛡️ منع إضافة الصنف مرتين (تم حفظه بالفعل):", existing.name);
+      return existing;
+    }
+
+    // Otherwise, this is a restock or price update: update existing product rather than creating a duplicate entry!
+    console.log("🔄 تحديث كمية الصنف الحالي بدلاً من تكراره:", existing.name);
+    existing.quantity = (parseInt(existing.quantity, 10) || 0) + qty;
+    if (buyP > 0) existing.buyPrice = buyP;
+    if (sellP > 0) existing.sellPrice = sellP;
+    if (productData.brand) existing.brand = productData.brand;
+    if (productData.model) existing.model = productData.model;
+    if (cleanBarcode && !existing.barcode) existing.barcode = cleanBarcode;
+    existing.updatedAt = now;
+    existing.lastRestockedAt = now;
+
+    Store.products = deduplicateProductList(Store.products);
+    setLocal(STORAGE_KEYS.PRODUCTS, Store.products);
+    syncToLocalServer();
+    notifySubscribers("products_updated", Store.products);
+
+    if (db && existing.id) {
+      updateDoc(doc(db, "products", existing.id), sanitizeForFirestore(existing)).catch(console.warn);
+    }
+    return existing;
+  }
 
   // Generate Firestore document reference FIRST so local and remote IDs are 100% identical!
   let docRef = null;
@@ -5194,22 +5299,18 @@ async function addProduct(productData) {
     } catch (e) {}
   }
 
-  const buyP = !isNaN(parseFloat(productData.buyPrice)) ? Math.max(0, parseFloat(productData.buyPrice)) : 0;
-  const sellP = !isNaN(parseFloat(productData.sellPrice)) ? Math.max(0, parseFloat(productData.sellPrice)) : 0;
-  const qty = !isNaN(parseInt(productData.quantity, 10)) ? Math.max(0, parseInt(productData.quantity, 10)) : 1;
-
   const newProduct = {
     id: finalId,
     barcode: cleanBarcode, // Serves as code (e.g. "70") or barcode
-    name: (productData.name || '').trim() || (productData.category === 'phones' ? 'هاتف محمول' : 'صنف جديد'),
-    category: productData.category || 'chargers', // 'chargers' | 'cables' | 'headphones' | 'speakers' | 'phones' | 'covers' | 'accessories' | 'manual'
+    name: prodName || (prodCat === 'phones' ? 'هاتف محمول' : 'صنف جديد'),
+    category: prodCat, // 'chargers' | 'cables' | 'headphones' | 'speakers' | 'phones' | 'covers' | 'accessories' | 'manual'
     subcategory: productData.subcategory || '',
     buyPrice: buyP,
     sellPrice: sellP,
     quantity: qty,
     brand: productData.brand || '',
     model: productData.model || '',
-    imei: cleanImei || (productData.category === 'phones' ? cleanBarcode : ''),
+    imei: cleanImei || (prodCat === 'phones' ? cleanBarcode : ''),
     storage: productData.storage || '',
     color: productData.color || '',
     status: productData.status || 'available',
@@ -5224,6 +5325,7 @@ async function addProduct(productData) {
 
   // Local optimistic update
   Store.products.unshift(newProduct);
+  Store.products = deduplicateProductList(Store.products);
   setLocal(STORAGE_KEYS.PRODUCTS, Store.products);
   syncToLocalServer();
   notifySubscribers("products_updated", Store.products);
@@ -9720,6 +9822,17 @@ function updateProductModalFields(category) {
 }
 
 window.saveProductForm = async () => {
+  if (window._isSavingProductLock) {
+    console.warn("⚠️ حفظ الصنف قيد التنفيذ بالفعل، تم منع الضغط المزدوج والتكرار.");
+    return;
+  }
+  window._isSavingProductLock = true;
+  const submitBtn = document.getElementById('modal-prod-submit-btn');
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+  }
+
   const barcode = (document.getElementById('prod-barcode')?.value || '').trim();
   const name = (document.getElementById('prod-name')?.value || '').trim();
   const category = document.getElementById('prod-category')?.value || 'chargers';
@@ -9790,6 +9903,14 @@ window.saveProductForm = async () => {
   } catch (e) {
     console.error("Save product error:", e);
     showToast("حدث خطأ أثناء حفظ الصنف", "error");
+  } finally {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+    }
+    setTimeout(() => {
+      window._isSavingProductLock = false;
+    }, 700);
   }
 };
 
